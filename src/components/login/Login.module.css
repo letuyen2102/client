@@ -1,0 +1,88 @@
+
+.loginTitle {
+    text-align: center;
+}
+
+.loginTitle h2 {
+    font-size: 26px;
+    line-height: 28px;
+    margin: 0;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 2.4px;
+}
+
+.loginFacebookGoogle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.loginFacebookGoogle a {
+    display: block;
+}
+.loginFacebookGoogle a:hover {
+    opacity: 0.7;
+}
+.loginFacebookGoogle a img {
+    width: 130px;
+}
+.loginFacebookGoogle {
+    margin-top: 30px;
+}
+.formLogin button{
+    margin-left: 50%;
+    transform: translateX(-50%);
+    letter-spacing: 1.2px;
+    font-size: 13px;
+    width: 290px;
+    padding: 15px 90px;
+    background-color: #000;
+    color: #fff;
+    margin-bottom: 15px;
+}
+.formGroup {
+    margin-bottom: 25px;
+}
+.formGroup input {
+    width: 100%;
+    background: #f7f7f7;
+    height: 50px;
+    padding: 0px 15px;
+    outline: none;
+    box-shadow: none;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+}
+.formGroup label {
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+.forgotPassword {
+    text-align: center;
+}
+
+.forgotPassword > a {
+    font-size: 12px;
+    color: #ec1f27;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+
+}
+.forgotPassword >p {
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    font-weight: 600;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+.forgotPassword >p > a {
+    color: #ec1f27;
+}
+.forgotPassword a:hover {
+    color: #000;
+}
+
+

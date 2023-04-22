@@ -1,0 +1,402 @@
+@media (min-width : 768px) {
+    .detailPage {
+        width: 750px;
+    }
+}
+
+@media (min-width : 992px) {
+    .detailPage {
+        width: 970px;
+    }
+}
+
+@media (min-width : 1200px) {
+    .detailPage {
+        width: 1170px;
+    }
+}
+
+.productDetailImageMain img {
+    width: 100%;
+    height: 100%;
+}
+
+
+
+.productDetailAll>h2 {
+    margin-top: 0;
+    font-size: 25px;
+    line-height: 1.4;
+    font-weight: 500;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    letter-spacing: 0.5px;
+}
+
+.productId {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    font-weight: 600;
+}
+
+.productId>i {
+    font-weight: 700
+}
+
+.price {
+    margin-bottom: 10px;
+}
+
+.price>h2 {
+    display: inline-block;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.price>del {
+    font-size: 20px;
+    margin-right: 5px;
+}
+
+.status {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.status>p {
+    color: #ec1f27;
+    display: inline-block;
+    font-weight: 700;
+}
+
+.size {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.size>p {
+    font-size: 14px;
+    font-weight: 600;
+    margin-right: 15px;
+}
+
+.size>div button {
+    margin-right: 5px;
+    background-color: #fff;
+    min-width: 40px;
+    font-size: 14px;
+    padding: 5px;
+}
+
+.quantity>p {
+    font-size: 14px;
+    font-weight: 600;
+    margin-right: 20px;
+}
+
+.quantity {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.quantity>div input {
+    text-align: center;
+    border: none;
+    max-width: 50px;
+    width: 100%;
+    height: 100%;
+}
+
+.quantity>div input:focus {
+    outline: none;
+}
+
+.quantity>div button {
+    background-color: #fff;
+    border: none;
+    padding: 5px 10px;
+    text-shadow: #ebebeb;
+    font-size: 16px;
+}
+
+.quantity>div {
+    border: 1px solid #ebebeb;
+}
+
+.buying {
+    color: #fff;
+    background-color: #1c1c1c;
+    font-size: 12px;
+    text-transform: uppercase;
+    font-weight: 500;
+    letter-spacing: 1.2px;
+    height: auto;
+    line-height: inherit;
+    box-shadow: none;
+    padding: 10px 30px;
+    border: none;
+}
+
+.adding {
+    color: #fff;
+    background-color: #ec1f27;
+    font-size: 12px;
+    text-transform: uppercase;
+    font-weight: 500;
+    letter-spacing: 1.2px;
+    height: auto;
+    line-height: inherit;
+    box-shadow: none;
+    padding: 10px 30px;
+    border: none;
+
+}
+/* 
+@media (min-width : 993px) {
+    .buying {
+        width: 70%;
+    }
+} */
+
+.colorOrder>p {
+    font-size: 14px;
+    font-weight: 600;
+    margin-right: 15px;
+}
+
+.colorOderImage {
+    width: 22px;
+}
+
+.colorOderImage img {
+    width: 100%;
+    height: 100%;
+
+}
+
+.allColor>div {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+    cursor: pointer;
+
+}
+
+.allColor>div>p {
+    font-size: 13px;
+    font-weight: 600;
+    opacity: 0.8;
+    margin-left: 10px;
+}
+
+.allColor {
+    display: flex;
+}
+
+.colorOrder {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.productDetailAll ul li div {
+    width: 6%;
+}
+
+.productDetailAll ul li div img {
+    width: 100%;
+    height: 100%;
+}
+
+.productDetailAll ul li {
+    display: flex;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.productDetailAll ul li strong {
+    font-size: 12px;
+    font-weight: 500;
+    margin-left: 15px;
+    letter-spacing: 1.4px;
+}
+
+.review {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.review i {
+    color: #edc419;
+    font-size: 12px;
+    margin-right: 5px;
+}
+
+.review a {
+    margin-left: 10px;
+    opacity: 0.6;
+}
+
+.review a:hover {
+    opacity: 1;
+}
+
+.supportBuying i {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+}
+
+.supportBuying strong {
+    color: #00b0f0;
+}
+
+.slickSlider img {
+    width: 100%;
+    height: 100%;
+}
+
+.slickSlider {
+    padding: 10px 15px;
+    border: 1px solid #ebebeb;
+    border-radius: 5px;
+}
+
+.carouselSlick {
+    padding: 5px 5px;
+}
+
+.productDetailImageSlide {
+    width: 100%;
+}
+
+.productDetailImageSlide {
+    overflow: hidden;
+}
+
+.productReviewsTitle {
+    border-bottom: 1px solid #e5e5e5;
+}
+.productReviewsContent {
+    margin-top: 25px;
+}
+.productReviewsTitle button {
+    margin-right: 0;
+    font-size: 14px;
+    font-weight: 500;
+    display: block;
+    text-transform: uppercase;
+    color: #ec1f27;
+    padding: 15px 0;
+    letter-spacing: 1.5px;
+    background-color: #fff;
+    border: none;
+    margin-right: 40px;
+}
+@media (min-width : 768px) {
+    .productReviewsTitle button {
+        display: inline-block;
+    }
+}
+.content1 p {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    line-height: 1.4;
+}
+.content2 strong {
+    font-size: 14px;
+    letter-spacing: 0.25px;
+    margin-bottom: 15px;
+}
+.content2Size img {
+    width: 100%;
+    height: 100%;
+}
+.quantityComment p {
+    font-size: 16px;
+}
+.userImage {
+    background-color: #fff;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+    flex: 1;
+    margin-right: 5px;
+
+}
+.imgEachUserComment {
+    flex: 1;
+}
+@media (max-width : 400px) {
+    .userImage{
+        flex: 2;
+    }
+}
+.userImage img {
+    width: 100%;
+    height: 100%;
+}
+.inputComment {
+    display: flex;
+    align-items :flex-start;
+}
+.inputComment input {
+    flex: 10;
+    border: none;
+    border-bottom: 2px solid #000;
+    margin-top: 5px;
+}
+.inputComment input:focus {
+    outline: none;
+}
+.setBorder {
+    padding: 2px;
+    border: 1px solid #1c1c1c;
+}
+.setUnBorder {
+    padding: 2px;
+    border: 1px solid #d5d5d5;
+}
+.setBorderButton {
+    border: 1px solid #1c1c1c;
+}
+
+.setUnBorderButton {
+    border: 1px solid #d5d5d5;
+}
+
+
+.userImageComment div img {
+    width: 100%;
+    height: 100%;
+}
+.userImageComment {
+    width: 10%;
+    margin-right: 5%;
+}
+
+.eachComment {
+    display: flex;
+    align-items: start;
+}
+
+.userCommentContent {
+    width: 85%;
+}
+
+.userCommentContent div {
+    display: flex;
+}
+
+.userCommentContent div strong {
+    margin-right: 15px;
+}
+.allComments {
+    margin-top: 20px;
+}

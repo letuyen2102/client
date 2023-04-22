@@ -1,0 +1,28 @@
+.successPage {
+    position: fixed;
+    right: 50%;
+    transform: translateX(50%);
+    top: 10%;
+    
+}
+.successBox > div > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    min-width: 250px;
+    max-height: 300px;
+}
+.successBox > h4 {
+    font-size: 20px;
+    font-weight: 600;
+    text-align: center;
+}
+.btnSuccess {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.btnSuccess > button {
+    padding: 10px;
+    border: 1px solid #ccc;
+}

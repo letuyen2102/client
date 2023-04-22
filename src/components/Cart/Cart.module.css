@@ -1,0 +1,261 @@
+@media (min-width : 768px) {
+    .Cart {
+        width: 750px;
+    }
+}
+
+@media (min-width : 992px) {
+    .Cart {
+        width: 970px;
+    }
+
+    .imagePaymentProduct img {
+        width: 65%;
+        height: 100%;
+    }
+
+    .inforPaymentProduct_price {
+        display: none;
+    }
+
+    .quantityBox_close {
+        display: none;
+    }
+
+}
+
+@media (min-width : 1200px) {
+    .Cart {
+        width: 1170px;
+    }
+}
+
+@media (max-width : 991px) {
+    .imagePaymentProduct img {
+        width: 100%;
+        height: 100%;
+    }
+
+    .inforPaymentProduct2 {
+        display: none;
+    }
+
+    .inforPaymentProduct_delete {
+        display: none;
+    }
+
+    .quantityBox {
+        text-align: center;
+    }
+
+    .inforPaymentProduct_price {
+        line-height: 2;
+        font-size: 14px;
+        color: #898989;
+        font-weight: 500;
+    }
+
+    .inforPaymentProduct_price>span {
+        color: #ec1f27;
+        font-weight: 600;
+    }
+
+    .setPadding {
+        padding-right: 0;
+    }
+
+    .quantityBox_close {
+        margin-top: 10px;
+        color: #ec1f27;
+        cursor: pointer;
+    }
+}
+
+.Cart {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.cartTitle {
+    font-size: 26px;
+    line-height: 28px;
+    margin: 0;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 2.4px;
+    color: #1c1c1c;
+}
+
+.cartTitle>span {
+    font-size: 14px;
+    text-transform: none;
+    font-weight: 500;
+    margin-left: 10px;
+}
+
+.tt,
+.tttt {
+    padding-top: 17px;
+    padding-bottom: 21px;
+}
+
+.tttt {
+    border-top: 1px solid #f4f4f4;
+}
+
+.tt span {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1c1c1c;
+    ;
+}
+
+.tt strong {
+    font-size: 14px;
+    font-weight: 700;
+    color: #363f4d;
+    letter-spacing: 0.25px;
+    float: right;
+}
+
+.tttt p {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1c1c1c;
+    ;
+}
+
+.tttt strong {
+    color: #ec1f27;
+    font-size: 22px;
+    font-weight: 700;
+    text-align: right;
+    display: block;
+}
+
+.payment {
+    width: 100%;
+    display: inline-block;
+    padding: 14px 28px;
+    line-height: normal;
+    border: 1px solid #1c1c1c;
+    text-transform: uppercase;
+    font-size: 14px;
+    text-align: center;
+    letter-spacing: 1.5px;
+    font-weight: 500;
+    font-style: normal;
+    color: #fff;
+    background-color: #000;
+    letter-spacing: 1.5px;
+    margin-top: 10px;
+}
+
+.continueBuying {
+    width: 100%;
+    display: inline-block;
+    padding: 14px 28px;
+    line-height: normal;
+    border: 1px solid #1c1c1c;
+    text-transform: uppercase;
+    font-size: 14px;
+    text-align: center;
+    letter-spacing: 1.5px;
+    font-weight: 500;
+    font-style: normal;
+    color: #000;
+    background-color: #fff;
+    letter-spacing: 1.5px;
+    margin-top: 10px;
+
+}
+
+.inforPaymentProduct1 a {
+    color: #242424;
+    font-weight: 500;
+    font-size: 15px;
+    letter-spacing: 0.25px;
+}
+
+.inforPaymentProduct1 a:hover {
+    color: #ec1f27;
+}
+
+.inforPaymentProduct_delete {
+    color: #ec1f27;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.inforPaymentProduct2 p {
+    font-size: 16px;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #ec1f27;
+    letter-spacing: 0.25px;
+}
+
+.inforPaymentProduct {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+}
+
+.inforPaymentProduct3 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.inforPaymentProduct3 input {
+    width: 20%;
+    border: none;
+    text-align: center;
+    background-color: #fff;
+    border-bottom: 1px solid #e5e5e5;
+    border-top: 1px solid #e5e5e5;
+    padding: 3px 9px;
+}
+
+.inforPaymentProduct3 input:focus {
+    outline: none;
+}
+
+.inforPaymentProduct3 button {
+    border: none;
+    background-color: #fff;
+    border: 1px solid #e5e5e5;
+    padding: 3px 9px;
+
+}
+
+.emptyCart {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.emptyCart>div>img {
+    width: 100%;
+    height: 100%;
+
+}
+
+.emptyCart>div {
+    width: 200px;
+}
+.emptyCart > a {
+    background: #1c1c1c;
+    border-color: #1c1c1c;
+    border-radius: 0!important;
+    color: #fff;
+    display: inline-block;
+    height: auto;
+    line-height: 1.1;
+    padding: 15px 30px;
+    text-transform: uppercase;
+    margin-top: 20px;
+}

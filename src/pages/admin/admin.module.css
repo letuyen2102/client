@@ -1,0 +1,46 @@
+.imageAdmin > div > img {
+    width: 100%;
+}
+
+.imageAdmin > p {
+    text-align: center;
+    font-size: 18px;
+    margin: 5px;
+    color: #fff;
+}
+
+.listOptions {
+    margin-top: 15px;
+}
+.listOptions > ul > li {
+    line-height: 2.4;
+}
+
+.sidebarAdmin {
+    background-color: #3B3131;
+    /* position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0; */
+}
+.listOptions > ul > li i ,.listOptions > ul > li a {
+    color: #fff;
+}
+.contentWithSidebar {
+    /* position: fixed;
+    top: 0;
+    right: 0; */
+}
+.adminLogout {
+    height: 100px;
+    background-color: #3B3131;
+    position: relative;
+}
+.adminLogout > i {
+    position: absolute;
+    bottom: 30%;
+    right: 5%;
+    color: #fff;
+    font-size: 25px;
+    cursor: pointer;
+}

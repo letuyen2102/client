@@ -1,0 +1,70 @@
+@import url("https://fonts.googleapis.com/css?family=Space+Grotesk|Roboto&display=swap");
+
+* {
+  font-family: "Space Grotesk";
+}
+
+html {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+  color: #000;
+}
+
+a:hover {
+  text-decoration: none;
+  color: #000;
+}
+
+h2,
+p,
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  list-style-type: none;
+}
+
+.pagination {
+  justify-content: center;
+  margin-top: 25px;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #ec1f27;
+  border-color: #ec1f27;
+  color: #fff;
+  font-size: 14px;
+}
+
+.pagination .page-item .page-link {
+  float: left;
+  margin: 0 2.5px;
+  width: 28px;
+  background: #1c1c1c;
+  text-align: center;
+  height: 28px;
+  font-size: 14px;
+  line-height: 24px;
+  color: #fff;
+  border-radius: 0;
+  border: 1px solid #1c1c1c;
+  text-decoration: none;
+  border-radius: 3px !important;
+  padding: 0;
+}
+
+.page-link {
+  padding: 0;
+}
+
+.error_message {
+  color: #ec1f27;
+  font-size: 12px;
+}

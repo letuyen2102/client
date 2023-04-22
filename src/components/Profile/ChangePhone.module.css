@@ -1,0 +1,26 @@
+.changePhone {
+    padding: 20px;
+    background-color: #fff;
+}
+.getOTP > input {
+    background: #ffffff;
+    background-clip: padding-box;
+    border: 1px solid #c2c2c2;
+    border-radius: 1px;
+    font-size: 14px;
+    height: 32px;
+    line-height: 1.42857143;
+    padding: 0 9px;
+    width: 100%;
+}
+.getOTP > button {
+    background: #326e52;
+    border-radius: 3px;
+    color: #fff;
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 15px;
+    font-weight: 700;
+    border: none;
+    width: 100%;
+}

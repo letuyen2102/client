@@ -1,0 +1,145 @@
+.history {
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #eee;
+}
+
+.history_tab {
+    display: flex;
+    align-items: center;
+    border-bottom: 2px solid #f2f1f6;
+}
+
+.history_tab_content {
+    margin-top: 20px;
+}
+
+.history_tab strong {
+    font-size: 18px;
+    padding: 5px 20px;
+    cursor: pointer;
+}
+
+.history_tab_button {
+    border-bottom: 3px solid #ff6600;
+    color: #ff6600;
+}
+
+.history_tab_content_button {
+    padding: 5px 20px;
+    color: #000;
+    background-color: #f2f1f6;
+    margin-right: 10px;
+    border-radius: 3px;
+    font-size: 15px;
+    border: none;
+}
+
+.history_tab_content_button_active {
+    background: #ff6600;
+    color: #fff;
+}
+
+.history_btn_active_tab {
+    border-bottom: 3px solid #ff6600;
+    color: #ff6600;
+}
+
+.history_tab_content_sort {
+    margin-bottom: 20px;
+}
+
+.eachBooking {
+    margin-bottom: 20px;
+}
+
+.eachBooking_title {
+    padding: 5px 10px;
+}
+
+.eachBooking_title>div {
+    font-size: 13px;
+    width: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    flex-wrap: wrap;
+}
+
+.eachBooking_title>div>p {
+    white-space: pre;
+    margin-right: 5px;
+}
+
+.eachBooking_title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #F7F7F7;
+}
+
+.eachBooking_title>div>button {
+    background-color: #4b8c6c;
+    padding: 3px 10px;
+    color: #fff;
+    border-radius: 3px;
+    border: none;
+    width: 110px;
+}
+
+.eachBooking_title>a {
+    font-size: 13px;
+    color: #326e51;
+    font-weight: bold;
+    width: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+}
+
+.eachBooking {
+    border: 1px solid #f2f1f6;
+}
+
+.eachBooking_image_image>img {
+    width: 100%;
+    height: 100%;
+}
+
+.eachBookingContainer {
+    display: flex;
+    align-items: start;
+    width: 100%;
+}
+
+.eachBooking_image_image {
+    width: 100px;
+    margin-right: 15px;
+}
+
+.eachBooking_image {
+    padding: 15px;
+}
+
+/* .emptyProduct {
+    text-align: center;
+}
+
+.emptyProduct>p {
+    font-size: 18px;
+    padding: 20px 0px;
+}
+
+
+.emptyProduct>a {
+    background: #326e52;
+    border-radius: 3px;
+    color: #fff;
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 15px;
+    font-weight: 700;
+    margin: 20px 0px;
+} */
+
+

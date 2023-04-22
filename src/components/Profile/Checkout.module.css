@@ -1,0 +1,313 @@
+
+@media (min-width : 768px) {
+    .checkout , .processContainer{
+        width: 750px;
+    }
+}
+@media (max-width : 991px) {
+    .checkoutTitle {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+}
+@media (min-width : 992px) {
+    .checkout , .processContainer{
+        width: 970px;
+    }
+    .checkoutTitle {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: start;
+    }
+}
+@media (min-width : 1200px) {
+    .checkout , .processContainer{
+        width: 1170px;
+    }
+}
+.containerCheckout {
+    background-color: #F9FAFA;
+    padding: 30px 0px;
+}
+.checkoutTitle {
+    padding: 0;
+}
+.checkoutTitle > strong {
+    font-weight: 400;
+    font-size: 2.125rem;
+    line-height: 1.235;
+    letter-spacing: 0.00735em;
+    margin-right: 20%;
+    padding: 5px 0px;
+}
+.checkoutTitle > div {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 5px 0px;
+}
+.checkoutTitle > div > p , .checkoutTitle  > div > a {
+    font-size: 1rem;
+    letter-spacing: 0.00938em;
+    font-weight: 600;
+}
+.checkoutTitle  > div > a {
+    color: rgb(53, 120, 229);
+}
+
+.checkoutInforUser , .checkoutPayment , .billPayment {
+    background: rgb(255, 255, 255);
+    padding: 16px;
+    border: 1px solid #eee;
+    border-radius: 6px;
+    margin-top: 20px;
+}
+
+.checkoutInforUserTitle > p ,  .checkoutPaymentTitle > p{
+    font-size: 20px;
+    font-weight: 600;
+}
+.checkoutFormGroup > label {
+    color: rgb(33, 33, 33);
+    font-weight: 600;
+    margin-bottom: 9px;
+    font-size: 14px;
+    line-height: 1.4375em;
+    letter-spacing: 0.00938em;
+}
+.checkoutFormGroup {
+    margin-top: 10px;
+}
+.checkoutFormGroup > input {
+    width: 100%;
+    padding: 16px 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 3px;
+    color: #333;
+}
+.checkoutFormGroup > input:focus {
+    outline: none;
+}
+.checkoutGroupPaymentDot {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 3px solid #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 5%;
+}
+.checkoutGroupPaymentName {
+    width: 70%;
+    text-align: center;
+}
+.checkoutGroupPaymentName > p {
+    letter-spacing: 0.00938em;
+    font-size: 14px
+}
+.checkoutGroupPayment {
+    display: flex;
+    align-items: center;
+    border: 1px solid #E0E0E0;
+    border-radius: 6px;;
+    padding: 18px 20px;
+    cursor: pointer;
+    margin-top: 30px;
+    justify-content: space-between;
+}
+.checkoutGroupPaymentImg {
+    margin-right: 5%;
+}
+.checkoutGroupPaymentImg img{
+    width: 100%;
+    height: 100%;
+}
+.checkoutGroupPayment_active {
+    border-color: #00B156;
+}
+.checkoutGroupPayment_border_active {
+    border: 1px solid #F2994A;
+}
+.btn_payment_active {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #00B156;
+}
+.btn_para_active {
+    font-weight: 600;
+    text-shadow: 1px 1px 1px #ccc;
+}
+
+.billPayment {
+    padding: 16px;
+    background-color: #fff;
+}
+.billPaymentTitle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+}
+.billPaymentTitle > p {
+    font-size: 20px;
+    font-weight: 600;
+}
+.billPaymentTitle > button {
+    background: #fafafa;
+    border: 1px solid #e0e0e0;
+    border-radius: 1px;
+    color: #858585;
+    padding: 5px 7px;
+}
+.paymentProductImg {
+    margin-right: 20px;
+}
+.paymentProductImg > div {
+    width: 40px;
+    height: 40px;
+}
+.paymentProductImg > div > img {
+    width: 100%;
+    height: 100%;
+    border-radius: 3px;
+    object-fit: cover;
+}
+.paymentProductInfor {
+    width: 100%;
+}
+.paymentProductInfor > p {
+    line-height: 1.5;
+    letter-spacing: 0.00938em;
+    color: rgb(0, 0, 0);
+    font-size: 14px;
+    font-weight: 600;
+    text-shadow: 1px 1px 1px #ccc;
+}
+.paymentProductInfor > div  p {
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 12px
+}
+.billPayment > ul {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.billPayment > ul li {
+    display: flex;
+    align-items: center;
+    padding: 20px 0px;
+    border-width: 0px 0px thin;
+    border-color: rgba(0, 0, 0, 0.12);
+    border-style: dashed;
+    
+}
+.paymentProductInfor > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.subTotal > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0px;
+}
+.subTotal >div p {
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.5;
+    letter-spacing: 0.00938em;
+}
+.subTotal > div > strong {
+    font-weight: 600;
+}
+.subTotal > div > span {
+    font-weight: 500;
+    line-height: 1.57;
+    letter-spacing: 0.00714em;
+    font-size: 12px;
+    display: block;
+    margin-left: 70%;
+    color: rgb(133, 133, 133);
+}
+
+.aa {
+    font-weight: 600;
+}
+.bb {
+    color: rgb(235, 87, 87);
+    font-weight: 600;
+    font-size: 18px;
+}
+.cc {
+    font-weight: 500;
+    line-height: 1.57;
+    letter-spacing: 0.00714em;
+    font-size: 12px;
+    color: rgb(133, 133, 133);
+    text-align: right;
+    display: block;
+}
+.billBtn{
+    margin-top: 25px;
+}
+.billBtn > button{
+    align-items: center;
+    border: 0;
+    border-radius: 4px;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    font-size: 16px;
+    font-weight: 700;
+    height: 50px;
+    justify-content: center;
+    text-decoration: none;
+    width: 100%;
+    background: #00b156;
+}
+
+.process {
+    background-color: #fff;
+}
+
+.processS {
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 600;
+}
+.processS > div {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: #00B156;
+    color: #fff;
+    margin-right: 5px;
+}
+.processContainer > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.setSpace {
+    width: 15%;
+    height: 1px;
+    background-color: #7c8db5;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.processContainer {
+    padding: 40px 0px;
+}
+

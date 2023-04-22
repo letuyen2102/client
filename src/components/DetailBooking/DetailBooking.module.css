@@ -1,0 +1,133 @@
+.detail_booking {
+    background-color: #fff;
+    padding: 20px;
+}
+.detail_booking_title {
+    font-size: 18px;
+    color: #333;
+    font-weight: 700;
+}
+.detail_booking_address {
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin-top: 10px;
+}
+.bookingDate > p {
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+.bookingDate > p > span {
+    color: #326e51;
+}
+
+.bookingDate > button {
+    padding: 3px 10px;
+    border-radius: 3px;
+    color: #fff;
+    font-size: 12px;
+    width: 110px;
+    text-align: center;
+    border: none;
+}
+.btnSuccess , .btnProcessing{
+    background-color: #326e51;
+}
+.btnCancel {
+    background-color: #e5e5e5;
+}
+.bookingAddress > h4 , .bookingPayment > h4{
+    font-size: 14px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 5px;
+}
+.bookingAddress > p {
+    font-size: 13px;
+    font-weight: 500;
+}
+.bookingPayment > p , .bookingPayment > span {
+    font-size: 13px;
+    font-weight: 500;
+}
+.bookingPayment > span  {
+    color: #ff6600;
+}
+.table {
+    width: 100%;
+    margin-top: 50px;
+    border: 1px solid #e5e5e5;;
+}
+.table > thead th {
+    font-size: 14px;
+    font-weight: 700;
+    color: #333;
+    padding: 7px 10px;
+}
+.table > thead > tr {
+    border-bottom: 1px solid #e5e5e5;
+    background-color: #f7f7f7;
+}
+
+.table > tbody  td {
+    padding: 7px 10px;
+    border-bottom: 1px solid #e5e5e5;
+}
+.eachBookingRow_img > div > img {
+    width: 100%;
+}
+.eachBookingRow {
+    display: flex;
+    align-items: center;
+
+}
+.eachBookingRow_img {
+    flex: 2;
+}
+.eachBookingRow_infor{
+    flex: 10;
+    margin-left: 15px;
+}
+.eachBookingRow_infor > h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: #326e51;
+    margin-bottom: 5px;
+}
+.eachBookingRow_infor > span , .eachBookingRow_infor > div {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.eachBookingRow_infor > a {
+    font-size: 14px;
+    color: #333;
+    display: block;
+}
+
+.endBill {
+    padding: 7px 10px;
+    border-left: 1px solid #e5e5e5;
+    border-right: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
+    background-color: #f7f7f7;
+}
+.endBill1 {
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.endBill {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+}
+.endBill2 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.endBill1 > p , .endBill2 > p{
+    margin-left: 100px;
+}

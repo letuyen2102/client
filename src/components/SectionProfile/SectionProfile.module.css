@@ -1,0 +1,98 @@
+.sectionTitle>p {
+    font-size: 26px;
+    font-weight: 500;
+}
+
+.formGroup {
+    margin-top: 24px;
+}
+
+.formGroup>label {
+    line-height: 1.4375em;
+    letter-spacing: 0.00938em;
+    padding: 0px;
+    font-family: "Space Grotesk";
+    font-weight: 700;
+    color: rgb(33, 33, 33);
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.formGroup>input {
+    width: 100%;
+    border-radius: 3px;
+    background-color: rgb(255, 255, 255);
+    height: 40px;
+    border: 2px solid rgb(224, 224, 224);
+    padding: 10px;
+}
+
+.formGroup>input:focus {
+    outline: none;
+}
+
+.gender {
+    margin-top: 24px;
+}
+
+.gender>label {
+    line-height: 1.4375em;
+    letter-spacing: 0.00938em;
+    padding: 0px;
+    font-family: "Space Grotesk";
+    font-weight: 700;
+    color: rgb(33, 33, 33);
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.genderRow {
+    display: flex;
+    align-items: center;
+}
+
+.genderGroup {
+    display: flex;
+    align-items: center;
+    margin-right: 25px;
+}
+
+.genderGroup:hover {
+    cursor: pointer;
+}
+
+.borderGender {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 3px solid rgb(33, 33, 33);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.genderGroup>label {
+    margin-left: 5px;
+}
+
+.setBorder {
+    border: 3px solid #F2994A;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    background-color: #F2994A;
+    border-radius: 50%;
+}
+
+.formGroup>button {
+    border: none;
+    background-color: #00b156;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: 2px;
+    border-radius: 5px;
+}
