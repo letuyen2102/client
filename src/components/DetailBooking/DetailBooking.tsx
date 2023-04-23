@@ -6,7 +6,7 @@ import styles from './DetailBooking.module.css'
 import { convertToVietnamTime } from "../Profile/History"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../../store/store"
-interface PRODORDER {
+export interface PRODORDER {
     product: PRODUCT
     quantity: number,
     color: string,
@@ -15,6 +15,7 @@ interface PRODORDER {
     total: number
 }
 export interface ORDER {
+    _id: string
     products: PRODORDER[],
     method: string,
     orderId: string,
@@ -48,15 +49,15 @@ const DetailBooking = () => {
                             <p>Đơn hàng <span>#{orderId}</span></p>
                             <p>Ngày đặt : {convertToVietnamTime(order?.createAt === undefined ? '' : order.createAt)}</p>
                             {
-                                order?.status === "success" && 
+                                order?.status === "success" &&
                                 <button className={styles.btnSuccess}>Thành công</button>
                             }
                             {
-                                order?.status === "processing" && 
+                                order?.status === "processing" &&
                                 <button className={styles.btnProcessing}>Đang xử lý</button>
                             }
                             {
-                                order?.status === "cancel" && 
+                                order?.status === "cancel" &&
                                 <button className={styles.btnCancel}>Đã hủy</button>
                             }
                         </div>
@@ -74,11 +75,11 @@ const DetailBooking = () => {
                             <h4>Phương thức thanh toán :</h4>
                             {
                                 order?.method === "offline" ?
-                                <p>Thanh toán khi nhận hàng (cod)</p>
-                                : <p>Thanh toán {order?.method} qua {order?.paymentCardName}</p>
+                                    <p>Thanh toán khi nhận hàng (cod)</p>
+                                    : <p>Thanh toán {order?.method} qua {order?.paymentCardName}</p>
                             }
                             {
-                                (order?.method === "online" && (order.status=== "processing" || order.status === "success")) && <span>Thanh toán thành công</span>
+                                (order?.method === "online" && (order.status === "processing" || order.status === "success")) && <span>Thanh toán thành công</span>
                             }
                             {
                                 order?.method === "offline" && order.status === "processing"

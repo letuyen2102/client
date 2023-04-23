@@ -1,6 +1,13 @@
+import { useParams } from 'react-router-dom'
+import { useState } from 'react'
 import styles from './MyBooking.module.css'
+import { ORDER } from './PaginitionBooking'
 
 const DetailOrder = () => {
+    const { orderId } = useParams()
+
+    const [orderDetail, setOrderDetail] = useState<ORDER>()
+
     return (
         <div className='col-lg-10 offset-lg-1'>
             <div className={styles.sectionTitle}>
@@ -48,7 +55,7 @@ const DetailOrder = () => {
 
             <div style={{ padding: '20px 30px', border: '1px solid rgb(222, 231, 231)', backgroundColor: '#fff', marginTop: '30px' }}>
                 <div className={styles.sectionTitle}>
-                    <p style={{ fontSize: '20px' }}>Thông tin đơn hàng <span>#AT1682151996162</span></p>
+                    <p style={{ fontSize: '20px' }}>Thông tin đơn hàng <span>#{orderDetail?._id}</span></p>
                 </div>
                 <table className={styles.orderTable}>
                     <thead>

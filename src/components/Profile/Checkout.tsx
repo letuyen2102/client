@@ -8,9 +8,25 @@ import { ITEM, ITEMCART } from "../Cart/Cart";
 import Title from "../Tiltle/Title";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store";
+
+interface RECEIVER {
+    name: string,
+    email: string,
+    phone: string,
+    address: string,
+    note: string
+}
+
 const Checkout = () => {
     const handleLoginAndCart = useSelector((state: RootState) => state.auth)
     const dispatch = useDispatch()
+    const [receiver, setReceiver] = useState<RECEIVER>({
+        name: handleLoginAndCart.user.name,
+        email: handleLoginAndCart.user.email,
+        phone: handleLoginAndCart.user.phone,
+        address: handleLoginAndCart.user.address,
+        note: ""
+    })
     const navigate = useNavigate()
     const [payment, setPayment] = useState('cod')
     const [itemsCart, setItemsCart] = useState<ITEMCART[]>([])
@@ -24,7 +40,8 @@ const Checkout = () => {
                     orderDescription: "Test order",
                     orderType: "billpayment",
                     language: "vn",
-                    products : itemsCart[0].items,
+                    products: itemsCart[0].items,
+                    ...receiver
                 }
             })
             console.log(res.data.data)
@@ -37,8 +54,7 @@ const Checkout = () => {
             const res = await axios.post('/myway/api/bookings/createBooking', {
                 products: itemsCart[0].items,
                 status: "processing",
-                method: "offline",
-                orderId : itemsCart[0].items[0].product._id
+                ...receiver
             })
 
             if (res.data.status === "success") {
@@ -52,7 +68,6 @@ const Checkout = () => {
                 .then(res => res.json())
                 .then(all => setItemsCart(all.cartMe))
         }
-
         getCartApi()
     }, [])
     return (
@@ -99,12 +114,6 @@ const Checkout = () => {
                 <div className={`container ${styles.checkout}`}>
                     <div className={`container ${styles.checkoutTitle}`}>
                         <strong>ĐẶT HÀNG</strong>
-
-                        <div>
-                            <p>Bạn đã có tài khoản ? </p>
-                            <Link to=''> Đăng nhập ngay</Link>
-                        </div>
-
                     </div>
 
                     <div className="row">
@@ -115,36 +124,31 @@ const Checkout = () => {
                                 </div>
                                 <div className={styles.checkoutFormGroup}>
                                     <label htmlFor="name">Họ tên</label>
-                                    <input id="name" type='text' placeholder="Nhập họ và tên của bạn" value={handleLoginAndCart.user.name}/>
+                                    <input id="name" type='text' required placeholder="Nhập họ và tên của bạn" value={receiver.name} onChange={event => setReceiver({ ...receiver, name: event.target.value })} />
                                 </div>
 
                                 <div className="row">
                                     <div className="col-lg-6">
                                         <div className={styles.checkoutFormGroup}>
                                             <label htmlFor="phone">Số điện thoại</label>
-                                            <input id="phone" type='text' placeholder="Nhập số điện thoại của bạn" value={handleLoginAndCart.user.phone}/>
+                                            <input id="phone" type='text' required placeholder="Nhập số điện thoại của bạn" value={receiver.phone} onChange={event => setReceiver({ ...receiver, phone: event.target.value })} />
                                         </div>
                                     </div>
                                     <div className="col-lg-6">
                                         <div className={styles.checkoutFormGroup}>
                                             <label htmlFor="email">Email</label>
-                                            <input id="email" type='text' placeholder="Nhập email của bạn" value={handleLoginAndCart.user.email}/>
+                                            <input id="email" type='email' placeholder="Nhập email của bạn" value={receiver.email} onChange={event => setReceiver({ ...receiver, email: event.target.value })} />
                                         </div>
                                     </div>
                                 </div>
 
                                 <div className={styles.checkoutFormGroup}>
                                     <label htmlFor="address">Địa chỉ nhận hàng</label>
-                                    <input id="address" type='text' placeholder="Nhập địa chỉ của bạn" value={handleLoginAndCart.user.address}/>
+                                    <input id="address" type='text' required placeholder="Nhập địa chỉ của bạn" value={receiver.address} onChange={event => setReceiver({ ...receiver, address: event.target.value })} />
                                 </div>
-
-                                <div className={styles.checkoutFormGroup}>
-
-                                </div>
-
                                 <div className={styles.checkoutFormGroup}>
                                     <label htmlFor="note">Ghi chú</label>
-                                    <input id="note" type='text' placeholder="Nhập ghi chú của bạn" />
+                                    <input id="note" type='text' placeholder="Nhập ghi chú của bạn" value={receiver.note} onChange={event => setReceiver({ ...receiver, note: event.target.value })} />
                                 </div>
 
                             </div>

@@ -32,6 +32,14 @@ export interface UserInfor {
     email: string,
     id: string
 }
+export interface USER_UPDATE {
+    name: string,
+    birthday: Date,
+    gender: string,
+    phone: string,
+    address: string,
+    email: string,
+}
 export interface AuthState {
     token: string;
     user: UserInfor;
@@ -227,7 +235,6 @@ export const authSlice = createSlice({
     },
 })
 
-// Action creators are generated for each case reducer function
 export const { login, logout, addCartNoToken, setEmptyCart, decCartNoToken, inCartNoTken, clearEach, changeInforUserImage } = authSlice.actions
 
 export default authSlice.reducer

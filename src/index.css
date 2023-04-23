@@ -32,13 +32,13 @@ li {
 }
 
 .pagination {
-  justify-content: center;
+  justify-content: end;
   margin-top: 25px;
 }
 
 .pagination .page-item.active .page-link {
-  background-color: #ec1f27;
-  border-color: #ec1f27;
+  background-color: #00b156;
+  border-color: #00b156;
   color: #fff;
   font-size: 14px;
 }
@@ -47,12 +47,12 @@ li {
   float: left;
   margin: 0 2.5px;
   width: 28px;
-  background: #1c1c1c;
+  background: #fff;
   text-align: center;
   height: 28px;
   font-size: 14px;
   line-height: 24px;
-  color: #fff;
+  color: #000;
   border-radius: 0;
   border: 1px solid #1c1c1c;
   text-decoration: none;
