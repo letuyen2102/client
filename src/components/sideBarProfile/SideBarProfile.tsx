@@ -1,13 +1,49 @@
 import { Link } from 'react-router-dom'
 import styles from './SideBarProfile.module.css'
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
+import axios from 'axios';
+import { changeInforUserImage } from '../../slices/authSlice';
 const SideBarProfile = () => {
+    const handleLoginAndCart = useSelector((state: RootState) => state.auth)
+    const dispatch = useDispatch()
+    const [confirm, setConfirm] = useState(false)
+    const [avatar, setAvatar] = useState<File | null>(null);
+    const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const selectedFile = event.target.files && event.target.files[0];
+        if (selectedFile) {
+            setAvatar(selectedFile);
+
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImagePreviewUrl(reader.result as string);
+            };
+            reader.readAsDataURL(selectedFile);
+
+            setConfirm(true)
+        }
+    };
+    const handleChangeImageUser = async (objUpdateImage: FormData) => {
+        try {
+            const res = await axios.patch('/myway/api/users/updateMe', objUpdateImage)
+            if (res.data.status === "success") {
+                dispatch(changeInforUserImage({ userDispatch: res.data.user }))
+            }
+        }
+        catch (err) {
+            console.log(err)
+            alert('Đã có lỗi khi tải ảnh lên , vui lòng kiểm tra lại')
+        }
+    }
     return (
         <div>
             <div className={styles.sideBarImageName}>
                 <div className={styles.sideBarImageUpload}>
                     <div>
                         <div>
-                            <img src='/users/default-user.jpg' alt='' />
+                            {imagePreviewUrl ? <img src={imagePreviewUrl} alt='' /> : <img src={`/users/${handleLoginAndCart.user.photo}`} alt='' />}
                         </div>
                     </div>
 
@@ -19,21 +55,27 @@ const SideBarProfile = () => {
                             </path>
                         </svg>
 
-                        <input id="fileInput" type="file" />
+                        <input id="fileInput" type="file" onChange={handleFileChange} />
 
                     </label>
                 </div>
 
                 <div className={styles.sideBarName}>
-                    <p>Lê tuyến</p>
+                    <p>{handleLoginAndCart.user.name}</p>
                     <p>Myway memmber</p>
                 </div>
             </div>
-            <div className={styles.confirmUploadImg}>
-                <button>CẬP NHẬT</button>
+            {confirm && <div className={styles.confirmUploadImg}>
+                <button onClick={event => {
+                    const formData = new FormData()
+                    if (avatar) {
+                        formData.append('users', avatar)
+                    }
+                    handleChangeImageUser(formData)
+                }}>CẬP NHẬT</button>
                 <button>HỦY</button>
 
-            </div>
+            </div>}
             <ul className={styles.sideBarListOptions}>
                 <li>
                     <Link to=''>

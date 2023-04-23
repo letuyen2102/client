@@ -7,12 +7,13 @@ import styles from '../../components/sideBarProfile/SideBarProfile.module.css'
 import SectionProfile from "../../components/SectionProfile/SectionProfile"
 import ChangePassword from "../../components/SectionProfile/ChangePassword"
 import MyBooking from "../../components/SectionProfile/MyBooking"
+import DetailOrder from "../../components/SectionProfile/DetailOrder"
 const ProfileUser = () => {
     return (
         <div>
             <Header />
             <div style={{ backgroundColor: '#F9FAFA' }}>
-                <div className={`${styles.middle} container-lg`}>
+                <div className={`container-lg`}>
                     <Title>
                         <ul>
                             <li>
@@ -24,20 +25,21 @@ const ProfileUser = () => {
                         </ul>
                     </Title>
                     <div className="row" style={{ marginTop: '50px' }}>
-                        <div className="col-lg-4" style={{ borderRight: '1px dashed rgb(224, 224, 224)' }}>
+                        <div className="col-lg-3" style={{ borderRight: '1px dashed rgb(224, 224, 224)' }}>
                             <div>
-                                <div style={{ width: '85%' }}>
+                                <div>
                                     <SideBarProfile />
                                 </div>
                             </div>
                         </div>
-                        <div className="col-lg-8">
+                        <div className="col-lg-9">
                             <div>
-                                <div style={{ marginLeft: '10%' }}>
+                                <div>
                                     <Routes>
                                         <Route path="/" element={<SectionProfile />} />
                                         <Route path="/change-password" element={<ChangePassword />} />
                                         <Route path="/myOrder" element={<MyBooking />} />
+                                        <Route path="/myOrder/:orderId" element={<DetailOrder />} />
                                     </Routes>
                                 </div>
                             </div>

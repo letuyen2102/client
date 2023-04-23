@@ -23,6 +23,8 @@ export interface CartWithNoToken {
 export interface UserInfor {
     _id: string,
     name: string,
+    birthday: Date,
+    gender: string,
     photo: string,
     phone: string,
     address: string,
@@ -40,6 +42,8 @@ export const initialStateAuth: AuthState = {
     user: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user") || "") : {
         _id: "",
         name: "",
+        gender: "",
+        birthday: new Date(),
         photo: "",
         phone: "",
         address: "",
@@ -72,6 +76,8 @@ export const authSlice = createSlice({
             localStorage.setItem("user", JSON.stringify({
                 _id: "",
                 name: "",
+                gender: "",
+                birthday: new Date(),
                 photo: "",
                 phone: "",
                 address: "",
@@ -85,6 +91,8 @@ export const authSlice = createSlice({
                 user: {
                     _id: "",
                     name: "",
+                    gender: "",
+                    birthday: new Date(),
                     photo: "",
                     phone: "",
                     address: "",
@@ -94,7 +102,16 @@ export const authSlice = createSlice({
                 }
             }
         },
-
+        changeInforUserImage: (state, action: PayloadAction<{ userDispatch: UserInfor }>) => {
+            localStorage.setItem("user", JSON.stringify(action.payload.userDispatch))
+            return {
+                ...state,
+                user: {
+                    ...state.user,
+                    ...action.payload.userDispatch
+                }
+            }
+        },
         addCartNoToken: (state, action: PayloadAction<{
             name: string
             productId: string,
@@ -211,6 +228,6 @@ export const authSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { login, logout, addCartNoToken, setEmptyCart, decCartNoToken, inCartNoTken, clearEach } = authSlice.actions
+export const { login, logout, addCartNoToken, setEmptyCart, decCartNoToken, inCartNoTken, clearEach, changeInforUserImage } = authSlice.actions
 
 export default authSlice.reducer

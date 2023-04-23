@@ -1,8 +1,11 @@
+import { useSelector } from 'react-redux'
 import styles from './SectionProfile.module.css'
+import { RootState } from '../../store/store'
 
 const SectionProfile = () => {
+    const handleLoginAndCart = useSelector((state: RootState) => state.auth)
     return (
-        <div>
+        <div className='col-lg-10 offset-lg-1'>
             <div className={styles.sectionTitle}>
                 <p>Thông tin tài khoản</p>
             </div>
@@ -13,7 +16,7 @@ const SectionProfile = () => {
                             Họ và tên
                         </label>
 
-                        <input />
+                        <input value={handleLoginAndCart.user.name} />
                     </div>
                 </div>
 
@@ -23,7 +26,9 @@ const SectionProfile = () => {
                             Ngày sinh
                         </label>
 
-                        <input type='datetime-local' />
+                        <input type='date' value={new Date(handleLoginAndCart.user.birthday).toISOString().substr(0, 10)} onChange={event => console.log(event.target.value)} />
+
+
                     </div>
                 </div>
 
@@ -52,30 +57,23 @@ const SectionProfile = () => {
                     Giới tính
                 </label>
                 <div className={styles.genderRow}>
-                    <div className={`${styles.genderGroup}`}>
-                        <div className={`${styles.setBorder} ${styles.borderGender}`}>
-                            <span className={styles.dot}></span>
-                        </div>
-                        <label>Nam</label>
-                    </div>
-                    <div className={styles.genderGroup}>
-                        <div className={styles.borderGender}>
-                            <span></span>
-                        </div>
-                        <label>Nữ</label>
-                    </div>
-                    <div className={styles.genderGroup}>
-                        <div className={styles.borderGender}>
-                            <span></span>
-                        </div>
-                        <label>Khác</label>
-                    </div>
+
+                    {
+                        ["Nam", "Nữ", "Khác"].map((each, idx) => {
+                            return <div className={`${styles.genderGroup}`} key={idx}>
+                                <div className={each === handleLoginAndCart.user.gender ? `${styles.setBorder} ${styles.borderGender}` : `${styles.borderGender}`}>
+                                    <span className={each === handleLoginAndCart.user.gender ? styles.dot : ""}></span>
+                                </div>
+                                <label>{each}</label>
+                            </div>
+                        })
+                    }
                 </div>
             </div>
             <div className={styles.sectionAddress}>
                 <div className={styles.formGroup}>
-                    <label>Số nhà + Tên đường</label>
-                    <input placeholder='Nhập số nhà và tên đường' />
+                    <label>Địa chỉ</label>
+                    <input placeholder='Nhập địa chỉ của bạn' />
                 </div>
             </div>
 

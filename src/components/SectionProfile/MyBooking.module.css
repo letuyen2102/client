@@ -3,3 +3,165 @@
     letter-spacing: 2px;
     font-weight: 700;
 }
+
+.sectionTitle>p>span {
+    color: #00b156;
+}
+
+.btnBooking {
+    width: 100%;
+    background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(222, 231, 231);
+    font-size: 16px;
+    font-weight: bolder;
+    line-height: 20px;
+    text-transform: uppercase;
+    color: #9e9e9e;
+    padding: 15px 10px;
+}
+
+.eachOrder_overview {
+    color: rgb(133, 133, 133);
+    font-size: 16px;
+}
+
+.detailOrder {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.detailOrder>div {
+    display: flex;
+    align-items: center;
+}
+
+.detailOrder>span,
+.eachInfor>button {
+    background-color: rgba(0, 177, 86, 0.15);
+    color: rgb(0, 152, 89);
+    padding: 4px 12px;
+    border-radius: 3px;
+    font-size: 14px;
+    border: none;
+}
+
+.detailOrder>div button,
+.detailOrder>div a {
+    padding: 10px 20px;
+    min-width: 130px;
+    font-size: 16px;
+    letter-spacing: 1.5px;
+    border: none;
+}
+
+.detailOrder>div button {
+    background-color: #757575;
+    color: #fff;
+    margin-right: 20px;
+}
+
+.detailOrder>div a {
+    background-color: #00b156;
+    color: #fff;
+}
+
+.btnColor {
+    color: #00b156;
+}
+
+.eachItemOrder {
+    display: flex;
+    align-items: center;
+
+}
+
+.eachOrder_item {
+    padding: 16px 0px;
+}
+
+.eachOrder_item div:last-child>span {
+    font-weight: 600;
+}
+
+.eachOrder_item div:last-child p {
+    font-size: 14px;
+}
+
+.eachInfor {
+    margin-bottom: 10px;
+}
+
+.eachInfor span:first-child {
+    color: #616161;
+    font-size: 14px;
+    font-weight: 300;
+    min-width: 30%;
+    display: inline-block;
+}
+
+.eachInfor span:last-child {
+    font-size: 14px;
+    font-weight: 600;
+    color: rgb(33, 33, 33);
+}
+
+.eachInfor p {
+    display: inline-block;
+    font-size: 14px;
+    color: #00b156;
+    font-weight: 600;
+}
+
+.orderTable {
+    width: 100%;
+    margin-top: 30px;
+}
+
+.orderTable>thead>tr>th,
+.orderTable>tbody>tr>td {
+    padding: 25px 0px;
+}
+
+.orderTable>tbody>tr>td>div>span {
+    font-size: 16px;
+    line-height: 1.5;
+    letter-spacing: 0.00938em;
+    font-weight: 600;
+}
+
+.orderTable>tbody>tr>td>div>div {
+    display: flex;
+    align-items: center;
+}
+
+.orderTable>tbody>tr>td>div>div p:first-child {
+    margin-right: 15px;
+}
+
+.orderTable>tbody>tr>td>div>div p {
+    font-size: 14px;
+    color: rgb(117, 117, 117);
+}
+
+.detailBill li {
+    padding: 25px 0px;
+    border-bottom: 1px solid rgb(245, 245, 245);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.detailBill li:last-child span {
+    font-weight: 600;
+    font-size: 20px;
+}
+
+.detailBill li:last-child span:last-child {
+    color: rgb(235, 87, 87);
+}
+
+.detailBill li span {
+    font-weight: 600;
+    font-size: 16px;
+}

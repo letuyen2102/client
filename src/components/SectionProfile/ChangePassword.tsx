@@ -2,7 +2,7 @@ import styles from './ChangePassword.module.css'
 
 const ChangePassword = () => {
     return (
-        <div>
+        <div className='col-lg-10 offset-lg-1'>
             <div className={styles.sectionTitle}>
                 <p>Thay đổi mật khẩu</p>
             </div>
