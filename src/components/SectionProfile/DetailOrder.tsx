@@ -1,12 +1,23 @@
 import { useParams } from 'react-router-dom'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import styles from './MyBooking.module.css'
 import { ORDER } from './PaginitionBooking'
+import moment from 'moment'
 
 const DetailOrder = () => {
     const { orderId } = useParams()
 
     const [orderDetail, setOrderDetail] = useState<ORDER>()
+    console.log(orderDetail)
+    useEffect(() => {
+        const getBooking = async () => {
+            await fetch(`/myway/api/bookings/getBooking/${orderId}`)
+                .then(res => res.json())
+                .then(all => setOrderDetail(all.booking))
+        }
+
+        getBooking()
+    }, [orderId])
 
     return (
         <div className='col-lg-10 offset-lg-1'>
@@ -17,39 +28,53 @@ const DetailOrder = () => {
             <div style={{ padding: '20px 30px', border: '1px solid rgb(222, 231, 231)', backgroundColor: '#fff', marginTop: '30px' }}>
                 <div className={styles.eachInfor}>
                     <span>Đơn hàng:</span>
-                    <span>#AT1682151996162</span>
+                    <span>#{orderDetail?._id}</span>
                 </div>
                 <div className={styles.eachInfor}>
                     <span>Ngày đặt:</span>
-                    <span>23/4/2023</span>
+                    <span>{moment(orderDetail?.createAt).format('DD/MM/YYYY')}</span>
                 </div>
                 <div className={styles.eachInfor}>
                     <span>Trạng thái:</span>
-                    <button>Đã xác nhận</button>
+                    {
+                        orderDetail?.status === "processing"
+                        && <button className={styles.btnOrderSuccess}>Đang xử lý</button>
+                    }
+                    {
+                        orderDetail?.status === "success"
+                        && <button className={styles.btnOrderSuccess}>Đã xác nhận</button>
+                    }
+                    {
+                        orderDetail?.status === "cancel"
+                        && <button className={styles.btnOrderFail}>Đã hủy</button>
+                    }
                 </div>
                 <div className={styles.eachInfor}>
                     <span>Tên người nhận:</span>
-                    <p>Lê Văn Tuyến</p>
+                    <p>{orderDetail?.name}</p>
                 </div>
                 <div className={styles.eachInfor}>
                     <span>Số điện thoại:</span>
-                    <span>0984993733</span>
+                    <span>{orderDetail?.phone}</span>
                 </div>
                 <div className={styles.eachInfor}>
                     <span>Email:</span>
-                    <span>letuyenkhtn212@gmail.com</span>
+                    <span>{orderDetail?.email ? orderDetail.email : ""}</span>
                 </div>
                 <div className={styles.eachInfor}>
                     <span>Địa chỉ nhận hàng:</span>
-                    <span>Trường đại học CNTT , phường Linh Trung , quận Thủ Đức</span>
+                    <span>{orderDetail?.address}</span>
                 </div>
                 <div className={styles.eachInfor}>
                     <span>Ghi chú:</span>
-                    <span>Nhận hàng mọi lúc</span>
+                    <span>{orderDetail?.note ? orderDetail.note : ""}</span>
                 </div>
                 <div className={styles.eachInfor}>
                     <span>Hình thức thanh toán:</span>
-                    <span>Thanh toán khi nhận hàng (COD)</span>
+                    {
+                        orderDetail?.paymentCardName ? <span>Thanh toán online qua {orderDetail.paymentCardName}</span>
+                            : <span>Thanh toán khi nhận hàng (COD)</span>
+                    }
                 </div>
             </div>
 
@@ -76,53 +101,37 @@ const DetailOrder = () => {
                     </thead>
 
                     <tbody>
-                        <tr>
-                            <td>
-                                <div>
-                                    <span>ĐẦM MAXI CỔ TYM KHÔNG TAY</span>
-                                    <div>
-                                        <p>Màu : Do</p>
-                                        <p>Kích cỡ : L+</p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <p>2.000.000đ</p>
-                            </td>
-                            <td>
-                                <p>2</p>
-                            </td>
-                            <td>
-                                <p>4.000.000đ</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div>
-                                    <span>ĐẦM MAXI CỔ TYM KHÔNG TAY</span>
-                                    <div>
-                                        <p>Màu : Do</p>
-                                        <p>Kích cỡ : L+</p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <p>2.000.000đ</p>
-                            </td>
-                            <td>
-                                <p>2</p>
-                            </td>
-                            <td>
-                                <p>4.000.000đ</p>
-                            </td>
-                        </tr>
+                        {
+                            orderDetail?.products.map((each, idx) => {
+                                return <tr key={idx}>
+                                    <td>
+                                        <div>
+                                            <span>{each.product.name}</span>
+                                            <div>
+                                                <p>Màu : {each.color}</p>
+                                                <p>Kích cỡ : {each.size}</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <p>{each.product.newPrice.toLocaleString('Vi-VN')}đ</p>
+                                    </td>
+                                    <td>
+                                        <p>{each.quantity}</p>
+                                    </td>
+                                    <td>
+                                        <p>{each.total.toLocaleString('Vi-VN')}đ</p>
+                                    </td>
+                                </tr>
+                            })
+                        }
                     </tbody>
                 </table>
 
                 <ul className={styles.detailBill}>
                     <li>
                         <span>Tổng tiền hàng</span>
-                        <span>385.000đ</span>
+                        <span>{orderDetail?.subTotal.toLocaleString('Vi-VN')}đ</span>
                     </li>
 
                     <li>
@@ -140,7 +149,7 @@ const DetailOrder = () => {
                     </li>
                     <li>
                         <span>Tổng thanh toán</span>
-                        <span>4.000.000đ</span>
+                        <span>{orderDetail?.subTotal.toLocaleString('Vi-VN')}đ</span>
                     </li>
                 </ul>
             </div>

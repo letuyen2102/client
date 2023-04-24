@@ -4,7 +4,7 @@ import ReactPaginate from 'react-paginate';
 import { PRODUCT } from '../Detail/Detail';
 import { UserInfor } from '../../slices/authSlice';
 import styles from './MyBooking.module.css'
-import { Link } from 'react-router-dom';
+import { Link, NavigateFunction, useLocation, useNavigate } from 'react-router-dom';
 import moment from 'moment';
 export interface PRODORDER {
     product: PRODUCT
@@ -16,7 +16,12 @@ export interface PRODORDER {
 }
 export interface ORDER {
     _id: string,
-    user: UserInfor
+    user: UserInfor,
+    name: string,
+    email: string,
+    address: string,
+    phone: string,
+    note: string,
     products: PRODORDER[],
     method: string,
     orderId: string,
@@ -33,7 +38,7 @@ function Items({ currentItems }: { currentItems: ORDER[] }) {
                     <div style={{ padding: '20px 30px', border: '1px solid rgb(222, 231, 231)', backgroundColor: '#fff', marginTop: '30px' }} key={idx}>
                         <div className={styles.eachOrder}>
                             <div className={styles.eachOrder_overview}>
-                                <p>Mã đơn hàng: #{item._id} | Đặt ngày: {moment(item.createAt).format('DD/MM/YYYY')} | Thanh toán khi nhận hàng (COD) | Tổng tiền: 385.000đ</p>
+                                <p>Mã đơn hàng: #{item._id} | Đặt ngày: {moment(item.createAt).format('DD/MM/YYYY')} | {item.paymentCardName ? `Thanh toán online qua ${item.paymentCardName}` : "Thanh toán khi nhận hàng (COD)"} | Tổng tiền: {item.subTotal}đ</p>
                             </div>
                             <div className={styles.eachOrder_item}>
                                 <div className='row'>
@@ -77,18 +82,24 @@ function Items({ currentItems }: { currentItems: ORDER[] }) {
 }
 
 function PaginatedItems({ itemsPerPage, apiString }: { itemsPerPage: number, apiString: string }) {
+    const navigate: NavigateFunction = useNavigate()
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
     const [bookings, setBookings] = useState<ORDER[]>([])
-    const [itemOffset, setItemOffset] = useState(0);
+    const itemOffset = parseInt((searchParams.get("page") ?? "1"), 10)
     const endOffset = itemOffset + itemsPerPage;
     console.log(`Loading items from ${itemOffset} to ${endOffset}`);
     const currentItems = bookings.slice(itemOffset, endOffset);
     const pageCount = Math.ceil(bookings.length / itemsPerPage);
     const handlePageClick = (event: { selected: number }) => {
-        const newOffset = (event.selected * itemsPerPage) % bookings.length;
-        console.log(
-            `User requested page number ${event.selected}, which is offset ${newOffset}`
-        );
-        setItemOffset(newOffset);
+        if (event.selected === 0) {
+            searchParams.delete("page")
+            navigate(`?${searchParams.toString()}`)
+        }
+        else {
+            searchParams.set("page", (event.selected + 1).toString())
+            navigate(`?${searchParams.toString()}`)
+        }
     };
     useEffect(() => {
         const getBookingsMe = async () => {
@@ -98,7 +109,7 @@ function PaginatedItems({ itemsPerPage, apiString }: { itemsPerPage: number, api
         }
 
         getBookingsMe()
-    }, [])
+    }, [apiString])
     return (
         <>
             <Items currentItems={currentItems} />
@@ -109,6 +120,7 @@ function PaginatedItems({ itemsPerPage, apiString }: { itemsPerPage: number, api
                 pageRangeDisplayed={3}
                 marginPagesDisplayed={2}
                 pageCount={pageCount}
+                forcePage={itemOffset - 1}
                 previousLabel="<"
                 pageClassName="page-item"
                 pageLinkClassName="page-link"
