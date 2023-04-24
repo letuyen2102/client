@@ -1,13 +1,19 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import styles from './SideBarProfile.module.css'
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import axios from 'axios';
-import { changeInforUserImage } from '../../slices/authSlice';
+import { changeInforUserImage, logout } from '../../slices/authSlice';
+interface CHANGE_PASSWORD {
+    passwordCurrent: string,
+    password: string,
+    passwordConfirm: string
+}
 const SideBarProfile = () => {
     const handleLoginAndCart = useSelector((state: RootState) => state.auth)
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const [confirm, setConfirm] = useState(false)
     const [avatar, setAvatar] = useState<File | null>(null);
     const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
@@ -29,12 +35,37 @@ const SideBarProfile = () => {
         try {
             const res = await axios.patch('/myway/api/users/updateMe', objUpdateImage)
             if (res.data.status === "success") {
+                setConfirm(false)
                 dispatch(changeInforUserImage({ userDispatch: res.data.user }))
             }
         }
         catch (err) {
             console.log(err)
             alert('Đã có lỗi khi tải ảnh lên , vui lòng kiểm tra lại')
+        }
+    }
+    const handleChangePassword = async (objUpdatePassword: CHANGE_PASSWORD) => {
+        try {
+            const res = await axios.patch('/myway/api/users/updateMyPassword', objUpdatePassword)
+            if (res.data.status === "success") {
+                dispatch(logout())
+                navigate('/account/login')
+            }
+        }
+        catch (err) {
+            alert("Đã có lỗi xảy ra")
+        }
+    }
+    const handleLogout = async () => {
+        try {
+            const res = await axios.get('/myway/api/users/logout')
+            if (res.data.status === "success") {
+                dispatch(logout())
+                navigate('/account/login')
+            }
+        }
+        catch (err: any) {
+            alert(err.response.data)
         }
     }
     return (
@@ -101,6 +132,16 @@ const SideBarProfile = () => {
                     <Link to=''>
                         <svg focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="FavoriteBorderOutlinedIcon"><path d="M16.5 3c-1.74 0-3.41.81-4.5 2.09C10.91 3.81 9.24 3 7.5 3 4.42 3 2 5.42 2 8.5c0 3.78 3.4 6.86 8.55 11.54L12 21.35l1.45-1.32C18.6 15.36 22 12.28 22 8.5 22 5.42 19.58 3 16.5 3zm-4.4 15.55-.1.1-.1-.1C7.14 14.24 4 11.39 4 8.5 4 6.5 5.5 5 7.5 5c1.54 0 3.04.99 3.57 2.36h1.87C13.46 5.99 14.96 5 16.5 5c2 0 3.5 1.5 3.5 3.5 0 2.89-3.14 5.74-7.9 10.05z"></path></svg>
                         <p>Danh sách yêu thích</p>
+                    </Link>
+                </li>
+
+                <li>
+                    <Link to='' onClick={event => {
+                        event.preventDefault();
+                        handleLogout()
+                    }}>
+                        <svg focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="LogoutOutlinedIcon"><path d="m17 8-1.41 1.41L17.17 11H9v2h8.17l-1.58 1.58L17 16l4-4-4-4zM5 5h7V3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h7v-2H5V5z"></path></svg>
+                        <p>Đăng xuất</p>
                     </Link>
                 </li>
             </ul>

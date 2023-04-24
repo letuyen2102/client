@@ -86,7 +86,7 @@ function PaginatedItems({ itemsPerPage, apiString }: { itemsPerPage: number, api
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const [bookings, setBookings] = useState<ORDER[]>([])
-    const itemOffset = parseInt((searchParams.get("page") ?? "1"), 10)
+    const itemOffset = parseInt((searchParams.get("page") ?? "0"), 10)
     const endOffset = itemOffset + itemsPerPage;
     console.log(`Loading items from ${itemOffset} to ${endOffset}`);
     const currentItems = bookings.slice(itemOffset, endOffset);
@@ -120,7 +120,7 @@ function PaginatedItems({ itemsPerPage, apiString }: { itemsPerPage: number, api
                 pageRangeDisplayed={3}
                 marginPagesDisplayed={2}
                 pageCount={pageCount}
-                forcePage={itemOffset - 1}
+                forcePage={(itemOffset - 1) < 0 ? 0 : (itemOffset - 1)}
                 previousLabel="<"
                 pageClassName="page-item"
                 pageLinkClassName="page-link"
