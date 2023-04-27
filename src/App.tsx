@@ -23,6 +23,8 @@ import Admin from './pages/admin/admin';
 import Product from './pages/admin/Product/product';
 import ChangeProduct from './pages/admin/Product/changeProduct';
 import ProfileUser from './pages/profile/ProfileUser';
+import Collection from './components/Collection/Collection';
+import PageShop from './pages/shop/Shop';
 function App() {
   const typeArr: string[] = ["Áo sơ mi", "Áo vest", "Chân váy ôm", "Chân váy xòe", "Jumpsuit", "Quần", "Set", "Đầm maxi", "Áo khoác", "Áo kiểu", "Áo dài"]
   const colorArr: string[] = ["Trắng", "Đen", "Vàng", "Be", "Hồng", "Đỏ", "Cam", "Tím", "Xanh", "Xanh lam", "Nâu", "Ghi"]
@@ -52,6 +54,7 @@ function App() {
           <Route path='/detail/:slug' element={<div><Header /> <Detail /> <Footer /> </div>} />
           <Route path='/profile/account/user/*' element={<ProfileUser />} />
           <Route path='/collection/all' element={<div><Header /> {titleShop} <Shop typeArr={typeArr} colorArr={colorArr} queryAPI={queryShopAll} />  <Footer /> </div>} />
+          <Route path='/all' element={<PageShop queryApi={queryShopAll} />} />
           <Route path='/dam' element={<div><Header /> {titleShop} <Shop typeArr={["Đầm xòe", "Đầm maxi", "Đầm ôm"]} colorArr={colorArr} queryAPI={queryShopDam} />  <Footer /> </div>} />
           <Route path='/ao' element={<div><Header /> {titleShop} <Shop typeArr={["Áo sơ mi", "Áo vest", "Áo khoác", "Áo kiểu", "Áo dài"]} colorArr={colorArr} queryAPI={queryShopAo} />  <Footer /> </div>} />
           <Route path='/quan' element={<div><Header /> {titleShop} <Shop typeArr={[]} colorArr={colorArr} queryAPI={queryShopQuan} />  <Footer /> </div>} />

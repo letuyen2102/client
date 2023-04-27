@@ -5,11 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import axios from 'axios';
 import { changeInforUserImage, logout } from '../../slices/authSlice';
-interface CHANGE_PASSWORD {
-    passwordCurrent: string,
-    password: string,
-    passwordConfirm: string
-}
 const SideBarProfile = () => {
     const handleLoginAndCart = useSelector((state: RootState) => state.auth)
     const dispatch = useDispatch()
@@ -42,18 +37,6 @@ const SideBarProfile = () => {
         catch (err) {
             console.log(err)
             alert('Đã có lỗi khi tải ảnh lên , vui lòng kiểm tra lại')
-        }
-    }
-    const handleChangePassword = async (objUpdatePassword: CHANGE_PASSWORD) => {
-        try {
-            const res = await axios.patch('/myway/api/users/updateMyPassword', objUpdatePassword)
-            if (res.data.status === "success") {
-                dispatch(logout())
-                navigate('/account/login')
-            }
-        }
-        catch (err) {
-            alert("Đã có lỗi xảy ra")
         }
     }
     const handleLogout = async () => {

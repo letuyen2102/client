@@ -1,5 +1,5 @@
 /*eslint-disable*/
-import React, {useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useSelector, useDispatch } from 'react-redux'
 import { Link } from "react-router-dom"
 import { useParams } from "react-router-dom";
@@ -44,7 +44,7 @@ export interface CART {
     size: string,
     image: string,
     slug: string,
-    newPrice : number,
+    newPrice: number,
     name: string
 }
 
@@ -63,7 +63,7 @@ const Detail: React.FC = (props) => {
     };
     const [changeImg, setChangeImg] = useState<string | null>()
     const [prod, setProd] = useState<PRODUCT>({ _id: "", name: "", description: "", oldPrice: 0, sale: 0, quantity: [], image: "", category: "", type: "", subQuantity: 0, newPrice: 0, slug: "" })
-    const getInforProduct = async (objCart: CART) => {
+    const addToCart = async (objCart: CART) => {
         if (handleLoginAndCart.token) {
             try {
                 const res = await axios.post('/myway/api/carts/createCart', objCart)
@@ -188,7 +188,7 @@ const Detail: React.FC = (props) => {
                                     Giao hàng tận nơi
                                 </button>
                                 <button className={`${styles.adding} col-lg-6 col-md-12`} onClick={e => {
-                                    getInforProduct({
+                                    addToCart({
                                         productId: prod._id,
                                         quantity: handleCart.orderQuantity,
                                         color: prod.quantity[handleCart.tabColor].color,
@@ -198,7 +198,7 @@ const Detail: React.FC = (props) => {
                                         newPrice: prod.newPrice,
                                         name: prod.name
                                     })
-                                        dispatch(defaultTab())
+                                    dispatch(defaultTab())
                                 }}>
                                     THÊM VÀO GIỎ HÀNG
                                 </button>

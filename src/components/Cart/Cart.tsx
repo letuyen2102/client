@@ -41,12 +41,10 @@ interface MANYITEM {
 }
 const Cart: React.FC = (props) => {
     const handleLoginAndCart = useSelector((state: RootState) => state.auth)
-    console.log(handleLoginAndCart)
     const dispatch = useDispatch()
     const navigate: NavigateFunction = useNavigate()
     const [itemsCart, setItemsCart] = useState<ITEMCART[]>([])
     const clearEachItem = async (objClear: ITEMCLEAR) => {
-        console.log(typeof (handleLoginAndCart.token))
         if (handleLoginAndCart.token) {
             try {
                 const res = await axios({
@@ -71,12 +69,25 @@ const Cart: React.FC = (props) => {
     const handleIncItem = async (objClear: ITEMCLEAR) => {
         if (handleLoginAndCart.token) {
             try {
-                const res = await axios.post('/myway/api/carts/incCart', objClear)
-                if (res.data.status === 'success') {
-                    fetch('/myway/api/carts/cartMe')
-                        .then(res => res.json())
-                        .then(all => setItemsCart(all.cartMe))
-                }
+                console.log("hhahahahahah")
+                setItemsCart(prev => {
+                    console.log("running")
+                    const newState = [...prev]
+                    const checkCartItem = newState[0].items.findIndex((each, index) => {
+                        return each.product._id.toLowerCase() === objClear.productId.toLowerCase() && each.color.toLowerCase() === objClear.color.toLowerCase() && each.size.toLowerCase() === objClear.size.toLowerCase()
+                    })
+                    if (checkCartItem > -1) {
+                        newState[0].items[checkCartItem].quantity = newState[0].items[checkCartItem].quantity + 1
+                    }
+                    let subTotal = 0;
+                    newState[0].items.forEach((item, idx: number) => {
+                        subTotal += item.product.newPrice * item.quantity
+                    })
+                    console.log(newState)
+                    newState[0].subTotal = subTotal
+                    return [...newState]
+                })
+                await axios.post('/myway/api/carts/incCart', objClear)
             }
             catch (err: any) {
                 alert(err.response.data)
@@ -89,12 +100,24 @@ const Cart: React.FC = (props) => {
     const handleDecItem = async (objClear: ITEMCLEAR) => {
         if (handleLoginAndCart.token) {
             try {
-                const res = await axios.post('/myway/api/carts/decCart', objClear)
-                if (res.data.status === 'success') {
-                    fetch('/myway/api/carts/cartMe')
-                        .then(res => res.json())
-                        .then(all => setItemsCart(all.cartMe))
-                }
+                setItemsCart(prev => {
+                    console.log("running")
+                    const newState = [...prev]
+                    const checkCartItem = newState[0].items.findIndex((each, index) => {
+                        return each.product._id.toLowerCase() === objClear.productId.toLowerCase() && each.color.toLowerCase() === objClear.color.toLowerCase() && each.size.toLowerCase() === objClear.size.toLowerCase()
+                    })
+                    if (checkCartItem > -1) {
+                        newState[0].items[checkCartItem].quantity = newState[0].items[checkCartItem].quantity - 1
+                    }
+                    let subTotal = 0;
+                    newState[0].items.forEach((item, idx: number) => {
+                        subTotal += item.product.newPrice * item.quantity
+                    })
+                    console.log(newState)
+                    newState[0].subTotal = subTotal
+                    return [...newState]
+                })
+                await axios.post('/myway/api/carts/decCart', objClear)
             }
             catch (err: any) {
                 alert(err.response.data)
@@ -106,10 +129,20 @@ const Cart: React.FC = (props) => {
     }
     useEffect(() => {
         const getCartApi = async () => {
+
+            console.log("jiiii")
             await fetch('/myway/api/carts/cartMe')
                 .then(res => res.json())
                 .then(all => setItemsCart(all.cartMe))
         }
+        if (handleLoginAndCart.token) {
+            console.log("hihihihihiihihi")
+            getCartApi()
+        }
+    }, [itemsCart[0]?.items.length])
+    useEffect(() => {
+        console.log("hahahahahah")
+
         const addManyCartApi = async (objManyItem: MANYITEM) => {
 
             await axios.post('/myway/api/carts/createManyCart', {
@@ -118,20 +151,17 @@ const Cart: React.FC = (props) => {
 
             dispatch(setEmptyCart())
         }
-        if (handleLoginAndCart.token) {
-            getCartApi()
-            if (handleLoginAndCart.cart && handleLoginAndCart.cart.items.length > 0) {
-                const items = handleLoginAndCart.cart.items.map((el, id) => {
-                    return {
-                        productId: el.product.product,
-                        quantity: el.quantity,
-                        color: el.color,
-                        size: el.size,
-                        image: el.product.image
-                    }
-                })
-                addManyCartApi({ items })
-            }
+        if (handleLoginAndCart.token && handleLoginAndCart.cart && handleLoginAndCart.cart.items.length > 0) {
+            const items = handleLoginAndCart.cart.items.map((el, id) => {
+                return {
+                    productId: el.product.product,
+                    quantity: el.quantity,
+                    color: el.color,
+                    size: el.size,
+                    image: el.product.image
+                }
+            })
+            addManyCartApi({ items })
         }
     }, [handleLoginAndCart.token, handleLoginAndCart.cart])
     return (
@@ -170,7 +200,7 @@ const Cart: React.FC = (props) => {
                                     <div className={`col-lg-9 col-md-10 col-sm-10 col-10`}>
                                         <div className={`${styles.inforPaymentProduct}`}>
                                             <div className={`${styles.inforPaymentProduct1}`}>
-                                                <Link to={`/detail/${eachProd.product.slug}`}>{eachProd.product.name} / {eachProd.color}</Link>
+                                                <Link to={`/detail/${eachProd.product.slug}`}>{eachProd.product.name} / {eachProd.color} / {eachProd.size}</Link>
                                                 <p className={`${styles.inforPaymentProduct_delete}`} onClick={e => {
                                                     clearEachItem({
                                                         productId: eachProd.product._id,
@@ -186,17 +216,21 @@ const Cart: React.FC = (props) => {
                                             <div className={`${styles.quantityBox}`}>
                                                 <div className={`${styles.inforPaymentProduct3}`}>
                                                     <button onClick={e => {
-                                                        handleDecItem({
-                                                            productId: eachProd.product._id, color: eachProd.color,
-                                                            size: eachProd.size
-                                                        })
+                                                        setTimeout(() => {
+                                                            handleDecItem({
+                                                                productId: eachProd.product._id, color: eachProd.color,
+                                                                size: eachProd.size
+                                                            })
+                                                        }, 500)
                                                     }}>-</button>
                                                     <input value={eachProd.quantity} disabled />
                                                     <button onClick={e => {
-                                                        handleIncItem({
-                                                            productId: eachProd.product._id, color: eachProd.color,
-                                                            size: eachProd.size
-                                                        })
+                                                        setTimeout(() => {
+                                                            handleIncItem({
+                                                                productId: eachProd.product._id, color: eachProd.color,
+                                                                size: eachProd.size
+                                                            })
+                                                        }, 500)
                                                     }}>+</button>
                                                 </div>
                                                 <p className={`${styles.quantityBox_close}`}>Xóa</p>
@@ -221,87 +255,87 @@ const Cart: React.FC = (props) => {
                                                         color: item.color,
                                                         size: item.size
                                                     })}> Xóa</p>
-                                                <p className={`${styles.inforPaymentProduct_price}`}>Price: <span>{item.product.newPrice.toLocaleString('vi-VN')}₫</span></p>
-                                            </div>
-                                            <div className={`${styles.inforPaymentProduct2}`}>
-                                                <p>{item.product.newPrice.toLocaleString('vi-VN')}₫</p>
-                                            </div>
-                                            <div className={`${styles.quantityBox}`}>
-                                                <div className={`${styles.inforPaymentProduct3}`}>
-                                                    <button onClick={e => handleDecItem({
-                                                        productId: item.product.product,
-                                                        color: item.color,
-                                                        size: item.size
-                                                    })}>-</button>
-                                                    <input value={item.quantity} disabled />
-                                                    <button onClick={e => handleIncItem({
-                                                        productId: item.product.product,
-                                                        color: item.color,
-                                                        size: item.size
-                                                    })}>+</button>
+                                                    <p className={`${styles.inforPaymentProduct_price}`}>Price: <span>{item.product.newPrice.toLocaleString('vi-VN')}₫</span></p>
                                                 </div>
-                                                <p className={`${styles.quantityBox_close}`}>Xóa</p>
+                                                <div className={`${styles.inforPaymentProduct2}`}>
+                                                    <p>{item.product.newPrice.toLocaleString('vi-VN')}₫</p>
+                                                </div>
+                                                <div className={`${styles.quantityBox}`}>
+                                                    <div className={`${styles.inforPaymentProduct3}`}>
+                                                        <button onClick={e => handleDecItem({
+                                                            productId: item.product.product,
+                                                            color: item.color,
+                                                            size: item.size
+                                                        })}>-</button>
+                                                        <input value={item.quantity} disabled />
+                                                        <button onClick={e => handleIncItem({
+                                                            productId: item.product.product,
+                                                            color: item.color,
+                                                            size: item.size
+                                                        })}>+</button>
+                                                    </div>
+                                                    <p className={`${styles.quantityBox_close}`}>Xóa</p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    </div>
-                    )
+                                )
                             })
 
                         }
-                </div>
+                    </div>
                     {handleLoginAndCart.token ? <div className={`col-lg-3 col-md-12`}>
-                    <div className={`${styles.tt}`}>
-                        <p>
-                            <span>Tổng tiền:</span>
-                            <strong>{itemsCart[0]?.subTotal.toLocaleString('vi-VN')}₫</strong>
-                        </p>
-                    </div>
-                    <div className={`${styles.tttt}`}>
-                        <p>
-                            Tổng tiền thanh toán:
-                        </p>
-                        <strong>
-                            {itemsCart[0]?.subTotal.toLocaleString('vi-VN')}₫
-                        </strong>
-                    </div>
-                    <button className={`${styles.payment}`} onClick={e => navigate('/checkout')}>
-                        THANH TOÁN
-                    </button>
-                    <button className={`${styles.continueBuying}`} onClick={e => navigate('/collection/all')}>
-                        TIẾP TỤC MUA HÀNG
-                    </button>
+                        <div className={`${styles.tt}`}>
+                            <p>
+                                <span>Tổng tiền:</span>
+                                <strong>{itemsCart[0]?.subTotal.toLocaleString('vi-VN')}₫</strong>
+                            </p>
+                        </div>
+                        <div className={`${styles.tttt}`}>
+                            <p>
+                                Tổng tiền thanh toán:
+                            </p>
+                            <strong>
+                                {itemsCart[0]?.subTotal.toLocaleString('vi-VN')}₫
+                            </strong>
+                        </div>
+                        <button className={`${styles.payment}`} onClick={e => navigate('/checkout')}>
+                            THANH TOÁN
+                        </button>
+                        <button className={`${styles.continueBuying}`} onClick={e => navigate('/collection/all')}>
+                            TIẾP TỤC MUA HÀNG
+                        </button>
 
-                </div> : <div className={`col-lg-3 col-md-12`}>
-                    <div className={`${styles.tt}`}>
-                        <p>
-                            <span>Tổng tiền:</span>
-                            <strong>{handleLoginAndCart.cart.subTotal.toLocaleString('vi-VN')}₫</strong>
-                        </p>
-                    </div>
-                    <div className={`${styles.tttt}`}>
-                        <p>
-                            Tổng tiền thanh toán:
-                        </p>
-                        <strong>
-                            {handleLoginAndCart.cart.subTotal.toLocaleString('vi-VN')}₫
-                        </strong>
-                    </div>
-                    <button className={`${styles.payment}`} onClick={e => navigate('/account/login')}>
-                        THANH TOÁN
-                    </button>
-                    <button className={`${styles.continueBuying}`} onClick={e => navigate('/collection/all')}>
-                        TIẾP TỤC MUA HÀNG
-                    </button>
+                    </div> : <div className={`col-lg-3 col-md-12`}>
+                        <div className={`${styles.tt}`}>
+                            <p>
+                                <span>Tổng tiền:</span>
+                                <strong>{handleLoginAndCart.cart.subTotal.toLocaleString('vi-VN')}₫</strong>
+                            </p>
+                        </div>
+                        <div className={`${styles.tttt}`}>
+                            <p>
+                                Tổng tiền thanh toán:
+                            </p>
+                            <strong>
+                                {handleLoginAndCart.cart.subTotal.toLocaleString('vi-VN')}₫
+                            </strong>
+                        </div>
+                        <button className={`${styles.payment}`} onClick={e => navigate('/account/login')}>
+                            THANH TOÁN
+                        </button>
+                        <button className={`${styles.continueBuying}`} onClick={e => navigate('/collection/all')}>
+                            TIẾP TỤC MUA HÀNG
+                        </button>
 
+                    </div>}
+                </div> : <div className={styles.emptyCart}>
+                    <div>
+                        <img src='https://bizweb.dktcdn.net/100/414/728/themes/867455/assets/empty-cart.png?1661616129384' />
+                    </div>
+                    <Link to='/collection/all'>Tiếp tục mua sắm</Link>
                 </div>}
-            </div> : <div className={styles.emptyCart}>
-                <div>
-                    <img src='https://bizweb.dktcdn.net/100/414/728/themes/867455/assets/empty-cart.png?1661616129384' />
-                </div>
-                <Link to='/collection/all'>Tiếp tục mua sắm</Link>
-            </div>}
-        </div>
+            </div>
         </div >
     )
 }
