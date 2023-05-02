@@ -4,28 +4,38 @@ import { useParams } from "react-router-dom"
 import { PRODUCT } from "../../../components/Detail/Detail";
 import styles from './changeProduct.module.css'
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { handleNotify } from "../../../slices/notifySlice";
 
 interface IMAGE_SHOW {
     quantity: {
         color: string;
-        size: {
-            size: string;
-            quantity: number;
-            _id: string;
-        }[];
         imageSlideShows: string[];
-        _id: string;
     }[];
 }
+interface IMAGE_SHOW_FORMDATA {
+    quantity: {
+        color: string;
+        imageSlideShows: File[];
+    }[];
+}
+const sizeArray = ['S', 'S+', 'M', 'M+', 'L', 'L+', 'XL', 'XL+', '2XL', '2XL+'].map((each, idx) => {
+    return {
+        size: each,
+        quantity: 0,
+    }
+})
 const ChangeProduct = () => {
+    const dispatch = useDispatch()
     const { idProd } = useParams()
     const [prod, setProd] = useState<PRODUCT>({ _id: "", name: "", description: "", oldPrice: 10, sale: 0, quantity: [], image: "", category: "", type: "", subQuantity: 0, newPrice: 0, slug: "" })
     console.log(prod)
     const [selectSize, setSelectSize] = useState<string[]>([''])
     const [image, setImage] = useState("");
     const [imgFormData, setImgFormData] = useState<any>()
-    const imageSlideShowFormData: IMAGE_SHOW = { quantity: [...prod.quantity] }
-    console.log(imageSlideShowFormData)
+    const [imageSlideShows, setImageSlideShows] = useState<IMAGE_SHOW>({ quantity: [] })
+    const [imageSlideShowsFormdata, setImageSlideShowsFormData] = useState<IMAGE_SHOW_FORMDATA>({ quantity: [] })
+    console.log(imageSlideShowsFormdata)
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const fileTest = e.target.files
         const file = e.target.files?.[0];
@@ -38,23 +48,46 @@ const ChangeProduct = () => {
                 setImage(reader.result as string);
             };
         }
-        // console.log(file)
+    };
+    const loadImage = (file: File) => {
+        return new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => {
+                const image = reader.result as string;
+                resolve(image);
+            };
+            reader.onerror = reject;
+        });
     };
     const handleUpdateProduct = async (objUpdate: any) => {
         try {
-            const res = await axios.patch(`/myway/api/products/${prod._id}`, objUpdate)
-
-            console.log(res)
+            const res = await axios.patch(`/myway/api/products/${idProd}`, objUpdate)
+            if (res.data.status === "success") {
+                dispatch(handleNotify({ message: "Thay đổi sản phẩm thành công", show: true, status: 200 }))
+                setTimeout(() => {
+                    dispatch(handleNotify({ message: "", show: false, status: 0 }))
+                }, 2000)
+            }
         }
         catch (err) {
-            console.log(err)
+            dispatch(handleNotify({ message: "Thay đổi sản phẩm thất bại , vui lòng kiểm tra lại", show: true, status: 400 }))
+            setTimeout(() => {
+                dispatch(handleNotify({ message: "", show: false, status: 0 }))
+            }, 2000)
         }
     }
     useEffect(() => {
         const getEachProduct = async () => {
-            await fetch(`/myway/api/products/${idProd}`)
+            await fetch(`/myway/api/products/getProductById/${idProd}`)
                 .then(res => res.json())
-                .then(all => { setProd(all.product), setSelectSize(Array(all.product.quantity.length).fill('')) })
+                .then(all => {
+                    console.log(all.product.quantity.length)
+                    setProd(all.product),
+                        setSelectSize(Array(all.product.quantity.length).fill('')),
+                        setImageSlideShows({ quantity: Array(all.product.quantity.length).fill({ color: "", imageSlideShows: [] }) }),
+                        setImageSlideShowsFormData({ quantity: Array(all.product.quantity.length).fill({ color: "", imageSlideShows: [] }) })
+                })
         }
         getEachProduct()
     }, [])
@@ -195,150 +228,164 @@ const ChangeProduct = () => {
                             <p style={{ fontSize: '20px', letterSpacing: '2px', color: '#333' }}>* Màu sắc : {prod.quantity.length} loại</p>
                             {
                                 prod.quantity.length > 0 && prod.quantity.map((each, idx) => {
-                                    // console.log(prod.quantity[idx]);
                                     return (
                                         <div key={idx}>
-                                            <div className="row">
-                                                <div className="col-lg-12 col-md-12 col-sm-12">
-                                                    <div className={styles.formGroup} style={{ display: 'flex', alignItems: 'center' }}>
-                                                        <label htmlFor="color" style={{ minWidth: '80px' }}>Màu sắc</label>
-                                                        <select id="color" required style={{ width: '100%', height: '40px' }} value={prod.quantity[idx]?.color} onChange={event => setProd(prev => {
-                                                            const newState = { ...prev }
-                                                            newState.quantity[idx].color = event.target.value;
-                                                            return newState;
-                                                        })}>
-                                                            <option value=''>Chọn màu</option>
-                                                            <option value='Xanh'>Xanh</option>
-                                                            <option value='Do'>Đỏ</option>
-                                                            <option value='Tim'>Tím</option>
-                                                            <option value='Vang'>Vàng</option>
-                                                            <option value='Trang'>Trắng</option>
-                                                            <option value='Den'>Đen</option>
-                                                            <option value='Nau'>Nâu</option>
-                                                            <option value='Ghi'>Ghi</option>
-                                                            <option value='XanhLam'>Xanh Lam</option>
-                                                            <option value='Be'>Be</option>
-                                                            <option value='Hong'>Hồng</option>
-                                                            <option value='Cam'>Cam</option>
-                                                            <option value='Ke'>Kẻ</option>
-                                                            <option value='Other'>Other</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
+                                            <div style={{ borderBottom: '2px dashed #00b156', margin: '10px 0px' }}>
                                                 <div className="row">
-                                                    <div className="col-lg-6 col-md-6 col-sm-12 col-12">
+                                                    <div className="col-lg-12 col-md-12 col-sm-12">
                                                         <div className={styles.formGroup} style={{ display: 'flex', alignItems: 'center' }}>
-                                                            <label style={{ minWidth: '80px' }}>Kích thước</label>
-                                                            <select style={{ width: '100%', height: '40px' }} value={selectSize[idx]} onChange={event => setSelectSize(prev => {
-                                                                const newState = [...prev]
-                                                                newState[idx] = event.target.value
-                                                                return newState
+                                                            <label htmlFor="color" style={{ minWidth: '80px' }}>Màu sắc</label>
+                                                            <select id="color" required style={{ width: '100%', height: '40px' }} value={prod.quantity[idx]?.color} onChange={event => setProd(prev => {
+                                                                const newState = { ...prev }
+                                                                newState.quantity[idx].color = event.target.value;
+                                                                return newState;
                                                             })}>
-                                                                <option value=''>-- Chọn kích thước --</option>
-                                                                {
-                                                                    each.size.map((pe, pidx) => {
-                                                                        return (
-                                                                            <option value={pe.size} key={pidx}>{pe.size}</option>
-                                                                        )
-                                                                    })
-                                                                }
+                                                                <option value=''>Chọn màu</option>
+                                                                <option value='Xanh'>Xanh</option>
+                                                                <option value='Do'>Đỏ</option>
+                                                                <option value='Tim'>Tím</option>
+                                                                <option value='Vang'>Vàng</option>
+                                                                <option value='Trang'>Trắng</option>
+                                                                <option value='Den'>Đen</option>
+                                                                <option value='Nau'>Nâu</option>
+                                                                <option value='Ghi'>Ghi</option>
+                                                                <option value='XanhLam'>Xanh Lam</option>
+                                                                <option value='Be'>Be</option>
+                                                                <option value='Hong'>Hồng</option>
+                                                                <option value='Cam'>Cam</option>
+                                                                <option value='Ke'>Kẻ</option>
+                                                                <option value='Other'>Other</option>
                                                             </select>
                                                         </div>
                                                     </div>
-                                                    <div className="col-lg-6 col-md-6 col-sm-12 col-12">
-                                                        <div className={styles.formGroup} style={{ display: 'flex', alignItems: 'center' }}>
-                                                            <label style={{ minWidth: '80px' }}>Số lượng</label>
-                                                            <input style={{ width: '100%', height: '40px' }} type='number' value={each.size.find((aa, ii) => aa.size === selectSize[idx])?.quantity ?? ''} onChange={event => {
-                                                                setProd(prev => {
-                                                                    const newState = { ...prev }
-                                                                    newState.quantity[idx].size.forEach((aa, ii) => {
-                                                                        if (aa.size === selectSize[idx]) {
-                                                                            aa.quantity = +event.target.value
-                                                                        }
-                                                                    })
+                                                    <div className="row">
+                                                        <div className="col-lg-6 col-md-6 col-sm-12 col-12">
+                                                            <div className={styles.formGroup} style={{ display: 'flex', alignItems: 'center' }}>
+                                                                <label style={{ minWidth: '80px' }}>Kích thước</label>
+                                                                <select style={{ width: '100%', height: '40px' }} value={selectSize[idx]} onChange={event => setSelectSize(prev => {
+                                                                    const newState = [...prev]
+                                                                    newState[idx] = event.target.value
                                                                     return newState
-                                                                })
-                                                            }} />
+                                                                })}>
+                                                                    <option value=''>-- Chọn kích thước --</option>
+                                                                    {
+                                                                        each.size.length > 0 && each.size.map((pe, pidx) => {
+                                                                            return (
+                                                                                <option value={pe.size} key={pidx}>{pe.size}</option>
+                                                                            )
+                                                                        })
+                                                                    }
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div className="col-lg-6 col-md-6 col-sm-12 col-12">
+                                                            <div className={styles.formGroup} style={{ display: 'flex', alignItems: 'center' }}>
+                                                                <label style={{ minWidth: '80px' }}>Số lượng</label>
+                                                                <input style={{ width: '100%', height: '40px' }} type='number' value={each.size.find((aa, ii) => aa.size === selectSize[idx])?.quantity ?? ''} onChange={event => {
+                                                                    setProd(prev => {
+                                                                        const newState = { ...prev }
+                                                                        newState.quantity[idx].size.forEach((aa, ii) => {
+                                                                            if (aa.size === selectSize[idx]) {
+                                                                                aa.quantity = +event.target.value
+                                                                            }
+                                                                        })
+                                                                        return newState
+                                                                    })
+                                                                }} />
+                                                            </div>
                                                         </div>
                                                     </div>
+
                                                 </div>
+                                                <div className={styles.postImage}>
+                                                    <div className={styles.imageSlideShow}>
+                                                        <div className="row">
+                                                            <p style={{ fontSize: '18px', letterSpacing: '2px', marginBottom: '10px' }}>Ảnh slideshow màu {each.color} <label className={styles.btnUploadImage}>
+                                                                THÊM ẢNH
+                                                                <input type="file" multiple style={{ display: 'none' }}
+                                                                    onChange={async (event) => {
+                                                                        const files = event.target.files
+                                                                        let images: string[] = []
 
-                                            </div>
-                                            <div className={styles.postImage}>
-                                                <div className={styles.imageSlideShow}>
-                                                    {/* <Dropzone onDrop={onDrop}>
-                                                        {({ getRootProps, getInputProps }) => (
-                                                            <div {...getRootProps()}>
-                                                                <input {...getInputProps()} />
-                                                                <button>Ảnh slideshow</button>
-                                                            </div>
-                                                        )}
-                                                    </Dropzone> */}
-                                                    <div className="row">
-                                                        {/* {files.length > 0 ? files.map((file, index) => (
-                                                            <div key={index} className="col-lg-3">
-                                                                <Img
-                                                                    key={index}
-                                                                    src={URL.createObjectURL(file)}
-                                                                    alt={file.name}
-                                                                    style={{ width: '100%' }}
-                                                                />
-                                                            </div>
-                                                        )) :  */}
-                                                        <p style={{ fontSize: '18px', letterSpacing: '2px' }}>Ảnh slideshow màu {each.color}</p>
-                                                        {each.imageSlideShows.map((ei, ii) => {
-
-                                                            return <div key={ii} className="col-lg-2">
-
-                                                                <div>
-                                                                    {/* <img src={prod.quantity[idx].imageSlideShows[ii] ? prod.quantity[idx].imageSlideShows[ii] : `/products/${ei}`} style={{ width: '100%' }} /> */}
-
-                                                                    {
-                                                                        prod.quantity[idx].imageSlideShows[ii].startsWith('data:image') ?
-                                                                            <img src={prod.quantity[idx].imageSlideShows[ii]} style={{ width: '100%' }} /> : <img src={`/products/${ei}`} style={{ width: '100%' }} />
-                                                                    }
-                                                                </div>
-                                                                <div>
-                                                                    <p onClick={e => {
-                                                                        setProd(prev => {
-                                                                            const newState = { ...prev };
-                                                                            newState.quantity[idx] = {
-                                                                                ...newState.quantity[idx],
-                                                                                imageSlideShows: newState.quantity[idx].imageSlideShows.filter(image => image !== ei)
-                                                                            };
-                                                                            return newState;
-                                                                        });
-                                                                    }}>Xóa ảnh</p>
-                                                                    <label htmlFor={`changeImage${idx}${ii}`}>
-                                                                        Thay đổi ảnh
-                                                                        <input
-                                                                            id={`changeImage${idx}${ii}`}
-                                                                            type="file"
-                                                                            style={{ display: 'none' }}
-                                                                            onChange={event => {
-                                                                                const file = event.target.files?.[0];
-                                                                                if (file) {
-                                                                                    const reader = new FileReader();
-                                                                                    reader.readAsDataURL(file);
-                                                                                    reader.onload = () => {
-                                                                                        setProd(prev => {
-                                                                                            const newState = { ...prev }
-                                                                                            newState.quantity[idx].imageSlideShows[ii] = (reader.result as string)
-                                                                                            
-                                                                                            return newState
-                                                                                        })
-                                                                                    };
+                                                                        if (files) {
+                                                                            setImageSlideShowsFormData(prev => {
+                                                                                const newState = { ...prev }
+                                                                                console.log(each.color)
+                                                                                newState.quantity[idx] = {
+                                                                                    color: each.color,
+                                                                                    imageSlideShows: [...Array.from(files)]
                                                                                 }
 
-                                                                            }}
-                                                                        />
+                                                                                return newState
+                                                                            })
 
-                                                                        {/* reader.result as string */}
-                                                                    </label>
-                                                                </div>
-                                                            </div>
-                                                        })
-                                                        }
+                                                                            for (let i = 0; i < files.length; i++) {
+                                                                                const image = await loadImage(files[i]);
+
+                                                                                images.push(image)
+                                                                            }
+                                                                        }
+                                                                        setImageSlideShows(prev => {
+                                                                            const newState = { ...prev }
+                                                                            newState.quantity[idx] = {
+                                                                                color: each.color,
+                                                                                imageSlideShows: Array.from(new Set([...images, ...newState.quantity[idx].imageSlideShows]))
+                                                                            }
+                                                                            return newState
+                                                                        })
+                                                                    }} />
+                                                            </label>
+                                                                <button className={styles.btnDeleteColor} onClick={event => {
+                                                                    setProd(prev => {
+                                                                        const newState = { ...prev }
+
+                                                                        newState.quantity = newState.quantity.filter((mm, nn) => {
+                                                                            return nn !== idx
+                                                                        })
+
+                                                                        return newState
+                                                                    })
+                                                                }}>Xóa màu</button>
+
+                                                            </p>
+                                                            {
+                                                                each.imageSlideShows.map((ei, ii) => {
+
+                                                                    return <div key={ii} className="col-lg-2">
+
+                                                                        <div>
+
+                                                                            <img src={`/products/${ei}`} style={{ width: '100%' }} />
+
+                                                                        </div>
+                                                                        <div>
+                                                                            <p onClick={e => {
+                                                                                setProd(prev => {
+                                                                                    const newState = { ...prev };
+                                                                                    newState.quantity[idx] = {
+                                                                                        ...newState.quantity[idx],
+                                                                                        imageSlideShows: newState.quantity[idx].imageSlideShows.filter(image => image !== ei)
+                                                                                    };
+                                                                                    return newState;
+                                                                                });
+                                                                            }}>Xóa ảnh</p>
+                                                                        </div>
+                                                                    </div>
+                                                                })
+                                                            }
+                                                            {
+                                                                imageSlideShows.quantity[idx]?.imageSlideShows.map((ei, ii) => {
+                                                                    return <div key={ii} className="col-lg-2">
+
+                                                                        <div>
+
+                                                                            <img src={`${ei}`} style={{ width: '100%' }} />
+
+                                                                        </div>
+                                                                    </div>
+                                                                })
+                                                            }
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -347,7 +394,54 @@ const ChangeProduct = () => {
                                 })
                             }
                         </div>
+                        <div className={styles.btnAddColor}>
+                            <button onClick={event => {
 
+                                setProd(prev => {
+                                    const newState = { ...prev }
+                                    newState.quantity = [
+                                        ...newState.quantity,
+                                        {
+                                            color: "",
+                                            size: [...sizeArray],
+                                            imageSlideShows: [],
+                                            // _id: ""
+                                        }
+                                    ]
+                                    return newState
+                                })
+                                setSelectSize(prev => {
+                                    const newState = [...prev, '']
+                                    return newState
+                                })
+                                setImageSlideShows(prev => {
+                                    const newState = { ...prev }
+
+                                    newState.quantity = [
+                                        ...newState.quantity,
+                                        {
+                                            color: "",
+                                            imageSlideShows: []
+                                        }
+                                    ]
+
+                                    return newState
+                                })
+                                setImageSlideShowsFormData(prev => {
+                                    const newState = { ...prev }
+
+                                    newState.quantity = [
+                                        ...newState.quantity,
+                                        {
+                                            color: "",
+                                            imageSlideShows: []
+                                        }
+                                    ]
+
+                                    return newState
+                                })
+                            }}>THÊM MÀU</button>
+                        </div>
                         <div style={{ textAlign: 'center', marginTop: '30px' }}>
                             <button className={styles.btnUpdate} onClick={event => {
                                 event.preventDefault()
@@ -361,6 +455,12 @@ const ChangeProduct = () => {
                                 formData.append('category', prod.category)
                                 formData.append('type', prod.type)
                                 formData.append('imageMainProduct', imgFormData)
+                                imageSlideShowsFormdata.quantity.forEach((gg, hh) => {
+                                    gg.imageSlideShows.forEach((jj, kk) => {
+                                        formData.append(`imageSlideShow${gg.color}`, jj)
+                                    })
+                                })
+
                                 handleUpdateProduct(formData)
                             }
                             }
@@ -369,6 +469,7 @@ const ChangeProduct = () => {
                     </div>
                 </div>
             </div>
+
         </div >
     )
 }

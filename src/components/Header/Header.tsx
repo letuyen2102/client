@@ -1,6 +1,6 @@
 /*eslint-disable*/
 import axios from "axios"
-import React, {useState } from "react"
+import React, { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Link, NavigateFunction, useNavigate, useLocation } from 'react-router-dom'
 import { RootState } from "../../store/store"
@@ -71,10 +71,10 @@ const Header: React.FC = (props) => {
                     <div className={`col-lg-4 col-md-4 col-sm-4 col-4`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'end' }}>
                         <div className={`${styles.HeaderTopAccount}`}>
                             <div className={`${styles.HeaderTopAccount_Account}`}>
-                                
+
                                 {
-                                    handleLoginAndCart.token ? <Link to={'/profile'} className={`${styles.setDisplay}`}>Tài khoản</Link> :
-                                    <Link to={'/account/login'} className={`${styles.setDisplay}`}>Tài khoản</Link>
+                                    handleLoginAndCart.token ? <Link to={'/profile/account/user'} className={`${styles.setDisplay}`}>Tài khoản</Link> :
+                                        <Link to={'/account/login'} className={`${styles.setDisplay}`}>Tài khoản</Link>
                                 }
                             </div>
                             <div className={`${styles.HeaderTopAccount_Cart}`}>
@@ -112,7 +112,7 @@ const Header: React.FC = (props) => {
                                         Đầm
                                         <i className={`fa-regular fa-angle-right ${styles.iconAngleDown}`}></i>
                                     </Link>
-                                    <ul>
+                                    {/* <ul>
                                         <li>
                                             <Link to=''>Đầm xòe</Link>
                                         </li>
@@ -122,7 +122,7 @@ const Header: React.FC = (props) => {
                                         <li>
                                             <Link to=''>Đầm maxi</Link>
                                         </li>
-                                    </ul>
+                                    </ul> */}
                                 </li>
                                 <li>
                                     <Link to='/ao'>
@@ -130,7 +130,7 @@ const Header: React.FC = (props) => {
                                         <i className={`fa-regular fa-angle-right ${styles.iconAngleDown}`}></i>
 
                                     </Link>
-                                    <ul>
+                                    {/* <ul>
                                         <li>
                                             <Link to=''>Áo sơ mi</Link>
                                         </li>
@@ -146,7 +146,7 @@ const Header: React.FC = (props) => {
                                         <li>
                                             <Link to=''>Áo dài</Link>
                                         </li>
-                                    </ul>
+                                    </ul> */}
                                 </li>
                                 <li>
                                     <Link to='/quan'>
@@ -159,14 +159,14 @@ const Header: React.FC = (props) => {
                                         <i className={`fa-regular fa-angle-right ${styles.iconAngleDown}`}></i>
 
                                     </Link>
-                                    <ul>
+                                    {/* <ul>
                                         <li>
                                             <Link to=''>Chân váy ôm</Link>
                                         </li>
                                         <li>
                                             <Link to=''>Chân váy dài</Link>
                                         </li>
-                                    </ul>
+                                    </ul> */}
                                 </li>
                                 <li>
                                     <Link to='/jumpsuit'>

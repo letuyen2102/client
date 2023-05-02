@@ -10,6 +10,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import { login } from "../../slices/authSlice";
 import { UserInfor } from "../../slices/authSlice";
+import { handleNotify } from "../../slices/notifySlice";
+import Title from "../Tiltle/Title";
 interface Account {
     email: string,
     password: string
@@ -32,14 +34,14 @@ const BtnGoogle: React.FC = (props) => {
                     googleId: res.data.sub,
                     name: res.data.name,
                     email: res.data.email,
-                    address : '',
-                    phone : ''
+                    address: '',
+                    phone: ''
                 }
             })
 
             if (resPost.data.status === 'success') {
-                const userGg: UserInfor = {...resPost.data.data.user}
-                dispatch(login({tokenDispatch : resPost.data.token , userDispatch : userGg}))
+                const userGg: UserInfor = { ...resPost.data.data.user }
+                dispatch(login({ tokenDispatch: resPost.data.token, userDispatch: userGg }))
 
                 navigate('/')
             }
@@ -47,7 +49,7 @@ const BtnGoogle: React.FC = (props) => {
         },
         onError: tokenResponse => console.log(tokenResponse),
     });
-    return <Link to='' style={{ marginRight: '8px' }} onClick = {e => {e.preventDefault() , loginGg()}}>
+    return <Link to='' style={{ marginRight: '8px' }} onClick={e => { e.preventDefault(), loginGg() }}>
         <img src="https://bizweb.dktcdn.net/assets/admin/images/login/gp-btn.svg" />
     </Link>
 }
@@ -58,7 +60,6 @@ const BtnGoogle: React.FC = (props) => {
 const Login: React.FC = () => {
     const handleLoginAndCart = useSelector((state: RootState) => state.auth)
     const dispatch = useDispatch()
-    const [messError, setMessError] = useState<string | null>()
     const navigate: NavigateFunction = useNavigate()
     // const { token, setToken, user, setUser } = useContext(tokenStorage)
     const [account, setAccount] = useState<Account>({
@@ -73,69 +74,82 @@ const Login: React.FC = () => {
                 data: objAccount
             })
 
-            if (res.data.status === 'success') { 
-                // setToken(res.data.token)
-                // setUser(res.data.data.user)
-                console.log(res.data.data.user)
-                dispatch(login({tokenDispatch : res.data.token , userDispatch : res.data.data.user}))
-                navigate('/')
+            if (res.data.status === 'success') {
+
+                dispatch(login({ tokenDispatch: res.data.token, userDispatch: res.data.data.user }))
+                dispatch(handleNotify({ message: "Đăng nhập thành công , chờ trong giây lát!", show: true, status: 200 }))
+                setTimeout(() => {
+                    dispatch(handleNotify({ message: "", show: false, status: 0 }))
+                    navigate('/')
+                }, 1500)
             }
         }
         catch (err: any) {
-            setMessError(err.response.data.message)
+            dispatch(handleNotify({ message: "Thông tin đăng nhập không chính xác , vui lòng thử lại sau", show: true, status: 400 }))
+            setTimeout(() => {
+                dispatch(handleNotify({ message: "", show: false, status: 0 }))
+            }, 2000)
         }
     }
-
     useEffect(() => {
-        setMessError(null)
-    }, [account])
-    useEffect(()=>{
         localStorage.removeItem("token")
         localStorage.removeItem("user")
-
-    } , [])
+    }, [])
     return (
-        <div className={`container-md ps-lg-5 pe-lg-5`} style={{ marginTop: '30px', width: '100%', overflow: 'hidden' }}>
-            <div className={`row`}>
-                <div className={`col-md-6 offset-md-3`}>
-                    <div className={`${styles.loginTitle}`}>
-                        <h2>ĐĂNG NHẬP TÀI KHOẢN</h2>
-                        <div className={`${styles.loginFacebookGoogle}`}>
-                            <GoogleOAuthProvider clientId="849429235369-7gor9ae12l6548i14q2mkud9o6bhjoff.apps.googleusercontent.com">
-                                <BtnGoogle />
-                            </GoogleOAuthProvider>
-                            <Link to='' style={{ marginLeft: '8px' }}>
-                                <img src="https://bizweb.dktcdn.net/assets/admin/images/login/fb-btn.svg" />
-                            </Link>
-                        </div>
-                    </div>
-
-                    <form className={`${styles.formLogin}`} onSubmit={e => {
-                        e.preventDefault()
-                        handleLoginNormal(account)
-                    }}>
-                        <div className={`${styles.formGroup}`}>
-                            <label htmlFor="Email">EMAIL <span style={{ color: '#ec1f27' }}>*</span></label>
-                            <input id="Email" placeholder="Nhập Địa Chỉ Email Hoặc SDT" value={account.email} required onChange={e => { e.preventDefault(), setAccount({ ...account, email: e.target.value }) }} />
-                            <p className="error_message">{messError}</p>
-                        </div>
-                        <div className={`${styles.formGroup}`}>
-                            <label htmlFor="Password">MẬT KHẨU <span style={{ color: '#ec1f27' }}>*</span></label>
-                            <input id="Password" type='password' placeholder="Nhập Mật Khẩu" value={account.password} required onChange={e => { e.preventDefault(), setAccount({ ...account, password: e.target.value }) }} />
-                            <p className="error_message">{messError}</p>
-
+        <div>
+            <Title>
+                <ul>
+                    <li>
+                        <Link to='/' style={{ whiteSpace: 'pre' }}>Trang chủ  {'>'} </Link>
+                    </li>
+                    <li>
+                        <Link to=''>Đăng nhập tài khoản</Link>
+                    </li>
+                </ul>
+            </Title>
+            <div className={`container-md ps-lg-5 pe-lg-5`} style={{ marginTop: '30px', width: '100%', overflow: 'hidden' }}>
+                <div className={`row`}>
+                    <div className={`col-md-6 offset-md-3`}>
+                        <div className={`${styles.loginTitle}`}>
+                            <h2>ĐĂNG NHẬP TÀI KHOẢN</h2>
+                            <div className={`${styles.loginFacebookGoogle}`}>
+                                <GoogleOAuthProvider clientId="849429235369-7gor9ae12l6548i14q2mkud9o6bhjoff.apps.googleusercontent.com">
+                                    <BtnGoogle />
+                                </GoogleOAuthProvider>
+                                <Link to='' style={{ marginLeft: '8px' }}>
+                                    <img src="https://bizweb.dktcdn.net/assets/admin/images/login/fb-btn.svg" />
+                                </Link>
+                            </div>
                         </div>
 
-                        <button>ĐĂNG NHẬP</button>
-                    </form>
+                        <form className={`${styles.formLogin}`} onSubmit={e => {
+                            e.preventDefault()
+                            handleLoginNormal(account)
+                        }}>
+                            <div className={`${styles.formGroup}`}>
+                                <label htmlFor="Email">EMAIL <span style={{ color: '#ec1f27' }}>*</span></label>
+                                <input id="Email" placeholder="Nhập Địa Chỉ Email Hoặc SDT" value={account.email} required onChange={e => { e.preventDefault(), setAccount({ ...account, email: e.target.value }) }} />
 
-                    <div className={`${styles.forgotPassword}`}>
-                        <Link to=''>Quên mật khẩu?</Link>
-                        <p>BẠN CHƯA CÓ TÀI KHOẢN. ĐĂNG KÝ <Link to='/account/signup'>TẠI ĐÂY</Link></p>
+                            </div>
+                            <div className={`${styles.formGroup}`}>
+                                <label htmlFor="Password">MẬT KHẨU <span style={{ color: '#ec1f27' }}>*</span></label>
+                                <input id="Password" type='password' placeholder="Nhập Mật Khẩu" value={account.password} required onChange={e => { e.preventDefault(), setAccount({ ...account, password: e.target.value }) }} />
+
+
+                            </div>
+
+                            <button>ĐĂNG NHẬP</button>
+                        </form>
+
+                        <div className={`${styles.forgotPassword}`}>
+                            <Link to='/account/forgotpassword/email'>Quên mật khẩu?</Link>
+                            <p>BẠN CHƯA CÓ TÀI KHOẢN. ĐĂNG KÝ <Link to='/account/signup'>TẠI ĐÂY</Link></p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
 
     )
 }

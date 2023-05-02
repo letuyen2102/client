@@ -10,8 +10,10 @@ import "slick-carousel/slick/slick-theme.css";
 import Title from "../Tiltle/Title";
 import axios from "axios";
 import { RootState } from "../../store/store";
-import { decCart, defaultTab, inCart, setTab, setTabColor, setTabSize } from "../../slices/cartSlice";
+import { decCart, defaultTab, inCart, setDisable, setEnable, setTab, setTabColor, setTabSize } from "../../slices/cartSlice";
 import { addCartNoToken } from "../../slices/authSlice";
+import { ITEM } from "../Cart/Cart";
+import { handleNotify } from "../../slices/notifySlice";
 
 export interface PRODUCT {
     _id: string;
@@ -24,10 +26,10 @@ export interface PRODUCT {
         size: {
             size: string;
             quantity: number;
-            _id: string;
+            // _id: string;
         }[];
         imageSlideShows: string[];
-        _id: string;
+        // _id: string;
     }[];
     image: string;
     category: string;
@@ -63,20 +65,45 @@ const Detail: React.FC = (props) => {
     };
     const [changeImg, setChangeImg] = useState<string | null>()
     const [prod, setProd] = useState<PRODUCT>({ _id: "", name: "", description: "", oldPrice: 0, sale: 0, quantity: [], image: "", category: "", type: "", subQuantity: 0, newPrice: 0, slug: "" })
-    const addToCart = async (objCart: CART) => {
+    const addToCart = async (objCart: ITEM) => {
         if (handleLoginAndCart.token) {
             try {
-                const res = await axios.post('/myway/api/carts/createCart', objCart)
+                const res = await axios.post('/myway/api/carts/createCart', {
+                    productId: objCart.product._id,
+                    quantity: objCart.quantity,
+                    color: objCart.color,
+                    size: objCart.size,
+                    image: objCart.image
+                })
 
                 if (res.data.status === "success") {
+                    dispatch(handleNotify({ message: "Thêm sản phẩm vào giỏ hàng thành công", show: true, status: 200 }))
+                    setTimeout(() => {
+                        dispatch(handleNotify({ message: "", show: false, status: 0 }))
+                    }, 2000)
                 }
             }
             catch (err: any) {
-                alert(err.response.data)
+                dispatch(handleNotify({ message: "Đã có lỗi xảy ra", show: true, status: 400 }))
+                setTimeout(() => {
+                    dispatch(handleNotify({ message: "", show: false, status: 0 }))
+                }, 2000)
             }
         }
         else {
-            dispatch(addCartNoToken(objCart))
+            try {
+                dispatch(addCartNoToken(objCart))
+                dispatch(handleNotify({ message: "Thêm sản phẩm vào giỏ hàng thành công", show: true, status: 200 }))
+                setTimeout(() => {
+                    dispatch(handleNotify({ message: "", show: false, status: 0 }))
+                }, 2000)
+            }
+            catch (err: any) {
+                dispatch(handleNotify({ message: "Đã có lỗi xảy ra", show: true, status: 400 }))
+                setTimeout(() => {
+                    dispatch(handleNotify({ message: "", show: false, status: 0 }))
+                }, 2000)
+            }
 
         }
     }
@@ -85,6 +112,9 @@ const Detail: React.FC = (props) => {
             .then(res => res.json())
             .then(data => setProd(data.product))
     }, [])
+    useEffect(() => {
+        dispatch(defaultTab())
+    }, [slug])
     return (
         <div>
             <Title>
@@ -166,9 +196,11 @@ const Detail: React.FC = (props) => {
                                 <div>
                                     {
                                         prod.quantity[handleCart.tabColor]?.size.map((each, index) => {
-                                            return (
-                                                <button key={index} className={handleCart.tabSize === index ? `${styles.setBorderButton}` : `${styles.setUnBorderButton}`} onClick={e => { dispatch(setTabSize(index)) }}>{each.size}</button>
-                                            )
+                                            if (each.quantity > 0) {
+                                                return (
+                                                    <button key={index} className={handleCart.tabSize === index ? `${styles.setBorderButton}` : `${styles.setUnBorderButton}`} onClick={e => { dispatch(setTabSize(index)) }}>{each.size}</button>
+                                                )
+                                            }
                                         })
                                     }
                                 </div>
@@ -176,9 +208,29 @@ const Detail: React.FC = (props) => {
                             <div className={`${styles.quantity}`}>
                                 <p>Số lượng :</p>
                                 <div>
-                                    <button onClick={e => { dispatch(decCart()) }}>-</button>
-                                    <input disabled value={handleCart.orderQuantity} style={{ backgroundColor: '#fff' }} onChange={e => { }} />
-                                    <button onClick={e => { dispatch(inCart()) }}>+</button>
+                                    <button onClick={e => {
+                                        if (handleCart.orderQuantity <= prod.quantity[handleCart.tabColor].size[handleCart.tabSize].quantity) {
+                                            dispatch(setEnable())
+                                        }
+                                        dispatch(decCart())
+
+                                    }}>-</button>
+                                    <input disabled
+                                        value={handleCart.orderQuantity}
+                                        style={{ backgroundColor: '#fff' }}
+                                        onChange={e => {
+
+                                        }} />
+                                    <button
+                                        disabled={handleCart.disableBtn}
+                                        onClick={e => {
+                                            if (handleCart.orderQuantity >= prod.quantity[handleCart.tabColor].size[handleCart.tabSize].quantity) {
+                                                dispatch(setDisable())
+                                                return
+                                            }
+                                            dispatch(inCart())
+                                        }}
+                                    >+</button>
                                 </div>
                             </div>
                             <div className="row">
@@ -189,14 +241,11 @@ const Detail: React.FC = (props) => {
                                 </button>
                                 <button className={`${styles.adding} col-lg-6 col-md-12`} onClick={e => {
                                     addToCart({
-                                        productId: prod._id,
+                                        product: prod,
                                         quantity: handleCart.orderQuantity,
                                         color: prod.quantity[handleCart.tabColor].color,
                                         size: prod.quantity[handleCart.tabColor].size[handleCart.tabSize].size,
-                                        image: prod.quantity[handleCart.tabColor].imageSlideShows[0],
-                                        slug: prod.slug,
-                                        newPrice: prod.newPrice,
-                                        name: prod.name
+                                        image: prod.quantity[handleCart.tabColor].imageSlideShows[0]
                                     })
                                     dispatch(defaultTab())
                                 }}>

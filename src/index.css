@@ -32,8 +32,9 @@ li {
 }
 
 .pagination {
-  justify-content: end;
-  margin-top: 25px;
+  justify-content: center;
+  margin-top: 30px;
+  margin-bottom: 30px;
 }
 
 .pagination .page-item.active .page-link {
@@ -67,4 +68,41 @@ li {
 .error_message {
   color: #ec1f27;
   font-size: 12px;
+}
+
+.notify_message_success {
+  position: fixed;
+  bottom: 50px;
+  left: 0;
+  background-color: #00b156;
+  padding: 10px 20px;
+  text-align: center;
+  z-index: 60;
+  width: 40%;
+
+}
+
+.notify_message_success>p {
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  display: block;
+}
+
+.notify_message_error {
+  position: fixed;
+  top: 0;
+  right: 0;
+  background-color: #ec1f27;
+  padding: 10px 20px;
+  text-align: center;
+  z-index: 60;
+  width: 40%;
+}
+
+.notify_message_error>p {
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  display: block;
 }

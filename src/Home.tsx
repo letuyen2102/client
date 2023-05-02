@@ -16,20 +16,7 @@ const Home = () => {
                     <Link to=''>THỜI TRANG MY WAY</Link>
                     <p>Thể hiện những vẻ đẹp, tri thức, văn hóa và ý tưởng của bạn.</p>
                 </div>
-                {/* <div className={`${styles.HomeProduct} row`}>
-                    <div className={`col-lg-3 col-md-4 col-sm-6 col-6`}>
-                        <ProductCard />
-                    </div>
-                    <div className={`col-lg-3 col-md-4 col-sm-6 col-6`}>
-                        <ProductCard />
-                    </div>
-                    <div className={`col-lg-3 col-md-4 col-sm-6 col-6`}>
-                        <ProductCard />
-                    </div>
-                    <div className={`col-lg-3 col-md-4 col-sm-6 col-6`}>
-                        <ProductCard />
-                    </div>
-                </div> */}
+
                 <div className={`${styles.showAll}`}>
                     <button>XEM TẤT CẢ THỜI TRANG MY WAY</button>
                 </div>
@@ -42,7 +29,7 @@ const Home = () => {
                                 </div>
                                 <div className={`${styles.productContentEachButton}`}>
                                     <h2>Bộ Sưu Tập</h2>
-                                    <Link to=''>XEM TẤT CẢ</Link>
+                                    <Link to='/collection/all'>XEM TẤT CẢ</Link>
                                 </div>
                             </div>
                         </div>
@@ -53,7 +40,7 @@ const Home = () => {
                                 </div>
                                 <div className={`${styles.productContentEachButton}`}>
                                     <h2>Vest</h2>
-                                    <Link to=''>XEM TẤT CẢ</Link>
+                                    <Link to='/ao'>XEM TẤT CẢ</Link>
                                 </div>
                             </div>
                         </div>
@@ -64,37 +51,23 @@ const Home = () => {
                                 </div>
                                 <div className={`${styles.productContentEachButton}`}>
                                     <h2>Đầm</h2>
-                                    <Link to=''>XEM TẤT CẢ</Link>
+                                    <Link to='/dam'>XEM TẤT CẢ</Link>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div className={`${styles.HomeTitle}`} style = {{marginTop : '30px'}}>
-                    <Link to=''>SẢN  PHẨM BÁN CHẠY</Link>
+                <div className={`${styles.HomeTitle}`} style={{ marginTop: '30px' }}>
+                    <Link to='/collection/all'>SẢN  PHẨM BÁN CHẠY</Link>
                     <p>Số lượng có hạn - Đừng để bị bỏ lỡ</p>
                 </div>
-                {/* <div className={`${styles.HomeProduct} row`}>
-                    <div className={`col-lg-3 col-md-4 col-sm-6 col-6`}>
-                        <ProductCard />
-                    </div>
-                    <div className={`col-lg-3 col-md-4 col-sm-6 col-6`}>
-                        <ProductCard />
-                    </div>
-                    <div className={`col-lg-3 col-md-4 col-sm-6 col-6`}>
-                        <ProductCard />
-                    </div>
-                    <div className={`col-lg-3 col-md-4 col-sm-6 col-6`}>
-                        <ProductCard />
-                    </div>
-                </div> */}
                 <div className={`${styles.showAll}`}>
                     <button>XEM TẤT CẢ SẢN PHẨM BÁN CHẠY</button>
                 </div>
                 <div className={`${styles.homeInforInsta}`}>
                     <h2>INSTAGRAM</h2>
-                    <Link to =''>@mywayvn.official</Link>
+                    <Link to=''>@mywayvn.official</Link>
                     <div>
                         <img src="https://bizweb.dktcdn.net/100/366/518/themes/740709/assets/banner.jpg?1677725914475" alt="" />
                     </div>

@@ -45,7 +45,7 @@ const Product = () => {
                 </thead>
                 <tbody>
                     {
-                        prods.length > 0 &&  prods.map((each, index) => {
+                        prods.length > 0 && prods.map((each, index) => {
                             return (
                                 <tr key={index}>
                                     <td><p>{index}</p></td>
@@ -67,7 +67,7 @@ const Product = () => {
                                     </td>
                                     <td>
                                         <div className={styles.actionProd}>
-                                            <Link to={`/myway/admin/product/${each.slug}`} className={styles.editProd}>Edit</Link>
+                                            <Link to={`/myway/admin/product/${each._id}`} className={styles.editProd}>Edit</Link>
                                             <Link to='' className={styles.deleteProd}>Delete</Link>
                                         </div>
                                     </td>

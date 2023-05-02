@@ -1,10 +1,11 @@
 /*eslint-disable*/
 import React, { useEffect, useState } from 'react'
-import { useNavigate, NavigateFunction, useSearchParams } from 'react-router-dom'
+import { useNavigate, NavigateFunction, useSearchParams, Link } from 'react-router-dom'
 import { useLocation } from 'react-router-dom';
 import styles from './Collection.module.css'
 import PaginatedItems from './Pagination';
-const Collection: React.FC<{ queryAPI: string }> = (props) => {
+import Title from '../Tiltle/Title';
+const Collection: React.FC<{ queryAPI: string, queryString: string }> = (props) => {
 
     const navigate: NavigateFunction = useNavigate()
     const location = useLocation();
@@ -13,9 +14,9 @@ const Collection: React.FC<{ queryAPI: string }> = (props) => {
     const [colors, setColors] = useState<string[]>([])
     useEffect(() => {
         const getCategories = async () => {
-            await fetch('/myway/api/products/getCategories')
+            await fetch(props.queryAPI)
                 .then(res => res.json())
-                .then(all => setCategories(all.categories))
+                .then(all => setCategories(all.result))
         }
         const getColors = async () => {
             await fetch('/myway/api/products/getColors')
@@ -25,129 +26,244 @@ const Collection: React.FC<{ queryAPI: string }> = (props) => {
         getCategories()
         getColors()
     }, [props.queryAPI])
+
     return (
-        <div className={`container-fluid ${styles.shop}`}>
-            <div className={`row`}>
-                <div className={`col-lg-3 ${styles.setdisplay}`}>
-                    <div className={`${styles.categoryShop}`}>
-                        <h2>TÌM THEO</h2>
-                        <p>Giá sản phẩm</p>
-                        <ul>
-                            <li>
-                                <label htmlFor='checkboxa'>
-                                    <input type='checkbox' />
-                                    Giá thấp hơn 1.000.000đ
-                                </label>
-                            </li>
-                            <li>
-                                <label htmlFor='checkboxb'>
-                                    <input type='checkbox' />
-                                    1.000.000đ - 3.000.000đ
-                                </label>
-                            </li>
-                            <li>
-                                <label htmlFor='checkboxc'>
-                                    <input type='checkbox' />
-                                    3.000.000đ - 5.000.000đ
-                                </label>
-                            </li>
-                            <li>
-                                <label htmlFor='checkboxd'>
-                                    <input type='checkbox' />
-                                    Giá cao hơn 5.000.000đ
-                                </label>
-                            </li>
-                        </ul>
-                        <p>Loại</p>
-                        <ul className={`${styles.categoryProductType}`}>
-                            {
-                                categories && categories.length > 0
-                                && categories.map((each, index) => {
-                                    return <li key={index}>
-                                        <label>
-                                            <input type="checkbox" checked={searchParams.get("category") === each} onChange={event => {
-                                                if (event.target.checked) {
-                                                    searchParams.delete("page")
-                                                    searchParams.set("category", each)
-                                                    navigate(`?${searchParams.toString()}`)
-                                                }
-                                                else {
-                                                    searchParams.delete("page")
-                                                    searchParams.delete("category")
-                                                    navigate(`?${searchParams.toString()}`)
-                                                }
-                                            }} />
-                                            {each}
-                                        </label>
-                                    </li>
-                                })
-                            }
+        <div>
+            <Title>
+                <ul>
+                    <li>
+                        <Link to='/' style={{ whiteSpace: 'pre' }}>Trang chủ  {'>'} </Link>
+                    </li>
+                    <li>
+                        <Link to=''>Tất cả sản phẩm</Link>
+                    </li>
+                </ul>
+            </Title>
+            <div className={`container-fluid ${styles.shop}`}>
+                <div className={`row`}>
+                    <div className={`col-lg-3 ${styles.setdisplay}`}>
+                        <div className={`${styles.categoryShop}`}>
+                            <h2>TÌM THEO</h2>
+                            <p>Giá sản phẩm</p>
+                            <ul>
+                                <li>
+                                    <label>
+                                        <input type='checkbox' checked={searchParams.get("maxPrice") === "1000000"} onChange={event => {
+                                            if (event.target.checked) {
+                                                searchParams.delete("startItem")
+                                                searchParams.delete("minPrice")
+                                                searchParams.delete("maxPrice")
+                                                searchParams.set("maxPrice", "1000000")
+                                                navigate(`?${searchParams.toString()}`)
+                                            }
+                                            else {
+                                                searchParams.delete("startItem")
+                                                searchParams.delete("minPrice")
+                                                searchParams.delete("maxPrice")
+                                                navigate(`?${searchParams.toString()}`)
+                                            }
+                                        }} />
+                                        Giá thấp hơn 1.000.000đ
+                                    </label>
+                                </li>
+                                <li>
+                                    <label>
+                                        <input type='checkbox' checked={searchParams.get("minPrice") === "1000000" && searchParams.get("maxPrice") === "3000000"} onChange={event => {
+                                            if (event.target.checked) {
+                                                searchParams.delete("startItem")
+                                                searchParams.delete("minPrice")
+                                                searchParams.delete("maxPrice")
+                                                searchParams.set("minPrice", "1000000")
+                                                searchParams.set("maxPrice", "3000000")
 
-                        </ul>
-                        <p>Màu sắc</p>
-                        <ul className={`${styles.categoryProductType}`}>
-                            {
-                                colors && colors.length > 0
-                                && colors.map((each, index) => {
-                                    return <li key={index}>
-                                        <label>
-                                            <input type="checkbox" checked={searchParams.get("color") === each} onChange={event => {
-                                                if (event.target.checked) {
-                                                    searchParams.delete("page")
-                                                    searchParams.set("color", each)
-                                                    navigate(`?${searchParams.toString()}`)
-                                                }
-                                                else {
-                                                    searchParams.delete("page")
-                                                    searchParams.delete("color")
-                                                    navigate(`?${searchParams.toString()}`)
-                                                }
-                                            }} />
-                                            {each}
-                                        </label>
-                                    </li>
-                                })
-                            }
+                                                navigate(`?${searchParams.toString()}`)
+                                            }
+                                            else {
+                                                searchParams.delete("startItem")
+                                                searchParams.delete("minPrice")
+                                                searchParams.delete("maxPrice")
+                                                navigate(`?${searchParams.toString()}`)
+                                            }
+                                        }} />
+                                        1.000.000đ - 3.000.000đ
+                                    </label>
+                                </li>
+                                <li>
+                                    <label>
+                                        <input type='checkbox' checked={searchParams.get("minPrice") === "3000000" && searchParams.get("maxPrice") === "5000000"} onChange={event => {
+                                            if (event.target.checked) {
+                                                searchParams.delete("startItem")
+                                                searchParams.delete("minPrice")
+                                                searchParams.delete("maxPrice")
+                                                searchParams.set("minPrice", "3000000")
+                                                searchParams.set("maxPrice", "5000000")
 
-                        </ul>
+                                                navigate(`?${searchParams.toString()}`)
+                                            }
+                                            else {
+                                                searchParams.delete("startItem")
+                                                searchParams.delete("minPrice")
+                                                searchParams.delete("maxPrice")
+                                                navigate(`?${searchParams.toString()}`)
+                                            }
+                                        }} />
+                                        3.000.000đ - 5.000.000đ
+                                    </label>
+                                </li>
+                                <li>
+                                    <label>
+                                        <input type='checkbox' checked={searchParams.get("minPrice") === "5000000"} onChange={event => {
+                                            if (event.target.checked) {
+                                                searchParams.delete("startItem")
+                                                searchParams.delete("minPrice")
+                                                searchParams.delete("maxPrice")
+                                                searchParams.set("minPrice", "5000000")
+                                                navigate(`?${searchParams.toString()}`)
+                                            }
+                                            else {
+                                                searchParams.delete("startItem")
+                                                searchParams.delete("minPrice")
+                                                searchParams.delete("maxPrice")
+                                                navigate(`?${searchParams.toString()}`)
+                                            }
+                                        }} />
+                                        Giá cao hơn 5.000.000đ
+                                    </label>
+                                </li>
+                            </ul>
+                            <p>Loại</p>
+                            <ul className={`${styles.categoryProductType}`}>
+                                {
+                                    categories && categories.length > 0
+                                    && categories.map((each, index) => {
+                                        return <li key={index}>
+                                            <label>
+                                                <input type="checkbox" checked={searchParams.get(props.queryString) === each} onChange={event => {
+                                                    if (event.target.checked) {
+                                                        searchParams.delete("startItem")
+                                                        searchParams.set(props.queryString, each)
+                                                        navigate(`?${searchParams.toString()}`)
+                                                    }
+                                                    else {
+                                                        searchParams.delete("startItem")
+                                                        searchParams.delete(props.queryString)
+                                                        navigate(`?${searchParams.toString()}`)
+                                                    }
+                                                }} />
+                                                {each}
+                                            </label>
+                                        </li>
+                                    })
+                                }
+
+                            </ul>
+                            <p>Màu sắc</p>
+                            <ul className={`${styles.categoryProductType}`}>
+                                {
+                                    colors && colors.length > 0
+                                    && colors.map((each, index) => {
+                                        return <li key={index}>
+                                            <label>
+                                                <input type="checkbox" checked={searchParams.get("color") === each} onChange={event => {
+                                                    if (event.target.checked) {
+                                                        searchParams.delete("startItem")
+                                                        searchParams.set("color", each)
+                                                        navigate(`?${searchParams.toString()}`)
+                                                    }
+                                                    else {
+                                                        searchParams.delete("startItem")
+                                                        searchParams.delete("color")
+                                                        navigate(`?${searchParams.toString()}`)
+                                                    }
+                                                }} />
+                                                {each}
+                                            </label>
+                                        </li>
+                                    })
+                                }
+
+                            </ul>
+                        </div>
                     </div>
-                </div>
-                <div className={`col-lg-9 col-md-12 col-sm-12 sol-12`}>
-                    <div className={`${styles.productShop}`}>
-                        <div className={`${styles.productShopFilter}`}>
-                            <h2>Filters:</h2>
-                            <div>
-                                <label>
-                                    <input type='checkbox' />
-                                    Tên A-Z
-                                </label>
-                                <label>
-                                    <input type='checkbox' />
-                                    Tên Z-A
-                                </label>
-                                <label>
-                                    <input type='checkbox' />
-                                    Mới
-                                </label>
-                                <label>
-                                    <input type='checkbox' />
-                                    Giá-Thấp đến Cao
-                                </label>
-                                <label>
-                                    <input type='checkbox' />
-                                    Giá-Cao đến Thấp
-                                </label>
+                    <div className={`col-lg-9 col-md-12 col-sm-12 sol-12`}>
+                        <div className={`${styles.productShop}`}>
+                            <div className={`${styles.productShopFilter}`}>
+                                <h2>Filters:</h2>
+                                <div>
+                                    <label>
+                                        <input type='checkbox' checked={searchParams.get("sort") === "name"} onChange={event => {
+                                            if (event.target.checked) {
+                                                searchParams.delete("startItem")
+                                                searchParams.set("sort", "name")
+                                                navigate(`?${searchParams.toString()}`)
+                                            }
+                                            else {
+                                                searchParams.delete("startItem")
+                                                searchParams.delete("sort")
+                                                navigate(`?${searchParams.toString()}`)
+                                            }
+                                        }} />
+                                        Tên A-Z
+                                    </label>
+                                    <label>
+                                        <input type='checkbox' checked={searchParams.get("sort") === "-name"} onChange={event => {
+                                            if (event.target.checked) {
+                                                searchParams.delete("startItem")
+                                                searchParams.set("sort", "-name")
+                                                navigate(`?${searchParams.toString()}`)
+                                            }
+                                            else {
+                                                searchParams.delete("startItem")
+                                                searchParams.delete("sort")
+                                                navigate(`?${searchParams.toString()}`)
+                                            }
+                                        }} />
+                                        Tên Z-A
+                                    </label>
+                                    <label>
+                                        <input type='checkbox' checked={searchParams.get("sort") === "newPrice"} onChange={event => {
+                                            if (event.target.checked) {
+                                                searchParams.delete("startItem")
+                                                searchParams.set("sort", "newPrice")
+                                                navigate(`?${searchParams.toString()}`)
+                                            }
+                                            else {
+                                                searchParams.delete("startItem")
+                                                searchParams.delete("sort")
+                                                navigate(`?${searchParams.toString()}`)
+                                            }
+                                        }} />
+                                        Giá-Thấp đến Cao
+                                    </label>
+                                    <label>
+                                        <input type='checkbox' checked={searchParams.get("sort") === "-newPrice"} onChange={event => {
+                                            if (event.target.checked) {
+                                                searchParams.delete("startItem")
+                                                searchParams.set("sort", "-newPrice")
+                                                navigate(`?${searchParams.toString()}`)
+                                            }
+                                            else {
+                                                searchParams.delete("startItem")
+                                                searchParams.delete("sort")
+                                                navigate(`?${searchParams.toString()}`)
+                                            }
+                                        }} />
+                                        Giá-Cao đến Thấp
+                                    </label>
+                                </div>
+                            </div>
+                            <div className='row'>
+                                <PaginatedItems itemsPerPage={8} apiString={props.queryAPI + searchParams.toString()} />
+                                {/* {props.queryAPI.endsWith('&') && <PaginatedItems itemsPerPage={8} apiString={props.queryAPI + searchParams.toString()} />} */}
+
                             </div>
                         </div>
-                        <div className='row'>
-                            <PaginatedItems itemsPerPage={8} apiString='' />
-                        </div>
+
                     </div>
 
                 </div>
 
             </div>
-
         </div>
     )
 }

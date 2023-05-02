@@ -1,24 +1,22 @@
 
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
+import { ITEM } from '../components/Cart/Cart';
+import { PRODUCT } from '../components/Detail/Detail';
 export interface Account {
     email: string,
     password: string
 }
+// export interface ITEM {
+//     product: PRODUCT,
+//     quantity: number,
+//     color: string,
+//     size: string,
+//     image: string
+// }
 export interface CartWithNoToken {
-    items: {
-        product: {
-            product: string,
-            name: string,
-            newPrice: number,
-            image: string,
-            slug: string
-        },
-        quantity: number,
-        color: string,
-        size: string
-    }[],
-    subTotal: number
+    items: ITEM[],
+    subTotal: number,
 }
 export interface UserInfor {
     _id: string,
@@ -120,19 +118,23 @@ export const authSlice = createSlice({
                 }
             }
         },
-        addCartNoToken: (state, action: PayloadAction<{
-            name: string
-            productId: string,
-            quantity: number,
-            color: string,
-            size: string,
-            image: string,
-            slug: string,
-            newPrice: number
-        }>) => {
-            const checkCartItem = state.cart.items.findIndex((each, el) => {
-                return each.product.product.toLowerCase() === action.payload.productId.toLowerCase() && each.color.toLowerCase() === action.payload.color.toLowerCase() && each.size.toLowerCase() === action.payload.size.toLowerCase()
-            })
+        getItemsCart: (state, action: PayloadAction<{ carts: CartWithNoToken }>) => {
+            const newState: AuthState = {
+                ...state,
+                cart: action.payload.carts
+            }
+
+            return newState
+        },
+        addCartNoToken: (state, action: PayloadAction<ITEM>) => {
+            const checkCartItem = state.cart.items.findIndex((each, index) => {
+                return (
+                    each.product._id.toLowerCase() === action.payload.product._id.toLowerCase() &&
+                    each.color.toLowerCase() === action.payload.color.toLowerCase() &&
+                    each.size.toLowerCase() === action.payload.size.toLowerCase()
+                )
+            });
+
             if (checkCartItem > -1) {
 
                 state.cart.items[checkCartItem].quantity = state.cart.items[checkCartItem].quantity + action.payload.quantity;
@@ -140,16 +142,11 @@ export const authSlice = createSlice({
             }
             else {
                 state.cart.items.push({
-                    product: {
-                        product: action.payload.productId,
-                        name: action.payload.name,
-                        newPrice: action.payload.newPrice,
-                        image: action.payload.image,
-                        slug: action.payload.slug
-                    },
+                    product: action.payload.product,
                     quantity: action.payload.quantity,
                     color: action.payload.color,
-                    size: action.payload.size
+                    size: action.payload.size,
+                    image: action.payload.image,
                 })
             }
             let subTotal = 0;
@@ -163,11 +160,7 @@ export const authSlice = createSlice({
         },
 
         setEmptyCart: (state) => {
-            sessionStorage.setItem("carts", JSON.stringify({
-                items: [],
-                subTotal: 0
-            }))
-
+            sessionStorage.removeItem("carts")
             return {
                 ...state,
                 cart: {
@@ -178,9 +171,9 @@ export const authSlice = createSlice({
         },
 
 
-        decCartNoToken: (state, action: PayloadAction<{ productId: string, color: string, size: string }>) => {
+        decCartNoToken: (state, action: PayloadAction<ITEM>) => {
             const checkCartItem = state.cart.items.findIndex((each, el) => {
-                return each.product.product.toLowerCase() === action.payload.productId.toLowerCase() && each.color.toLowerCase() === action.payload.color.toLowerCase() && each.size.toLowerCase() === action.payload.size.toLowerCase()
+                return each.product._id.toLowerCase() === action.payload.product._id.toLowerCase() && each.color.toLowerCase() === action.payload.color.toLowerCase() && each.size.toLowerCase() === action.payload.size.toLowerCase()
             })
             if (checkCartItem > -1) {
                 if (state.cart.items[checkCartItem].quantity === 1)
@@ -199,9 +192,9 @@ export const authSlice = createSlice({
             return state
         },
 
-        inCartNoTken: (state, action: PayloadAction<{ productId: string, color: string, size: string }>) => {
+        inCartNoTken: (state, action: PayloadAction<ITEM>) => {
             const checkCartItem = state.cart.items.findIndex((each, el) => {
-                return each.product.product.toLowerCase() === action.payload.productId.toLowerCase() && each.color.toLowerCase() === action.payload.color.toLowerCase() && each.size.toLowerCase() === action.payload.size.toLowerCase()
+                return each.product._id.toLowerCase() === action.payload.product._id.toLowerCase() && each.color.toLowerCase() === action.payload.color.toLowerCase() && each.size.toLowerCase() === action.payload.size.toLowerCase()
             })
             if (checkCartItem > -1) {
                 state.cart.items[checkCartItem].quantity = state.cart.items[checkCartItem].quantity + 1
@@ -216,9 +209,9 @@ export const authSlice = createSlice({
             return state
         },
 
-        clearEach: (state, action: PayloadAction<{ productId: string, color: string, size: string }>) => {
+        clearEach: (state, action: PayloadAction<ITEM>) => {
             state.cart.items = state.cart.items.filter(item => {
-                return item.product.product.toLowerCase() !== action.payload.productId.toLowerCase() ||
+                return item.product._id.toLowerCase() !== action.payload.product._id.toLowerCase() ||
                     item.color.toLowerCase() !== action.payload.color.toLowerCase() ||
                     item.size.toLowerCase() !== action.payload.size.toLowerCase();
             });
@@ -235,6 +228,6 @@ export const authSlice = createSlice({
     },
 })
 
-export const { login, logout, addCartNoToken, setEmptyCart, decCartNoToken, inCartNoTken, clearEach, changeInforUserImage } = authSlice.actions
+export const { login, logout, addCartNoToken, setEmptyCart, decCartNoToken, inCartNoTken, clearEach, changeInforUserImage, getItemsCart } = authSlice.actions
 
 export default authSlice.reducer

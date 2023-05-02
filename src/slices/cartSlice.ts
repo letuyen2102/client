@@ -5,13 +5,15 @@ export interface CARTHANDLE {
     orderQuantity: number,
     tab: number,
     tabColor: number,
-    tabSize: number
+    tabSize: number,
+    disableBtn: boolean
 }
 export const initialStateDetailCart: CARTHANDLE = {
     orderQuantity: 1,
     tab: 1,
     tabColor: 0,
-    tabSize: 0
+    tabSize: 0,
+    disableBtn: false
 }
 
 export const cartSlice = createSlice({
@@ -27,27 +29,40 @@ export const cartSlice = createSlice({
         inCart: (state) => {
             return { ...state, orderQuantity: state.orderQuantity + 1 }
         },
+        setDisable: (state) => {
+            return {
+                ...state,
+                disableBtn: true
+            }
+        },
+        setEnable: (state) => {
+            return {
+                ...state,
+                disableBtn: false
+            }
+        },
         setTabColor: (state, action: PayloadAction<number>) => {
-            return { ...state, tabColor: action.payload }
+            return { ...state, tabColor: action.payload, orderQuantity: 1, tabSize: 0, disableBtn: false }
         },
         setTabSize: (state, action: PayloadAction<number>) => {
-            return { ...state, tabSize: action.payload }
+            return { ...state, tabSize: action.payload, orderQuantity: 1, disableBtn: false }
         },
         setTab: (state, action: PayloadAction<number>) => {
-            return { ...state, tab: action.payload }
+            return { ...state, tab: action.payload, disableBtn: false }
         },
         defaultTab: (state) => {
             return {
                 orderQuantity: 1,
                 tab: 1,
                 tabColor: 0,
-                tabSize: 0
+                tabSize: 0,
+                disableBtn: false
             }
         }
     },
 })
 
 // Action creators are generated for each case reducer function
-export const { decCart, inCart, setTabColor, setTabSize, setTab , defaultTab } = cartSlice.actions
+export const { decCart, inCart, setTabColor, setTabSize, setTab, defaultTab, setDisable, setEnable } = cartSlice.actions
 
 export default cartSlice.reducer
