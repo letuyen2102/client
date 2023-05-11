@@ -1,34 +1,41 @@
-.pageProductAdmin {
-}
-.tiltle > p {
+.pageProductAdmin {}
+
+.tiltle>p {
     font-size: 20px;
     letter-spacing: 2px;
 }
+
 .tableOrderUserAdmin {
     width: 100%;
 }
+
 .tableOrderUserAdmin p {
     font-size: 18px;
     font-weight: 400;
 }
 
-.tableOrderUserAdmin > thead > tr > th {
+.tableOrderUserAdmin>thead>tr>th {
     padding: 10px 20px;
     color: #fff;
 }
-.tableOrderUserAdmin > tbody > tr > td {
+
+.tableOrderUserAdmin>tbody>tr>td {
     padding: 10px 20px;
 }
-.tableOrderUserAdmin > thead > tr {
+
+.tableOrderUserAdmin>thead>tr {
     background-color: #584E46;
 }
-.prodImage > img {
+
+.prodImage>img {
     width: 100%;
 }
+
 .actionProd {
     display: flex;
     align-items: center;
 }
+
 .editProd {
     margin-right: 10px;
     font-size: 18px;
@@ -37,6 +44,7 @@
     color: #fff;
     border-radius: 10px;
 }
+
 .deleteProd {
     margin-left: 10px;
     font-size: 18px;
@@ -44,10 +52,13 @@
     background-color: #DC3545;
     color: #fff;
     border-radius: 10px;
-}   
-.deleteProd:hover , .editProd:hover {
+}
+
+.deleteProd:hover,
+.editProd:hover {
     color: #fff;
 }
+
 .tiltle {
     display: flex;
     align-items: center;
@@ -55,12 +66,14 @@
     margin-top: 5px;
     margin-bottom: 5px;
 }
-.tiltle > p {
+
+.tiltle>p {
     font-size: 25px;
     color: #333;
     letter-spacing: 2px;
 }
-.tiltle > button {
+
+.tiltle>a {
     padding: 10px 15px;
     background-color: #000;
     color: #fff;

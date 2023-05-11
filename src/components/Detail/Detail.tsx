@@ -23,6 +23,7 @@ export interface PRODUCT {
     sale: number;
     quantity: {
         color: string;
+        colorName: string;
         size: {
             size: string;
             quantity: number;
@@ -33,7 +34,7 @@ export interface PRODUCT {
     }[];
     image: string;
     category: string;
-    type: string;
+    categoryName: string;
     subQuantity: number;
     newPrice: number;
     slug: string;
@@ -64,7 +65,7 @@ const Detail: React.FC = (props) => {
         slidesToScroll: 5
     };
     const [changeImg, setChangeImg] = useState<string | null>()
-    const [prod, setProd] = useState<PRODUCT>({ _id: "", name: "", description: "", oldPrice: 0, sale: 0, quantity: [], image: "", category: "", type: "", subQuantity: 0, newPrice: 0, slug: "" })
+    const [prod, setProd] = useState<PRODUCT>({ _id: "", name: "", description: "", oldPrice: 0, sale: 0, quantity: [], image: "", category: "", categoryName: "", subQuantity: 0, newPrice: 0, slug: "" })
     const addToCart = async (objCart: ITEM) => {
         if (handleLoginAndCart.token) {
             try {
@@ -183,7 +184,7 @@ const Detail: React.FC = (props) => {
                                                     <div className={styles.colorOderImage}>
                                                         <img src={`/products/${prod.quantity[idx].imageSlideShows[0]}`} />
                                                     </div>
-                                                    <p>{el.color}</p>
+                                                    <p>{el.colorName}</p>
                                                 </div>
                                             )
 

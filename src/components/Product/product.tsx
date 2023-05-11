@@ -1,7 +1,7 @@
 /*eslint-disable*/
 import { Link } from 'react-router-dom'
 import styles from './product.module.css'
-import { PRODUCT } from '../../../components/Detail/Detail'
+import { PRODUCT } from '../Detail/Detail'
 import { useEffect, useState } from 'react'
 const Product = () => {
     const [prods, setProds] = useState<PRODUCT[]>([])
@@ -18,7 +18,7 @@ const Product = () => {
         <div className={styles.pageProductAdmin}>
             <div className={styles.tiltle}>
                 <p>Quản lý sản phẩm</p>
-                <button>Thêm sản phẩm</button>
+                <Link to='/myway/admin/addProduct'>Thêm sản phẩm</Link>
             </div>
             <table className={`${styles.tableOrderUserAdmin}`}>
                 <thead>

@@ -5,20 +5,20 @@ import ReactDOM from 'react-dom';
 import ReactPaginate from 'react-paginate';
 import ProductCard from '../ProductCard/ProductCard';
 
-function Items({ currentItems }: { currentItems: { name: string, image: string, oldPrice: number, sale: number, type: string , slug: string}[] }) {
+function Items({ currentItems }: { currentItems: { name: string, image: string, oldPrice: number, sale: number, category: string, slug: string }[] }) {
     return (
         <>
             {currentItems &&
                 currentItems.map((each, index) => (
                     <div className={`col-lg-3 col-md-4 col-sm-6 col-6`} key={index}>
-                        <ProductCard image={each.image} oldPrice={each.oldPrice} sale={each.sale} name={each.name} type={each.type} slug = {each.slug}/>
+                        <ProductCard image={each.image} oldPrice={each.oldPrice} sale={each.sale} name={each.name} category={each.category} slug={each.slug} />
                     </div>
                 ))}
         </>
     );
 }
 
-export default function PaginatedItems({ itemsPerPage, queryAPI , currentPage , setCurrentPage}: { itemsPerPage: number, queryAPI: string, currentPage: number , setCurrentPage: React.Dispatch<SetStateAction<number>>}) {
+export default function PaginatedItems({ itemsPerPage, queryAPI, currentPage, setCurrentPage }: { itemsPerPage: number, queryAPI: string, currentPage: number, setCurrentPage: React.Dispatch<SetStateAction<number>> }) {
     const navigate: NavigateFunction = useNavigate()
     let getAPI: string
     const local = localStorage.getItem('queryApi')
@@ -31,7 +31,7 @@ export default function PaginatedItems({ itemsPerPage, queryAPI , currentPage , 
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const queryString: number = parseInt(searchParams.get('page') || '1');
-    const [prods, setProds] = useState<{ _id: string, name: string, description: string, oldPrice: number, sale: number, quantity: { color: string, size: { size: string, quantity: number }[] }[], image: string, imageSlideShows: string, category: string, type: string , slug: string}[]>([])
+    const [prods, setProds] = useState<{ _id: string, name: string, description: string, oldPrice: number, sale: number, quantity: { color: string, size: { size: string, quantity: number }[] }[], image: string, imageSlideShows: string, category: string, type: string, slug: string }[]>([])
     // const [currentPage, setCurrentPage] = useState(queryString - 1);
     const itemOffset = currentPage * itemsPerPage;
     const endOffset = itemOffset + itemsPerPage;

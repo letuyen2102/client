@@ -5,18 +5,23 @@ import { useLocation } from 'react-router-dom';
 import styles from './Collection.module.css'
 import PaginatedItems from './Pagination';
 import Title from '../Tiltle/Title';
+interface CATEGORY {
+    name: string,
+    displayName: string,
+    productCount: number
+}
 const Collection: React.FC<{ queryAPI: string, queryString: string }> = (props) => {
 
     const navigate: NavigateFunction = useNavigate()
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
-    const [categories, setCategories] = useState<string[]>([])
+    const [categories, setCategories] = useState<CATEGORY[]>([])
     const [colors, setColors] = useState<string[]>([])
     useEffect(() => {
         const getCategories = async () => {
-            await fetch(props.queryAPI)
+            await fetch(`/myway/api/categories/statsCategory`)
                 .then(res => res.json())
-                .then(all => setCategories(all.result))
+                .then(all => setCategories(all.stats))
         }
         const getColors = async () => {
             await fetch('/myway/api/products/getColors')
@@ -138,10 +143,10 @@ const Collection: React.FC<{ queryAPI: string, queryString: string }> = (props) 
                                     && categories.map((each, index) => {
                                         return <li key={index}>
                                             <label>
-                                                <input type="checkbox" checked={searchParams.get(props.queryString) === each} onChange={event => {
+                                                <input type="checkbox" checked={searchParams.get(props.queryString) === each.name} onChange={event => {
                                                     if (event.target.checked) {
                                                         searchParams.delete("startItem")
-                                                        searchParams.set(props.queryString, each)
+                                                        searchParams.set(props.queryString, each.name)
                                                         navigate(`?${searchParams.toString()}`)
                                                     }
                                                     else {
@@ -150,7 +155,7 @@ const Collection: React.FC<{ queryAPI: string, queryString: string }> = (props) 
                                                         navigate(`?${searchParams.toString()}`)
                                                     }
                                                 }} />
-                                                {each}
+                                                {each.displayName} ({each.productCount})
                                             </label>
                                         </li>
                                     })

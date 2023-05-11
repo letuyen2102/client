@@ -133,21 +133,8 @@ const Cart: React.FC = (props) => {
         }
     }
     useEffect(() => {
-        const getCartApi = async () => {
-
-            await axios.get('/myway/api/carts/cartMe')
-                .then(response => {
-                    const all = response.data;
-                    setItemsCart(all.cartMe);
-                })
-        }
-        if (handleLoginAndCart.token) {
-            getCartApi()
-        }
-    }, [handleLoginAndCart.token])
-    useEffect(() => {
-
         const addManyCartApi = async (objManyItem: MANYITEM) => {
+            console.log("hihihihi")
             const items = objManyItem.items.map((el, id) => {
                 return {
                     productId: el.product._id,
@@ -160,14 +147,25 @@ const Cart: React.FC = (props) => {
             await axios.post('/myway/api/carts/createManyCart', {
                 items: [...items]
             })
-
             dispatch(setEmptyCart())
         }
         if (handleLoginAndCart.token && handleLoginAndCart.cart && handleLoginAndCart.cart.items.length > 0) {
             addManyCartApi({ items: handleLoginAndCart.cart.items })
         }
-    }, [handleLoginAndCart.token, handleLoginAndCart.cart])
+    }, [])
+    useEffect(() => {
+        const getCartApi = async () => {
 
+            await axios.get('/myway/api/carts/cartMe')
+                .then(response => {
+                    const all = response.data;
+                    setItemsCart(all.cartMe);
+                })
+        }
+        if (handleLoginAndCart.token) {
+            getCartApi()
+        }
+    }, [handleLoginAndCart.token, handleLoginAndCart.cart])
     return (
         <div>
             <Title>

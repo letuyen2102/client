@@ -10,7 +10,7 @@ function Items({ currentItems }: { currentItems: PRODUCT[] }) {
             {currentItems &&
                 currentItems.map((item, index) => (
                     <div className='col-lg-3' key={index}>
-                        <ProductCard image={item.image} oldPrice={item.oldPrice} sale={item.sale} name={item.name} type={item.type} slug={item.slug} />
+                        <ProductCard image={item.image} oldPrice={item.oldPrice} sale={item.sale} name={item.name} category={item.category} slug={item.slug} />
                     </div>
                 ))}
         </>

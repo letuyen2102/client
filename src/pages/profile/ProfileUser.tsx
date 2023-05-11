@@ -8,6 +8,7 @@ import SectionProfile from "../../components/SectionProfile/SectionProfile"
 import ChangePassword from "../../components/SectionProfile/ChangePassword"
 import MyBooking from "../../components/SectionProfile/MyBooking"
 import DetailOrder from "../../components/SectionProfile/DetailOrder"
+import AddProduct from "../../components/AddProduct/AddProduct"
 const ProfileUser = () => {
     return (
         <div>
@@ -40,6 +41,7 @@ const ProfileUser = () => {
                                         <Route path="/change-password" element={<ChangePassword />} />
                                         <Route path="/myOrder" element={<MyBooking />} />
                                         <Route path="/myOrder/:orderId" element={<DetailOrder />} />
+
                                     </Routes>
                                 </div>
                             </div>

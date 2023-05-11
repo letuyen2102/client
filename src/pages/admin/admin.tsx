@@ -2,7 +2,10 @@
 import React, { FunctionComponent } from 'react'
 import { Link } from 'react-router-dom'
 import styles from './admin.module.css'
-const Admin: React.FC<{children: React.ReactNode}> = (props) => {
+import { useSelector } from 'react-redux'
+import { RootState } from '../../store/store'
+const Admin: React.FC<{ children: React.ReactNode }> = (props) => {
+    const handleLoginAndCart = useSelector((state: RootState) => state.auth)
     return (
         <div className='container-fluid'>
             <div className={styles.admin}>
@@ -11,7 +14,7 @@ const Admin: React.FC<{children: React.ReactNode}> = (props) => {
                         <div>
                             <div className={styles.imageAdmin}>
                                 <div>
-                                    <img src='https://cdn.vectorstock.com/i/1000x1000/30/97/flat-business-man-user-profile-avatar-icon-vector-4333097.webp' />
+                                    <img src={`/users/${handleLoginAndCart.user.photo}`} />
                                 </div>
                                 <p>Chào Admin</p>
                             </div>
@@ -29,6 +32,10 @@ const Admin: React.FC<{children: React.ReactNode}> = (props) => {
                                     <li>
                                         <i className="fa-solid fa-list"></i>
                                         <Link to='/myway/admin/product'>Sản phẩm</Link>
+                                    </li>
+                                    <li>
+                                        <i className="fa-solid fa-list"></i>
+                                        <Link to='/myway/admin/categories'>Danh mục sản phẩm</Link>
                                     </li>
                                     <li>
                                         <i className="fa-duotone fa-list"></i>

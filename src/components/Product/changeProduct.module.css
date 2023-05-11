@@ -26,7 +26,11 @@
     border: 1px solid #ccc;
     height: 40px;
 }
-
+.formGroup>textarea {
+    width: 100%;
+    border: 1px solid #ccc;
+    min-height: 200px;
+}
 .action {
     margin-top: 10px;
 }
@@ -34,7 +38,7 @@
 .formGroup>select {
     padding: 5px 10px;
     border: 1px solid #ccc;
-    margin-left: 15px;
+    /* margin-left: 15px; */
 }
 
 .postImage {

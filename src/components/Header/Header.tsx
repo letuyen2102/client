@@ -104,79 +104,37 @@ const Header: React.FC = (props) => {
                         <li>
                             <Link to='/collection/all'>
                                 Thời trang
-                                <i className={`fa-solid fa-angle-down ${styles.iconAngleDown}`}></i>
                             </Link>
                             <ul className={`${styles.ul1}`}>
                                 <li>
-                                    <Link to='/dam'>
+                                    <Link to=''>
                                         Đầm
-                                        <i className={`fa-regular fa-angle-right ${styles.iconAngleDown}`}></i>
                                     </Link>
-                                    {/* <ul>
-                                        <li>
-                                            <Link to=''>Đầm xòe</Link>
-                                        </li>
-                                        <li>
-                                            <Link to=''>Đầm ôm</Link>
-                                        </li>
-                                        <li>
-                                            <Link to=''>Đầm maxi</Link>
-                                        </li>
-                                    </ul> */}
                                 </li>
                                 <li>
-                                    <Link to='/ao'>
+                                    <Link to=''>
                                         Áo
-                                        <i className={`fa-regular fa-angle-right ${styles.iconAngleDown}`}></i>
-
                                     </Link>
-                                    {/* <ul>
-                                        <li>
-                                            <Link to=''>Áo sơ mi</Link>
-                                        </li>
-                                        <li>
-                                            <Link to=''>Áo kiểu</Link>
-                                        </li>
-                                        <li>
-                                            <Link to=''>Áo vest</Link>
-                                        </li>
-                                        <li>
-                                            <Link to=''>Áo khoác</Link>
-                                        </li>
-                                        <li>
-                                            <Link to=''>Áo dài</Link>
-                                        </li>
-                                    </ul> */}
                                 </li>
                                 <li>
-                                    <Link to='/quan'>
+                                    <Link to=''>
                                         Quần
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link to='/chan-vay'>
+                                    <Link to=''>
                                         Chân váy
-                                        <i className={`fa-regular fa-angle-right ${styles.iconAngleDown}`}></i>
-
                                     </Link>
-                                    {/* <ul>
-                                        <li>
-                                            <Link to=''>Chân váy ôm</Link>
-                                        </li>
-                                        <li>
-                                            <Link to=''>Chân váy dài</Link>
-                                        </li>
-                                    </ul> */}
                                 </li>
                                 <li>
-                                    <Link to='/jumpsuit'>
+                                    <Link to=''>
                                         Jumpsuit
                                     </Link>
                                 </li>
                             </ul>
                         </li>
                         <li>
-                            <Link to=''>
+                            <Link to='/collection/all'>
                                 Mua sắm theo dịp
                                 <i className={`fa-solid fa-angle-down ${styles.iconAngleDown}`}></i>
                             </Link>
@@ -207,7 +165,7 @@ const Header: React.FC = (props) => {
                             </ul>
                         </li>
                         <li>
-                            <Link to=''>
+                            <Link to='/collection/all'>
                                 Bộ sưu tập
                                 <i className={`fa-solid fa-angle-down ${styles.iconAngleDown}`}></i>
                             </Link>
