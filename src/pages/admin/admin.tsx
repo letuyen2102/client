@@ -34,10 +34,6 @@ const Admin: React.FC<{ children: React.ReactNode }> = (props) => {
                                         <Link to='/myway/admin/product'>Sản phẩm</Link>
                                     </li>
                                     <li>
-                                        <i className="fa-solid fa-list"></i>
-                                        <Link to='/myway/admin/categories'>Danh mục sản phẩm</Link>
-                                    </li>
-                                    <li>
                                         <i className="fa-duotone fa-list"></i>
                                         <Link to=''>order</Link>
                                     </li>

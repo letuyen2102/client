@@ -4,31 +4,15 @@ import { useParams } from "react-router-dom"
 import { PRODUCT } from "../Detail/Detail";
 import styles from './changeProduct.module.css'
 import axios from "axios";
+import slugify from 'slugify'
 import { useDispatch } from "react-redux";
 import { handleNotify } from "../../slices/notifySlice";
+import { IMAGE_SHOW, IMAGE_SHOW_FORMDATA, sizeArray } from "../AddProduct/AddProduct";
 
-interface IMAGE_SHOW {
-    quantity: {
-        color: string;
-        imageSlideShows: string[];
-    }[];
-}
-interface IMAGE_SHOW_FORMDATA {
-    quantity: {
-        color: string;
-        imageSlideShows: File[];
-    }[];
-}
-const sizeArray = ['S', 'S+', 'M', 'M+', 'L', 'L+', 'XL', 'XL+', '2XL', '2XL+'].map((each, idx) => {
-    return {
-        size: each,
-        quantity: 0,
-    }
-})
 const ChangeProduct = () => {
     const dispatch = useDispatch()
     const { idProd } = useParams()
-    const [prod, setProd] = useState<PRODUCT>({ _id: "", name: "", description: "", oldPrice: 10, sale: 0, quantity: [], image: "", category: "", categoryName: "", subQuantity: 0, newPrice: 0, slug: "" })
+    const [prod, setProd] = useState<PRODUCT>({ _id: "", name: "", description: "", oldPrice: 0, sale: 0, quantity: [], image: "", category: "", categoryName: "", subQuantity: 0, newPrice: 0, slug: "" })
     console.log(prod)
     const [selectSize, setSelectSize] = useState<string[]>([''])
     const [image, setImage] = useState("");
@@ -110,7 +94,7 @@ const ChangeProduct = () => {
                                     <label htmlFor="productDes">Mô tả sản phẩm</label>
                                     <textarea id="productDes" required value={prod.description} onChange={e => setProd({ ...prod, description: e.target.value })} />
                                 </div>
-                                <div className={styles.formGroup}>
+                                {/* <div className={styles.formGroup}>
                                     <label htmlFor="oldPrice">Giá cũ</label>
                                     <input id="oldPrice" type='number' required value={prod.oldPrice} onChange={e => setProd({ ...prod, oldPrice: +e.target.value })} />
                                 </div>
@@ -119,32 +103,36 @@ const ChangeProduct = () => {
                                     <input id="sale" type='number' required value={prod.sale} onChange={event => {
                                         setProd({ ...prod, sale: +event.target.value })
                                     }} />
-                                </div>
+                                </div> */}
                                 <div className="row">
                                     {/* <div className="col-lg-3 col-md-6 col-sm-6">
                                         <div className={styles.formGroup}>
                                             <label >Mã danh mục</label>
                                             <input type="text" value={prod.category} onChange={event => setProd({ ...prod, category: event.target.value })} />
                                         </div>
-                                    </div>
-                                    <div className="col-lg-3 col-md-6 col-sm-6">
+                                    </div> */}
+
+                                    <div className="col-lg-4 col-md-6 col-sm-6">
                                         <div className={styles.formGroup}>
                                             <label >Tên danh mục</label>
                                             <input type="text" value={prod.categoryName} onChange={event => setProd({ ...prod, categoryName: event.target.value })} />
                                         </div>
-                                    </div> */}
-                                    {/* <div className="col-lg-3 col-md-6 col-sm-6">
-                                <div className={styles.formGroup}>
-                                    <label >Mã loại</label>
-                                    <input value={prod.type} onChange={event => setProd({ ...prod, type: event.target.value })} />
-                                </div>
-                            </div> */}
-                                    {/* <div className="col-lg-3 col-md-6 col-sm-6">
-                                <div className={styles.formGroup}>
-                                    <label >Tên loại</label>
-                                    <input value={prod.typeName} onChange={event => setProd({ ...prod, typeName: event.target.value })} />
-                                </div>
-                            </div> */}
+                                    </div>
+                                    <div className="col-lg-4 col-md-6 col-sm-6">
+                                        <div className={styles.formGroup}>
+                                            <label htmlFor="oldPrice">Giá cũ</label>
+                                            <input id="oldPrice" type='number' required value={prod.oldPrice} onChange={e => setProd({ ...prod, oldPrice: +e.target.value })} />
+                                        </div>
+
+                                    </div>
+                                    <div className="col-lg-4 col-md-6 col-sm-6">
+                                        <div className={styles.formGroup}>
+                                            <label htmlFor="sale">Giảm giá (0-1)</label>
+                                            <input id="sale" type='number' required value={prod.sale} onChange={event => {
+                                                setProd({ ...prod, sale: +event.target.value })
+                                            }} />
+                                        </div>
+                                    </div>
                                     <div className={styles.imageMain}>
                                         <p>Ảnh chính</p>
                                         <div>
@@ -159,17 +147,6 @@ const ChangeProduct = () => {
                                                 <div key={idx}>
                                                     <div style={{ borderBottom: '2px dashed #00b156', margin: '10px 0px' }}>
                                                         <div className="row">
-                                                            <div className="col-lg-6 col-md-6 col-sm-12">
-                                                                <div className={styles.formGroup} >
-                                                                    <label>Mã màu</label>
-                                                                    <input value={prod.quantity[idx]?.color}
-                                                                        onChange={event => setProd(prev => {
-                                                                            const newState = { ...prev }
-                                                                            newState.quantity[idx].color = event.target.value;
-                                                                            return newState;
-                                                                        })} />
-                                                                </div>
-                                                            </div>
                                                             <div className="col-lg-6 col-md-6 col-sm-12">
                                                                 <div className={styles.formGroup} >
                                                                     <label>Tên màu</label>
@@ -222,7 +199,7 @@ const ChangeProduct = () => {
                                                         <div className={styles.postImage}>
                                                             <div className={styles.imageSlideShow}>
                                                                 <div className="row">
-                                                                    <p style={{ fontSize: '18px', letterSpacing: '2px', marginBottom: '10px' }}>Ảnh slideshow màu {each.color} <label className={styles.btnUploadImage}>
+                                                                    <p style={{ fontSize: '18px', letterSpacing: '2px', marginBottom: '10px' }}>Ảnh slideshow màu {each.colorName} <label className={styles.btnUploadImage}>
                                                                         THÊM ẢNH
                                                                         <input type="file" multiple style={{ display: 'none' }}
                                                                             onChange={async (event) => {
@@ -234,7 +211,7 @@ const ChangeProduct = () => {
                                                                                         const newState = { ...prev }
                                                                                         console.log(each.color)
                                                                                         newState.quantity[idx] = {
-                                                                                            color: each.color,
+                                                                                            colorName: each.colorName,
                                                                                             imageSlideShows: [...Array.from(files)]
                                                                                         }
 
@@ -250,7 +227,7 @@ const ChangeProduct = () => {
                                                                                 setImageSlideShows(prev => {
                                                                                     const newState = { ...prev }
                                                                                     newState.quantity[idx] = {
-                                                                                        color: each.color,
+                                                                                        colorName: each.colorName,
                                                                                         imageSlideShows: Array.from(new Set([...images, ...newState.quantity[idx].imageSlideShows]))
                                                                                     }
                                                                                     return newState
@@ -343,7 +320,7 @@ const ChangeProduct = () => {
                                             newState.quantity = [
                                                 ...newState.quantity,
                                                 {
-                                                    color: "",
+                                                    colorName: "",
                                                     imageSlideShows: []
                                                 }
                                             ]
@@ -356,7 +333,7 @@ const ChangeProduct = () => {
                                             newState.quantity = [
                                                 ...newState.quantity,
                                                 {
-                                                    color: "",
+                                                    colorName: "",
                                                     imageSlideShows: []
                                                 }
                                             ]
@@ -375,12 +352,12 @@ const ChangeProduct = () => {
                                         formData.append('oldPrice', prod.oldPrice.toString())
                                         formData.append('sale', prod.sale.toString())
                                         formData.append('quantity', JSON.stringify(prod.quantity))
-                                        formData.append('category', prod.category)
+                                        formData.append('categoryName', prod.categoryName)
                                         // formData.append('type', prod.type)
                                         formData.append('imageMainProduct', imgFormData)
                                         imageSlideShowsFormdata.quantity.forEach((gg, hh) => {
                                             gg.imageSlideShows.forEach((jj, kk) => {
-                                                formData.append(`imageSlideShow${gg.color}`, jj)
+                                                formData.append(`imageSlideShow${slugify(gg.colorName, { locale: 'vi', lower: true })}`, jj)
                                             })
                                         })
 

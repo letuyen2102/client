@@ -30,6 +30,7 @@
     "react-slideshow-image": "^4.2.1",
     "react-toastify": "^9.1.1",
     "slick-carousel": "^1.8.1",
+    "slugify": "^1.6.6",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },

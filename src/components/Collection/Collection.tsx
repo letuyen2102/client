@@ -5,23 +5,19 @@ import { useLocation } from 'react-router-dom';
 import styles from './Collection.module.css'
 import PaginatedItems from './Pagination';
 import Title from '../Tiltle/Title';
-interface CATEGORY {
-    name: string,
-    displayName: string,
-    productCount: number
-}
+import slugify from 'slugify';
 const Collection: React.FC<{ queryAPI: string, queryString: string }> = (props) => {
 
     const navigate: NavigateFunction = useNavigate()
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
-    const [categories, setCategories] = useState<CATEGORY[]>([])
+    const [categories, setCategories] = useState<string[]>([])
     const [colors, setColors] = useState<string[]>([])
     useEffect(() => {
         const getCategories = async () => {
-            await fetch(`/myway/api/categories/statsCategory`)
+            await fetch(`/myway/api/products/getCategories`)
                 .then(res => res.json())
-                .then(all => setCategories(all.stats))
+                .then(all => setCategories(all.categories))
         }
         const getColors = async () => {
             await fetch('/myway/api/products/getColors')
@@ -143,10 +139,10 @@ const Collection: React.FC<{ queryAPI: string, queryString: string }> = (props) 
                                     && categories.map((each, index) => {
                                         return <li key={index}>
                                             <label>
-                                                <input type="checkbox" checked={searchParams.get(props.queryString) === each.name} onChange={event => {
+                                                <input type="checkbox" checked={searchParams.get(props.queryString) === slugify(each, { locale: 'vi', lower: true })} onChange={event => {
                                                     if (event.target.checked) {
                                                         searchParams.delete("startItem")
-                                                        searchParams.set(props.queryString, each.name)
+                                                        searchParams.set(props.queryString, slugify(each, { locale: 'vi', lower: true }))
                                                         navigate(`?${searchParams.toString()}`)
                                                     }
                                                     else {
@@ -155,7 +151,7 @@ const Collection: React.FC<{ queryAPI: string, queryString: string }> = (props) 
                                                         navigate(`?${searchParams.toString()}`)
                                                     }
                                                 }} />
-                                                {each.displayName} ({each.productCount})
+                                                {each}
                                             </label>
                                         </li>
                                     })
@@ -169,10 +165,10 @@ const Collection: React.FC<{ queryAPI: string, queryString: string }> = (props) 
                                     && colors.map((each, index) => {
                                         return <li key={index}>
                                             <label>
-                                                <input type="checkbox" checked={searchParams.get("color") === each} onChange={event => {
+                                                <input type="checkbox" checked={searchParams.get("color") === slugify(each, { locale: 'vi', lower: true })} onChange={event => {
                                                     if (event.target.checked) {
                                                         searchParams.delete("startItem")
-                                                        searchParams.set("color", each)
+                                                        searchParams.set("color", slugify(each, { locale: 'vi', lower: true }))
                                                         navigate(`?${searchParams.toString()}`)
                                                     }
                                                     else {

@@ -33,9 +33,6 @@ const Product = () => {
                             <p>Tên</p>
                         </th>
                         <th>
-                            <p>Mô tả</p>
-                        </th>
-                        <th>
                             <p>Số lượng</p>
                         </th>
                         <th>
@@ -56,11 +53,6 @@ const Product = () => {
                                     </td>
                                     <td>
                                         <p>{each.name}</p>
-                                    </td>
-                                    <td>
-                                        <p>
-                                            {each.description}
-                                        </p>
                                     </td>
                                     <td>
                                         <p>{each.subQuantity}</p>
