@@ -44,7 +44,9 @@
     letter-spacing: 1.5px;
     border: none;
 }
-
+.detailOrder>div a:first-child {
+    margin-right: 20px;
+}
 .btnOrderSuccess {
     background-color: rgba(0, 177, 86, 0.15);
     color: rgb(0, 152, 89);

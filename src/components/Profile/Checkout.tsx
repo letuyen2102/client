@@ -212,7 +212,7 @@ const Checkout = () => {
                                                     <p style={{ textTransform: 'uppercase' }}>{each.product.name}</p>
                                                     <div>
                                                         <p>x{each.quantity}</p>
-                                                        <p>Màu: {each.color}</p>
+                                                        <p>Màu: {each.colorName}</p>
                                                         <p>Kích cỡ: {each.size}</p>
                                                     </div>
                                                 </div>

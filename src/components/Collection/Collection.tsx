@@ -190,7 +190,7 @@ const Collection: React.FC<{ queryAPI: string, queryString: string }> = (props) 
                         <div className={`${styles.productShop}`}>
                             <div className={`${styles.productShopFilter}`}>
                                 <h2>Filters:</h2>
-                                <div>
+                                <div style={{ display: 'flex', alignItems: 'center' }}>
                                     <label>
                                         <input type='checkbox' checked={searchParams.get("sort") === "name"} onChange={event => {
                                             if (event.target.checked) {

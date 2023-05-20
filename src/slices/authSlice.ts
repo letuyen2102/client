@@ -145,6 +145,7 @@ export const authSlice = createSlice({
                     product: action.payload.product,
                     quantity: action.payload.quantity,
                     color: action.payload.color,
+                    colorName : action.payload.colorName,
                     size: action.payload.size,
                     image: action.payload.image,
                 })

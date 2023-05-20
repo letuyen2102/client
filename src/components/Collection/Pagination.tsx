@@ -9,7 +9,7 @@ function Items({ currentItems }: { currentItems: PRODUCT[] }) {
         <>
             {currentItems &&
                 currentItems.map((item, index) => (
-                    <div className='col-lg-3' key={index}>
+                    <div className='col-lg-3 col-md-3 col-sm-4 col-6' key={index}>
                         <ProductCard image={item.image} oldPrice={item.oldPrice} sale={item.sale} name={item.name} category={item.category} slug={item.slug} />
                     </div>
                 ))}
@@ -24,14 +24,10 @@ export default function PaginatedItems({ itemsPerPage, apiString }: { itemsPerPa
     const [prods, setProds] = useState<PRODUCT[]>([])
     const [itemOffset, setItemOffset] = useState(parseInt(searchParams.get("startItem") ?? "0", 10));
 
-    // Simulate fetching items from another resources.
-    // (This could be items from props; or items loaded in a local state
-    // from an API endpoint with useEffect and useState)
     const endOffset = itemOffset + itemsPerPage;
     const currentItems = prods.slice(itemOffset, endOffset);
     const pageCount = Math.ceil(prods.length / itemsPerPage);
 
-    // Invoke when user click to request another page.
     const handlePageClick = (event: { selected: number }) => {
 
         const newOffset = (event.selected * itemsPerPage) % prods.length;

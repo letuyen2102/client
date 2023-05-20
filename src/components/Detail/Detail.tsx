@@ -66,6 +66,7 @@ const Detail: React.FC = (props) => {
     };
     const [changeImg, setChangeImg] = useState<string | null>()
     const [prod, setProd] = useState<PRODUCT>({ _id: "", name: "", description: "", oldPrice: 0, sale: 0, quantity: [], image: "", category: "", categoryName: "", subQuantity: 0, newPrice: 0, slug: "" })
+    console.log(prod)
     const addToCart = async (objCart: ITEM) => {
         if (handleLoginAndCart.token) {
             try {
@@ -73,6 +74,7 @@ const Detail: React.FC = (props) => {
                     productId: objCart.product._id,
                     quantity: objCart.quantity,
                     color: objCart.color,
+                    colorName: objCart.colorName,
                     size: objCart.size,
                     image: objCart.image
                 })
@@ -245,6 +247,7 @@ const Detail: React.FC = (props) => {
                                         product: prod,
                                         quantity: handleCart.orderQuantity,
                                         color: prod.quantity[handleCart.tabColor].color,
+                                        colorName: prod.quantity[handleCart.tabColor].colorName,
                                         size: prod.quantity[handleCart.tabColor].size[handleCart.tabSize].size,
                                         image: prod.quantity[handleCart.tabColor].imageSlideShows[0]
                                     })

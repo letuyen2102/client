@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from 'react'
-import styles from './MyBooking.module.css'
-import PaginatedItems from './PaginitionBooking'
+import styles from '../SectionProfile/MyBooking.module.css'
 import { NavigateFunction, useLocation, useNavigate } from 'react-router-dom'
-
-const MyBooking: React.FC<{ API: string }> = (props) => {
+import PaginationAdminBooking from './PaginationAdminBooking'
+const Order = () => {
     const navigate: NavigateFunction = useNavigate()
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
-    const [apiString, setApiString] = useState(props.API)
-    useEffect(() => {
-        setApiString('/myway/api/bookings/getBookingsMe' + location.search)
-    }, [location.search])
+    const [apiString, setApiString] = useState('/myway/api/bookings/getAllBookings')
+    // useEffect(() => {
+    //     setApiString('/myway/api/bookings/getAllBookings' + location.search)
+    // }, [])
     return (
         <div>
-            <div className={styles.sectionTitle}>
-                <p>Đơn hàng của tôi</p>
+            <div className={styles.orderTitle}>
+                <h1>Danh mục đơn hàng</h1>
             </div>
             <div className='row' style={{ marginTop: '24px' }}>
                 <div className='col-lg-3'>
@@ -62,10 +61,22 @@ const MyBooking: React.FC<{ API: string }> = (props) => {
                         }}>THẤT BẠI</button>
                     </div>
                 </div>
+                <div className='col-lg-3'>
+                    <div>
+                        <button className={`${styles.btnBooking} ${searchParams.get("status") === "required" && styles.btnColor}`} onClick={() => {
+                            searchParams.delete("startItem")
+                            searchParams.delete("status")
+
+                            searchParams.set("status", "required")
+                            navigate(`?${searchParams.toString()}`)
+
+                        }}>YÊU CẦU HỦY</button>
+                    </div>
+                </div>
             </div>
-            <PaginatedItems itemsPerPage={2} apiString={apiString} />
+            <PaginationAdminBooking itemsPerPage={6} apiString={apiString + location.search} />
         </div>
     )
 }
 
-export default MyBooking
+export default Order

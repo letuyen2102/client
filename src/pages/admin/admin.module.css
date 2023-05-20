@@ -19,10 +19,11 @@
 
 .sidebarAdmin {
     background-color: #3B3131;
-    /* position: fixed;
+    position: fixed;
     top: 0;
     left: 0;
-    bottom: 0; */
+    bottom: 0;
+    width: 16.67%; 
 }
 
 .listOptions>ul>li i,
@@ -31,9 +32,7 @@
 }
 
 .contentWithSidebar {
-    /* position: fixed;
-    top: 0;
-    right: 0; */
+    margin-left: 16.67%;
 }
 
 .adminLogout {

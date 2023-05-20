@@ -79,11 +79,12 @@ const AddProduct = () => {
             reader.onerror = reject;
         });
     };
-    const handleCreateProd = async (objCreate: FormData) => {
+    const handleCreateProd = async (objCreate: any) => {
         try {
             console.log(objCreate)
             const res = await axios({
                 method: "POST",
+                url: '/myway/api/products',
                 data: objCreate
             })
             console.log(res)
@@ -150,7 +151,7 @@ const AddProduct = () => {
                                         <div className={styles.imageMain}>
                                             <p>Ảnh chính</p>
                                             <div>
-                                                <input type="file" onChange={handleImageChange} />
+                                                <input type="file" accept="image/*" onChange={handleImageChange} />
                                                 {image && <img src={image} alt="Ảnh của bạn" style={{ width: '20%' }} />}
                                             </div>
                                         </div>
@@ -216,6 +217,7 @@ const AddProduct = () => {
                                                                         <p style={{ fontSize: '18px', letterSpacing: '2px', marginBottom: '10px' }}>Ảnh slideshow màu {each.colorName} <label className={styles.btnUploadImage}>
                                                                             THÊM ẢNH
                                                                             <input type="file" multiple style={{ display: 'none' }}
+                                                                                accept="image/*"
                                                                                 onChange={async (event) => {
                                                                                     const files = event.target.files
                                                                                     let images: string[] = []
@@ -370,9 +372,7 @@ const AddProduct = () => {
                                                         formData.append(`imageSlideShow${slugify(gg.colorName, { locale: 'vi', lower: true })}`, jj)
                                                     })
                                                 })
-                                                console.log(formData.get("name"))
-                                                console.log(prod.quantity)
-                                                // handleCreateProd(formData)
+                                                handleCreateProd(formData)
                                             }}
                                         >ADD</button>
                                     </div>

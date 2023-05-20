@@ -17,6 +17,7 @@ export interface ITEM {
     product: PRODUCT,
     quantity: number,
     color: string,
+    colorName: string,
     size: string,
     image: string
 }
@@ -140,6 +141,7 @@ const Cart: React.FC = (props) => {
                     productId: el.product._id,
                     quantity: el.quantity,
                     color: el.color,
+                    colorName: el.colorName,
                     size: el.size,
                     image: el.image
                 }
@@ -159,6 +161,7 @@ const Cart: React.FC = (props) => {
             await axios.get('/myway/api/carts/cartMe')
                 .then(response => {
                     const all = response.data;
+                    console.log(all)
                     setItemsCart(all.cartMe);
                 })
         }
@@ -202,12 +205,13 @@ const Cart: React.FC = (props) => {
                                     <div className={`col-lg-9 col-md-10 col-sm-10 col-10`}>
                                         <div className={`${styles.inforPaymentProduct}`}>
                                             <div className={`${styles.inforPaymentProduct1}`}>
-                                                <Link to={`/detail/${eachProd.product.slug}`}>{eachProd.product.name} / {eachProd.color} / {eachProd.size}</Link>
+                                                <Link to={`/detail/${eachProd.product.slug}`}>{eachProd.product.name} / {eachProd.colorName} / {eachProd.size}</Link>
                                                 <p className={`${styles.inforPaymentProduct_delete}`} onClick={e => {
                                                     clearEachItem({
                                                         product: eachProd.product,
                                                         quantity: 0,
                                                         color: eachProd.color,
+                                                        colorName: eachProd.colorName,
                                                         size: eachProd.size,
                                                         image: eachProd.image
                                                     })
@@ -224,6 +228,7 @@ const Cart: React.FC = (props) => {
                                                             product: eachProd.product,
                                                             quantity: 0,
                                                             color: eachProd.color,
+                                                            colorName: eachProd.colorName,
                                                             size: eachProd.size,
                                                             image: eachProd.image
                                                         })
@@ -234,6 +239,7 @@ const Cart: React.FC = (props) => {
                                                             product: eachProd.product,
                                                             quantity: 0,
                                                             color: eachProd.color,
+                                                            colorName: eachProd.colorName,
                                                             size: eachProd.size,
                                                             image: eachProd.image
                                                         })
@@ -260,6 +266,7 @@ const Cart: React.FC = (props) => {
                                                         product: item.product,
                                                         quantity: 0,
                                                         color: item.color,
+                                                        colorName: item.colorName,
                                                         size: item.size,
                                                         image: item.image
                                                     })}> Xóa</p>
@@ -274,6 +281,7 @@ const Cart: React.FC = (props) => {
                                                             product: item.product,
                                                             quantity: 0,
                                                             color: item.color,
+                                                            colorName: item.colorName,
                                                             size: item.size,
                                                             image: item.image
                                                         })}>-</button>
@@ -282,6 +290,7 @@ const Cart: React.FC = (props) => {
                                                             product: item.product,
                                                             quantity: 0,
                                                             color: item.color,
+                                                            colorName: item.colorName,
                                                             size: item.size,
                                                             image: item.image
                                                         })}>+</button>

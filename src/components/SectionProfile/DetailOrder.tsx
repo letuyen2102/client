@@ -48,6 +48,10 @@ const DetailOrder = () => {
                         orderDetail?.status === "cancel"
                         && <button className={styles.btnOrderFail}>Đã hủy</button>
                     }
+                    {
+                        orderDetail?.status === "required"
+                        && <button className={styles.btnOrderSuccess}>Đang yêu cầu hủy</button>
+                    }
                 </div>
                 <div className={styles.eachInfor}>
                     <span>Tên người nhận:</span>
@@ -108,7 +112,7 @@ const DetailOrder = () => {
                                         <div>
                                             <span>{each.product.name}</span>
                                             <div>
-                                                <p>Màu : {each.color}</p>
+                                                <p>Màu : {each.colorName}</p>
                                                 <p>Kích cỡ : {each.size}</p>
                                             </div>
                                         </div>

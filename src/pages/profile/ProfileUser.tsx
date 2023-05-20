@@ -39,9 +39,8 @@ const ProfileUser = () => {
                                     <Routes>
                                         <Route path="/" element={<SectionProfile />} />
                                         <Route path="/change-password" element={<ChangePassword />} />
-                                        <Route path="/myOrder" element={<MyBooking />} />
+                                        <Route path="/myOrder" element={<MyBooking API="/myway/api/bookings/getBookingsMe" />} />
                                         <Route path="/myOrder/:orderId" element={<DetailOrder />} />
-
                                     </Routes>
                                 </div>
                             </div>

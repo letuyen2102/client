@@ -11,36 +11,36 @@ const Admin: React.FC<{ children: React.ReactNode }> = (props) => {
             <div className={styles.admin}>
                 <div className='row'>
                     <div className={`col-lg-2 ${styles.sidebarAdmin}`}>
-                        <div>
-                            <div className={styles.imageAdmin}>
-                                <div>
-                                    <img src={`/users/${handleLoginAndCart.user.photo}`} />
-                                </div>
-                                <p>Chào Admin</p>
+                        <div className={styles.imageAdmin}>
+                            <div>
+                                <img src={`/users/${handleLoginAndCart.user.photo}`} />
                             </div>
-
-                            <div className={styles.listOptions}>
-                                <ul>
-                                    <li>
-                                        <i className="fa-light fa-house-chimney"></i>
-                                        <Link to=''>Dashboard</Link>
-                                    </li>
-                                    <li>
-                                        <i className="fa-thin fa-people-simple"></i>
-                                        <Link to=''>Khách hàng</Link>
-                                    </li>
-                                    <li>
-                                        <i className="fa-solid fa-list"></i>
-                                        <Link to='/myway/admin/product'>Sản phẩm</Link>
-                                    </li>
-                                    <li>
-                                        <i className="fa-duotone fa-list"></i>
-                                        <Link to=''>order</Link>
-                                    </li>
-
-                                </ul>
-                            </div>
+                            <p>Chào Admin</p>
                         </div>
+
+                        <div className={styles.listOptions}>
+                            <ul>
+                                <li>
+                                    <i className="fa-light fa-house-chimney"></i>
+                                    <Link to=''>Dashboard</Link>
+                                </li>
+                                <li>
+                                    <i className="fa-thin fa-people-simple"></i>
+                                    <Link to=''>Khách hàng</Link>
+                                </li>
+                                <li>
+                                    <i className="fa-solid fa-list"></i>
+                                    <Link to='/myway/admin/product'>Sản phẩm</Link>
+                                </li>
+                                <li>
+                                    <i className="fa-duotone fa-list"></i>
+                                    <Link to='/myway/admin/orders'>order</Link>
+                                </li>
+
+                            </ul>
+                        </div>
+
+
                     </div>
                     <div className={`col-lg-10 ${styles.contentWithSidebar}`}>
                         <div className={styles.adminLogout}>

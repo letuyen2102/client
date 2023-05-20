@@ -1,61 +1,72 @@
-import React, { useEffect, useState } from 'react';
-import ReactDOM from 'react-dom';
+import { useEffect, useState } from 'react';
 import ReactPaginate from 'react-paginate';
-import { PRODUCT } from '../Detail/Detail';
-import { UserInfor, login } from '../../slices/authSlice';
-import styles from './MyBooking.module.css'
+import styles from '../SectionProfile/MyBooking.module.css'
 import { Link, NavigateFunction, useLocation, useNavigate } from 'react-router-dom';
 import moment from 'moment';
+import { ORDER } from '../SectionProfile/PaginitionBooking';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { handleNotify } from '../../slices/notifySlice';
-export interface PRODORDER {
-    product: PRODUCT
-    quantity: number,
-    color: string,
-    colorName: string,
-    size: string,
-    image: string,
-    total: number
-}
-export interface ORDER {
-    _id: string,
-    user: UserInfor,
-    name: string,
-    email: string,
-    address: string,
-    phone: string,
-    note: string,
-    products: PRODORDER[],
-    method: string,
-    orderId: string,
-    status: string,
-    createAt: string,
-    subTotal: number,
-    paymentCardName: string
-}
 function Items({ currentItems }: { currentItems: ORDER[] }) {
+    console.log(currentItems)
     const dispatch = useDispatch()
-    const cancelOrder = async (idBooking: string) => {
+    const [items, setItems] = useState<ORDER[]>(currentItems)
+    console.log(items)
+    const handleAcceptOrder = async (idBooking: string) => {
         try {
-            const res = await axios.patch(`/myway/api/bookings/userCancelBooking/${idBooking}`)
+            const res = await axios.patch(`/myway/api/bookings/acceptOrder/${idBooking}`)
             if (res.data.status === "success") {
-                dispatch(handleNotify({ message: "Hủy đơn hàng thành công!", show: true, status: 200 }))
-                setTimeout(() => {
-                    dispatch(handleNotify({ message: "", show: false, status: 0 }))
-                }, 1500)
+                setItems(prev => {
+                    const newState = [...prev]
+
+                    newState.forEach((each, idx) => {
+                        if (each._id === idBooking) {
+                            each.status = 'success'
+                        }
+                    })
+
+                    return newState
+                })
             }
         }
         catch (err) {
-            dispatch(handleNotify({ message: "Hủy đơn hàng thất bại !", show: true, status: 400 }))
+            dispatch(handleNotify({ message: "Chấp nhận đơn hàng thất bại , vui lòng kiểm tra lại số lượng tồn kho !", show: true, status: 400 }))
             setTimeout(() => {
                 dispatch(handleNotify({ message: "", show: false, status: 0 }))
             }, 1500)
         }
     }
+    const handleRefuseOrder = async (idBooking: string) => {
+        try {
+            const res = await axios.patch(`/myway/api/bookings/refuseOrder/${idBooking}`)
+            if (res.data.status === "success") {
+                setItems(prev => {
+                    const newState = [...prev]
+
+                    newState.forEach((each, idx) => {
+                        if (each._id === idBooking) {
+                            each.status = 'cancel'
+                        }
+                    })
+
+                    return newState
+                })
+            }
+        }
+        catch (err) {
+            console.log(err)
+            // dispatch(handleNotify({ message: "Từ chối đơn hàng thất bại , vui lòng kiểm tra lại số lượng tồn kho !", show: true, status: 400 }))
+            // setTimeout(() => {
+            //     dispatch(handleNotify({ message: "", show: false, status: 0 }))
+            // }, 1500)
+        }
+    }
+    useEffect(() => {
+        setItems(currentItems)
+    }, [currentItems])
     return (
         <div>
-            {currentItems && currentItems.length > 0 &&
+            {items && items.length > 0 &&
                 currentItems.map((item, idx) => (
                     <div style={{ padding: '20px 30px', border: '1px solid rgb(222, 231, 231)', backgroundColor: '#fff', marginTop: '30px' }} key={idx}>
                         <div className={styles.eachOrder}>
@@ -88,15 +99,18 @@ function Items({ currentItems }: { currentItems: ORDER[] }) {
                                     <div className={styles.detailOrder}>
                                         {item.status === "processing" && <span className={styles.btnOrderSuccess}>Đang xử lý</span>}
                                         {item.status === "success" && <span className={styles.btnOrderSuccess}>Chờ nhận hàng</span>}
-                                        {item.status === "required" && <span className={styles.btnOrderSuccess}>Yêu cầu hủy</span>}
                                         {item.status === "cancel" && <span className={styles.btnOrderFail}>Đã hủy</span>}
+                                        {item.status === "required" && <span className={styles.btnOrderSuccess}>Yêu cầu hủy</span>}
+
                                         <div>
+                                            {item.status === "required" && <button onClick={event => {
+                                                handleRefuseOrder(item._id)
+                                            }}>CHẤP NHẬN HỦY</button>}
+                                            {item.status === "required" && <button>TIẾP TỤC ĐƠN</button>}
                                             {item.status === "processing" && <button onClick={event => {
-                                                cancelOrder(item._id)
-                                            }}>HỦY BỎ</button>}
-                                            {item.status === "required" && <button>ĐANG HỦY</button>}
-                                            {item.status === "cancel" && <Link to={`/cart`}>MUA LẠI</Link>}
-                                            <Link to={`/profile/account/user/myOrder/${item._id}`}>XEM CHI TIẾT</Link>
+                                                handleAcceptOrder(item._id)
+                                            }}>CHẤP NHẬN</button>}
+                                            <Link to={`/myway/admin/orders/${item._id}`}>XEM CHI TIẾT</Link>
                                         </div>
                                     </div>
                                 </div>
@@ -108,7 +122,7 @@ function Items({ currentItems }: { currentItems: ORDER[] }) {
     );
 }
 
-function PaginatedItems({ itemsPerPage, apiString }: { itemsPerPage: number, apiString: string }) {
+function PaginationAdminBooking({ itemsPerPage, apiString }: { itemsPerPage: number, apiString: string }) {
     const navigate: NavigateFunction = useNavigate()
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
@@ -124,6 +138,7 @@ function PaginatedItems({ itemsPerPage, apiString }: { itemsPerPage: number, api
             searchParams.delete("startItem")
         }
         else {
+
             searchParams.set("startItem", newOffset.toString())
         }
         navigate(`?${searchParams.toString()}`)
@@ -170,4 +185,4 @@ function PaginatedItems({ itemsPerPage, apiString }: { itemsPerPage: number, api
     );
 }
 
-export default PaginatedItems
+export default PaginationAdminBooking

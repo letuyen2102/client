@@ -57,6 +57,10 @@ const DetailBooking = () => {
                                 <button className={styles.btnProcessing}>Đang xử lý</button>
                             }
                             {
+                                order?.status === "required" &&
+                                <button className={styles.btnProcessing}>Đang yêu cầu hủy</button>
+                            }
+                            {
                                 order?.status === "cancel" &&
                                 <button className={styles.btnCancel}>Đã hủy</button>
                             }
