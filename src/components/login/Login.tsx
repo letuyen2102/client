@@ -58,7 +58,7 @@ const BtnGoogle: React.FC = (props) => {
 
 
 const Login: React.FC = () => {
-    const handleLoginAndCart = useSelector((state: RootState) => state.auth)
+
     const dispatch = useDispatch()
     const navigate: NavigateFunction = useNavigate()
     // const { token, setToken, user, setUser } = useContext(tokenStorage)
@@ -91,10 +91,10 @@ const Login: React.FC = () => {
             }, 2000)
         }
     }
-    useEffect(() => {
-        localStorage.removeItem("token")
-        localStorage.removeItem("user")
-    }, [])
+    // useEffect(() => {
+    //     localStorage.removeItem("token")
+    //     localStorage.removeItem("user")
+    // }, [])
     return (
         <div>
             <Title>

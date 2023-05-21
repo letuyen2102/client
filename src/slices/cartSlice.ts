@@ -5,14 +5,14 @@ export interface CARTHANDLE {
     orderQuantity: number,
     tab: number,
     tabColor: number,
-    tabSize: number,
+    tabSize: number | null,
     disableBtn: boolean
 }
 export const initialStateDetailCart: CARTHANDLE = {
     orderQuantity: 1,
     tab: 1,
     tabColor: 0,
-    tabSize: 0,
+    tabSize: null,
     disableBtn: false
 }
 
@@ -42,7 +42,7 @@ export const cartSlice = createSlice({
             }
         },
         setTabColor: (state, action: PayloadAction<number>) => {
-            return { ...state, tabColor: action.payload, orderQuantity: 1, tabSize: 0, disableBtn: false }
+            return { ...state, tabColor: action.payload, orderQuantity: 1, disableBtn: false }
         },
         setTabSize: (state, action: PayloadAction<number>) => {
             return { ...state, tabSize: action.payload, orderQuantity: 1, disableBtn: false }
@@ -55,7 +55,7 @@ export const cartSlice = createSlice({
                 orderQuantity: 1,
                 tab: 1,
                 tabColor: 0,
-                tabSize: 0,
+                tabSize: null,
                 disableBtn: false
             }
         }

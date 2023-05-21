@@ -1,13 +1,29 @@
 import React, { useState } from 'react';
 import styles from './LoginAdminPage.module.css';
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { login } from '../../slices/authSlice';
+import { handleNotify } from '../../slices/notifySlice';
+import { useNavigate } from 'react-router-dom';
 
 const LoginAdminPage = () => {
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-
-    const handleSubmit = (event: React.FormEvent) => {
+    console.log("aaaaaaaaaaaaaaaaaaaaaa")
+    const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-        // Xử lý đăng nhập ở đây
+        try {
+            const res = await axios.post('/myway/api/users/loginAsAdmin', { email: username, password: password })
+            if (res.data.status === 'success') {
+                dispatch(login({ tokenDispatch: res.data.token, userDispatch: res.data.data.user }))
+                navigate('/myway/admin')
+            }
+        }
+        catch (err) {
+            alert('Thông tin admin không đúng')
+        }
     };
 
     return (

@@ -1,4 +1,5 @@
 import { Routes, Route, Outlet, Navigate, useNavigate } from 'react-router-dom';
+import jwtDecode from 'jwt-decode';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import Home from './Home';
@@ -31,7 +32,9 @@ function App() {
 
     useEffect(() => {
       if (!isAdmin) {
-        navigate("/admin/login");
+        navigate('/admin/login');
+      } else if (isAdmin && window.location.pathname === '/admin/login') {
+        navigate('/myway/admin');
       }
     }, [isAdmin, navigate]);
 
@@ -45,10 +48,55 @@ function App() {
       if (!isLogin) {
         navigate("/account/login");
       }
+      else if (isLogin && window.location.pathname === '/account/login') {
+        navigate('/profile/account/user');
+      }
     }, [isLogin, navigate]);
 
     return <>{element}</>;
   };
+  const getCookieValue = (cookieName: string) => {
+    const cookies = document.cookie.split('; ');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].split('=');
+      const name = cookie[0];
+      const value = cookie[1];
+
+      if (name === cookieName) {
+        return decodeURIComponent(value);
+      }
+    }
+
+    return null;
+  };
+
+  // Sử dụng hàm getCookieValue để lấy giá trị của cookie
+  useEffect(() => {
+    const checkTokenExpiration = () => {
+      const token = getCookieValue('jwt');
+      console.log(token)
+      if (token) {
+        try {
+          const decodedToken = jwtDecode<{ exp: number }>(token);
+          const expirationTime = decodedToken.exp * 1000; // Đổi timestamp thành milliseconds
+          const currentTime = Date.now();
+          console.log(expirationTime)
+          if (currentTime > expirationTime) {
+            // Thực hiện các hành động đăng xuất người dùng tại đây
+            console.log('JWT hết hạn, đăng xuất người dùng.');
+          }
+        } catch (error) {
+          console.log('Lỗi giải mã JWT:', error);
+        }
+      }
+    };
+
+    // Kiểm tra trạng thái của JWT mỗi giây
+    const interval = setInterval(checkTokenExpiration, 1000);
+
+    // Clear interval khi component bị unmount
+    return () => clearInterval(interval);
+  }, []);
   return (
     <div className="App">
       {notify.show && notify.status === 200 && <div className='notify_message_success'>
@@ -59,7 +107,7 @@ function App() {
       </div>}
       <Routes>
         <Route path='/' element={<Home />} />
-        <Route path='/account/login' element={<div><Header /> <Login /> <Footer /> </div>} />
+        <Route path='/account/login' element={<ProtectedUserRoute element={<div><Header /> <Login /> <Footer /> </div>} />} />
         <Route path='/account/forgotpassword/*' element={<ForgotPasswordPage />} />
         <Route path='/account/signup' element={<div><Header /> <Signup /> <Footer /> </div>} />
         <Route path='/detail/:slug' element={<div><Header /> <Detail /> <Footer /> </div>} />
@@ -68,7 +116,7 @@ function App() {
         <Route path='/cart' element={<div><Header />  <Cart /> <Footer /> </div>} />
         <Route path='/checkout' element={<ProtectedUserRoute element={<div><Header /> <Checkout /> <Footer /> </div>} />} />
         <Route path='/success' element={<ProtectedUserRoute element={<PaymentSuccess />} />} />
-        <Route path="/admin/login" element={<LoginAdminPage />} />
+        <Route path="/admin/login" element={<ProtectedAdminRoute element={<LoginAdminPage />} />} />
         <Route path="/myway/admin" element={<ProtectedAdminRoute element={<div><Admin><Outlet /></Admin></div>} />}>
           <Route index element={<div>THIS IS DASHBOARD</div>} />
           <Route path="product" element={<Product />} />

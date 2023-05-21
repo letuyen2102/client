@@ -14,13 +14,12 @@
     margin-bottom: 15px;
   }
   
-  label {
+  .formGroup label {
     display: block;
     margin-bottom: 5px;
   }
   
-  input[type='text'],
-  input[type='password'] {
+  .formGroup input {
     width: 100%;
     padding: 8px;
     font-size: 16px;
