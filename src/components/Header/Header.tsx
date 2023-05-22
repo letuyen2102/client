@@ -5,11 +5,25 @@ import { useDispatch, useSelector } from "react-redux"
 import { Link, NavigateFunction, useNavigate, useLocation } from 'react-router-dom'
 import { RootState } from "../../store/store"
 import styles from './Header.module.css'
+import { logout } from "../../slices/authSlice"
 const Header: React.FC = (props) => {
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const handleLoginAndCart = useSelector((state: RootState) => state.auth)
     const location = useLocation();
     const [showMenuMobile, setShowMenuMobile] = useState<boolean>(false)
+    const handleLogout = async () => {
+        try {
+            const res = await axios.get('/myway/api/users/logout')
+            if (res.data.status === "success") {
+                dispatch(logout())
+                navigate('/account/login')
+            }
+        }
+        catch (err: any) {
+            alert(err.response.data)
+        }
+    }
     return (
         <div>
             <div className={`${styles.HeaderTop} container-lg`}>
@@ -40,12 +54,32 @@ const Header: React.FC = (props) => {
                                     <Link to=''>Liên Hệ</Link>
                                     <i className={`fa-solid fa-angle-down ${styles.iconAngleDown}`}></i>
                                 </li>
-                                <li>
-                                    <Link to='/account/login' onClick={e => setShowMenuMobile(false)}>Đăng Nhập</Link>
-                                </li>
-                                <li>
-                                    <Link to='/account/signup' onClick={e => setShowMenuMobile(false)}>Đăng Kí</Link>
-                                </li>
+                                {!handleLoginAndCart.token ?
+                                    <>
+                                        <li>
+                                            <Link to='/account/login' onClick={e => setShowMenuMobile(false)}>Đăng Nhập</Link>
+                                        </li>
+                                        <li>
+                                            <Link to='/account/signup' onClick={e => setShowMenuMobile(false)}>Đăng Kí</Link>
+                                        </li>
+                                    </> : <>
+                                        <li>
+                                            <Link to='/profile/account/user' onClick={e => setShowMenuMobile(false)}>Profile</Link>
+                                        </li>
+                                        <li>
+                                            <Link to='/profile/account/user/change-password' onClick={e => setShowMenuMobile(false)}>Đổi mật khẩu</Link>
+                                        </li>
+                                        <li>
+                                            <Link to='/profile/account/user/myOrder' onClick={e => setShowMenuMobile(false)}>Đơn hàng</Link>
+                                        </li>
+                                        <li>
+                                            <Link to='' onClick={e => {
+                                                handleLogout()
+                                                setShowMenuMobile(false)
+                                            }}>Đăng xuất</Link>
+                                        </li>
+                                    </>
+                                }
                             </ul>
                         </div>
                     </div>
@@ -73,8 +107,8 @@ const Header: React.FC = (props) => {
                             <div className={`${styles.HeaderTopAccount_Account}`}>
 
                                 {
-                                    handleLoginAndCart.token ? <Link to={'/profile/account/user'} className={`${styles.setDisplay}`}>Tài khoản</Link> :
-                                        <Link to={'/account/login'} className={`${styles.setDisplay}`}>Tài khoản</Link>
+                                    // handleLoginAndCart.token ? <Link to={'/profile/account/user'} className={`${styles.setDisplay}`}>Tài khoản</Link> :
+                                    <Link to={'/account/login'} className={`${styles.setDisplay}`}>Tài khoản</Link>
                                 }
                             </div>
                             <div className={`${styles.HeaderTopAccount_Cart}`}>
@@ -105,7 +139,7 @@ const Header: React.FC = (props) => {
                             <Link to='/collection/all'>
                                 Thời trang
                             </Link>
-                            <ul className={`${styles.ul1}`}>
+                            {/* <ul className={`${styles.ul1}`}>
                                 <li>
                                     <Link to=''>
                                         Đầm
@@ -131,7 +165,7 @@ const Header: React.FC = (props) => {
                                         Jumpsuit
                                     </Link>
                                 </li>
-                            </ul>
+                            </ul> */}
                         </li>
                         <li>
                             <Link to='/collection/all'>

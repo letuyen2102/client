@@ -3,12 +3,11 @@ import Footer from "../../components/Footer/Footer"
 import Header from "../../components/Header/Header"
 import Title from "../../components/Tiltle/Title"
 import SideBarProfile from "../../components/sideBarProfile/SideBarProfile"
-import styles from '../../components/sideBarProfile/SideBarProfile.module.css'
 import SectionProfile from "../../components/SectionProfile/SectionProfile"
 import ChangePassword from "../../components/SectionProfile/ChangePassword"
 import MyBooking from "../../components/SectionProfile/MyBooking"
 import DetailOrder from "../../components/SectionProfile/DetailOrder"
-import AddProduct from "../../components/AddProduct/AddProduct"
+import styles from './Profile.module.css'
 const ProfileUser = () => {
     return (
         <div>
@@ -26,14 +25,14 @@ const ProfileUser = () => {
                         </ul>
                     </Title>
                     <div className="row" style={{ marginTop: '50px' }}>
-                        <div className="col-lg-3" style={{ borderRight: '1px dashed rgb(224, 224, 224)' }}>
+                        <div className={`col-lg-3 ${styles.hide}`}>
                             <div>
                                 <div>
                                     <SideBarProfile />
                                 </div>
                             </div>
                         </div>
-                        <div className="col-lg-9">
+                        <div className="col-lg-9 col-md-12 col-sm-12 col-12">
                             <div>
                                 <div>
                                     <Routes>

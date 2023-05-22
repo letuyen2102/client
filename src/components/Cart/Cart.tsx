@@ -47,9 +47,10 @@ const Cart: React.FC = (props) => {
                     method: "POST",
                     url: "/myway/api/carts/clearEachCart",
                     data: {
-                        productId: objClear.product._id,
+                        productId: objClear.product,
                         color: objClear.color,
-                        size: objClear.size
+                        colorName: objClear.colorName,
+                        size: objClear.size,
                     }
                 })
                 if (res.data.status === 'success') {
@@ -72,9 +73,10 @@ const Cart: React.FC = (props) => {
         if (handleLoginAndCart.token) {
             try {
                 const res = await axios.post('/myway/api/carts/incCart', {
-                    productId: objClear.product._id,
+                    productId: objClear.product,
                     color: objClear.color,
-                    size: objClear.size
+                    colorName: objClear.colorName,
+                    size: objClear.size,
                 })
 
                 if (res.data.status === "success") {
@@ -113,9 +115,10 @@ const Cart: React.FC = (props) => {
                 //     return newState
                 // })
                 const res = await axios.post('/myway/api/carts/decCart', {
-                    productId: objClear.product._id,
+                    productId: objClear.product,
                     color: objClear.color,
-                    size: objClear.size
+                    colorName: objClear.colorName,
+                    size: objClear.size,
                 })
                 if (res.data.status === "success") {
                     await axios.get('/myway/api/carts/cartMe')
@@ -133,28 +136,27 @@ const Cart: React.FC = (props) => {
             dispatch(decCartNoToken(objClear))
         }
     }
-    useEffect(() => {
-        const addManyCartApi = async (objManyItem: MANYITEM) => {
-            console.log("hihihihi")
-            const items = objManyItem.items.map((el, id) => {
-                return {
-                    productId: el.product._id,
-                    quantity: el.quantity,
-                    color: el.color,
-                    colorName: el.colorName,
-                    size: el.size,
-                    image: el.image
-                }
-            })
-            await axios.post('/myway/api/carts/createManyCart', {
-                items: [...items]
-            })
-            dispatch(setEmptyCart())
-        }
-        if (handleLoginAndCart.token && handleLoginAndCart.cart && handleLoginAndCart.cart.items.length > 0) {
-            addManyCartApi({ items: handleLoginAndCart.cart.items })
-        }
-    }, [])
+    const addManyCartApi = async (objManyItem: MANYITEM) => {
+        console.log("hihihihi")
+        const items = objManyItem.items.map((el, id) => {
+            return {
+                productId: el.product._id,
+                quantity: el.quantity,
+                color: el.color,
+                colorName: el.colorName,
+                size: el.size,
+                image: el.image
+            }
+        })
+        await axios.post('/myway/api/carts/createManyCart', {
+            items: [...items]
+        })
+
+    }
+    if (handleLoginAndCart.token && handleLoginAndCart.cart && handleLoginAndCart.cart.items.length > 0) {
+        addManyCartApi({ items: handleLoginAndCart.cart.items })
+        dispatch(setEmptyCart())
+    }
     useEffect(() => {
         const getCartApi = async () => {
 
@@ -168,7 +170,7 @@ const Cart: React.FC = (props) => {
         if (handleLoginAndCart.token) {
             getCartApi()
         }
-    }, [handleLoginAndCart.token, handleLoginAndCart.cart])
+    }, [handleLoginAndCart.cart])
     return (
         <div>
             <Title>
@@ -207,6 +209,7 @@ const Cart: React.FC = (props) => {
                                             <div className={`${styles.inforPaymentProduct1}`}>
                                                 <Link to={`/detail/${eachProd.product.slug}`}>{eachProd.product.name} / {eachProd.colorName} / {eachProd.size}</Link>
                                                 <p className={`${styles.inforPaymentProduct_delete}`} onClick={e => {
+
                                                     clearEachItem({
                                                         product: eachProd.product,
                                                         quantity: 0,
@@ -245,7 +248,17 @@ const Cart: React.FC = (props) => {
                                                         })
                                                     }}>+</button>
                                                 </div>
-                                                <p className={`${styles.quantityBox_close}`}>Xóa</p>
+                                                <p className={`${styles.quantityBox_close}`} onClick={e => {
+
+                                                    clearEachItem({
+                                                        product: eachProd.product,
+                                                        quantity: 0,
+                                                        color: eachProd.color,
+                                                        colorName: eachProd.colorName,
+                                                        size: eachProd.size,
+                                                        image: eachProd.image
+                                                    })
+                                                }}>Xóa</p>
                                             </div>
                                         </div>
                                     </div>
@@ -295,7 +308,14 @@ const Cart: React.FC = (props) => {
                                                             image: item.image
                                                         })}>+</button>
                                                     </div>
-                                                    <p className={`${styles.quantityBox_close}`}>Xóa</p>
+                                                    <p className={`${styles.quantityBox_close}`} onClick={e => clearEachItem({
+                                                        product: item.product,
+                                                        quantity: 0,
+                                                        color: item.color,
+                                                        colorName: item.colorName,
+                                                        size: item.size,
+                                                        image: item.image
+                                                    })}>Xóa</p>
                                                 </div>
                                             </div>
                                         </div>

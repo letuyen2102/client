@@ -9,7 +9,7 @@ import Detail from './components/Detail/Detail';
 import Cart from './components/Cart/Cart';
 import Checkout from './components/Profile/Checkout';
 import PaymentSuccess from './components/PaymentSuccess/PaymentSuccess';
-import { useSelector } from 'react-redux/es/exports';
+import { useDispatch, useSelector } from 'react-redux/es/exports';
 import { RootState } from './store/store';
 import Admin from './pages/admin/admin';
 import Product from './components/Product/product';
@@ -22,39 +22,18 @@ import Order from './components/orderDetail/Order';
 import DetailOrder from './components/SectionProfile/DetailOrder';
 import LoginAdminPage from './pages/loginAdminpage/LoginAdminPage';
 import { useEffect } from 'react';
+import { logout } from './slices/authSlice';
+import { ProtectedAdminRoute, ProtectedUserRoute } from './components/RouteProtect/RouteProtect';
+import User from './pages/user/User';
+import DetailUser from './pages/detailUser/DetailUser';
+import GetBookingBaseOnUser from './pages/getBookingBaseOnUser/GetBookingBaseOnUser';
 function App() {
   const queryShopAll = '/myway/api/products/filterProducts?'
+  const API = '/myway/api/bookings/getAllBookings'
   const notify = useSelector((state: RootState) => state.notify)
   const handleLoginAndCart = useSelector((state: RootState) => state.auth)
-  const ProtectedAdminRoute: React.FC<{ element: React.ReactNode }> = ({ element }) => {
-    const isAdmin = handleLoginAndCart.token && handleLoginAndCart.user.role === 'admin';
-    const navigate = useNavigate();
-
-    useEffect(() => {
-      if (!isAdmin) {
-        navigate('/admin/login');
-      } else if (isAdmin && window.location.pathname === '/admin/login') {
-        navigate('/myway/admin');
-      }
-    }, [isAdmin, navigate]);
-
-    return <>{element}</>;
-  };
-  const ProtectedUserRoute: React.FC<{ element: React.ReactNode }> = ({ element }) => {
-    const isLogin = handleLoginAndCart.token
-    const navigate = useNavigate();
-
-    useEffect(() => {
-      if (!isLogin) {
-        navigate("/account/login");
-      }
-      else if (isLogin && window.location.pathname === '/account/login') {
-        navigate('/profile/account/user');
-      }
-    }, [isLogin, navigate]);
-
-    return <>{element}</>;
-  };
+  const dispatch = useDispatch()
+  const navigate = useNavigate();
   const getCookieValue = (cookieName: string) => {
     const cookies = document.cookie.split('; ');
     for (let i = 0; i < cookies.length; i++) {
@@ -69,32 +48,26 @@ function App() {
 
     return null;
   };
-
-  // Sử dụng hàm getCookieValue để lấy giá trị của cookie
   useEffect(() => {
     const checkTokenExpiration = () => {
       const token = getCookieValue('jwt');
-      console.log(token)
       if (token) {
         try {
           const decodedToken = jwtDecode<{ exp: number }>(token);
-          const expirationTime = decodedToken.exp * 1000; // Đổi timestamp thành milliseconds
+          const expirationTime = decodedToken.exp * 1000;
           const currentTime = Date.now();
-          console.log(expirationTime)
           if (currentTime > expirationTime) {
-            // Thực hiện các hành động đăng xuất người dùng tại đây
-            console.log('JWT hết hạn, đăng xuất người dùng.');
+            if (window.confirm('Phiên đăng nhập đã hết hạn , vui lòng đăng nhập lại')) {
+              dispatch(logout())
+              navigate('/account/login')
+            }
           }
         } catch (error) {
           console.log('Lỗi giải mã JWT:', error);
         }
       }
     };
-
-    // Kiểm tra trạng thái của JWT mỗi giây
     const interval = setInterval(checkTokenExpiration, 1000);
-
-    // Clear interval khi component bị unmount
     return () => clearInterval(interval);
   }, []);
   return (
@@ -109,7 +82,7 @@ function App() {
         <Route path='/' element={<Home />} />
         <Route path='/account/login' element={<ProtectedUserRoute element={<div><Header /> <Login /> <Footer /> </div>} />} />
         <Route path='/account/forgotpassword/*' element={<ForgotPasswordPage />} />
-        <Route path='/account/signup' element={<div><Header /> <Signup /> <Footer /> </div>} />
+        <Route path='/account/signup' element={<ProtectedUserRoute element={<div><Header /> <Signup /> <Footer /> </div>} />} />
         <Route path='/detail/:slug' element={<div><Header /> <Detail /> <Footer /> </div>} />
         <Route path='/profile/account/user/*' element={<ProtectedUserRoute element={<ProfileUser />} />} />
         <Route path='/collection/all' element={<PageShop queryApi={queryShopAll} queryString='category' />} />
@@ -122,9 +95,13 @@ function App() {
           <Route path="product" element={<Product />} />
           <Route path="product/:idProd" element={<ChangeProduct />} />
           <Route path="addProduct" element={<AddProduct />} />
-          <Route path="orders" element={<Order />} />
+          <Route path="users" element={<User />} />
+          <Route path="user/:userId" element={<DetailUser />} />
+          <Route path="orders" element={<Order API={API} />} />
+          <Route path="user/:idUser/orders" element={<GetBookingBaseOnUser />} />
           <Route path="orders/:orderId" element={<DetailOrder />} />
         </Route>
+
       </Routes>
     </div>
   );

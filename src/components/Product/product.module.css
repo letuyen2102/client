@@ -1,36 +1,42 @@
-.pageProductAdmin {}
-
 .tiltle>p {
     font-size: 20px;
     letter-spacing: 2px;
 }
 
-.tableOrderUserAdmin {
+.table {
     width: 100%;
 }
 
-.tableOrderUserAdmin p {
+.table p {
     font-size: 18px;
     font-weight: 400;
 }
 
-.tableOrderUserAdmin>thead>tr>th {
+.table>thead>tr>th {
     padding: 10px 20px;
     color: #fff;
 }
 
-.tableOrderUserAdmin>tbody>tr>td {
+.table>tbody>tr>td {
     padding: 10px 20px;
 }
 
-.tableOrderUserAdmin>thead>tr {
+.table>thead>tr {
     background-color: #584E46;
 }
 
-.prodImage>img {
+.Image {
     width: 20%;
 }
-
+.Image > img{
+    width: 100%;
+}
+.ImageUser {
+    width: 100%;
+}
+.ImageUser > img{
+    width: 100%;
+}
 .actionProd {
     display: flex;
     align-items: center;

@@ -3,15 +3,16 @@ import axios from "axios"
 import React, { useContext, useEffect, useState } from "react"
 import { Link, NavigateFunction, useNavigate } from "react-router-dom"
 import { useGoogleLogin } from '@react-oauth/google';
-import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import { signInWithPopup, FacebookAuthProvider, getAuth } from 'firebase/auth'
+import FacebookLogin from '@greatsumini/react-facebook-login';
 import styles from './Login.module.css'
-// import { tokenStorage } from "../../App"
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store/store";
+import { useDispatch } from "react-redux";
 import { login } from "../../slices/authSlice";
 import { UserInfor } from "../../slices/authSlice";
 import { handleNotify } from "../../slices/notifySlice";
 import Title from "../Tiltle/Title";
+import { initializeApp } from "firebase/app";
 interface Account {
     email: string,
     password: string
@@ -77,11 +78,11 @@ const Login: React.FC = () => {
             if (res.data.status === 'success') {
 
                 dispatch(login({ tokenDispatch: res.data.token, userDispatch: res.data.data.user }))
-                dispatch(handleNotify({ message: "Đăng nhập thành công , chờ trong giây lát!", show: true, status: 200 }))
-                setTimeout(() => {
-                    dispatch(handleNotify({ message: "", show: false, status: 0 }))
-                    navigate('/')
-                }, 1500)
+                // dispatch(handleNotify({ message: "Đăng nhập thành công , chờ trong giây lát!", show: true, status: 200 }))
+                // setTimeout(() => {
+                //     dispatch(handleNotify({ message: "", show: false, status: 0 }))
+                navigate('/')
+                // }, 1500)
             }
         }
         catch (err: any) {
@@ -91,10 +92,40 @@ const Login: React.FC = () => {
             }, 2000)
         }
     }
-    // useEffect(() => {
-    //     localStorage.removeItem("token")
-    //     localStorage.removeItem("user")
-    // }, [])
+    // const signInWithFacebook = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    //     event.preventDefault()
+    //     signInWithPopup(auth, provider)
+    //         .then(result => {
+    //             console.log(result)
+    //         })
+    //         .catch(error => {
+    //             console.log(error)
+    //         })
+    // }
+    const firebaseConfig = {
+        apiKey: "AIzaSyBbLgHgOpXJeckQnpxRg0g4uxHCHJR9khs",
+        authDomain: "auth-ff3d6.firebaseapp.com",
+        projectId: "auth-ff3d6",
+        storageBucket: "auth-ff3d6.appspot.com",
+        messagingSenderId: "955357172472",
+        appId: "1:955357172472:web:43288d1bec7accf4b5a10d",
+        measurementId: "G-K0FRV0DD3W"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const signInWithFacebook = () => {
+        const provider = new FacebookAuthProvider();
+        signInWithPopup(auth, provider)
+            .then((result) => {
+                // Đăng nhập thành công, bạn có thể lấy thông tin người dùng từ result.user
+                console.log(result.user);
+            })
+            .catch((error) => {
+                // Xử lý lỗi đăng nhập
+                console.error(error);
+            });
+    };
     return (
         <div>
             <Title>
@@ -116,7 +147,10 @@ const Login: React.FC = () => {
                                 <GoogleOAuthProvider clientId="849429235369-7gor9ae12l6548i14q2mkud9o6bhjoff.apps.googleusercontent.com">
                                     <BtnGoogle />
                                 </GoogleOAuthProvider>
-                                <Link to='' style={{ marginLeft: '8px' }}>
+                                <Link to='' style={{ marginLeft: '8px' }} onClick={event => {
+                                    event.preventDefault()
+                                    signInWithFacebook()
+                                }}>
                                     <img src="https://bizweb.dktcdn.net/assets/admin/images/login/fb-btn.svg" />
                                 </Link>
                             </div>

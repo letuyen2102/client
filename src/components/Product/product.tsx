@@ -20,7 +20,7 @@ const Product = () => {
                 <p>Quản lý sản phẩm</p>
                 <Link to='/myway/admin/addProduct'>Thêm sản phẩm</Link>
             </div>
-            <table className={`${styles.tableOrderUserAdmin}`}>
+            <table className={`${styles.table}`}>
                 <thead>
                     <tr>
                         <th>
@@ -47,7 +47,7 @@ const Product = () => {
                                 <tr key={index}>
                                     <td><p>{index}</p></td>
                                     <td>
-                                        <div className={styles.prodImage}>
+                                        <div className={styles.Image}>
                                             <img src={`/products/${each.image}`} />
                                         </div>
                                     </td>

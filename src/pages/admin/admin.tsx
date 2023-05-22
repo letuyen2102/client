@@ -26,7 +26,7 @@ const Admin: React.FC<{ children: React.ReactNode }> = (props) => {
                                 </li>
                                 <li>
                                     <i className="fa-thin fa-people-simple"></i>
-                                    <Link to=''>Khách hàng</Link>
+                                    <Link to='/myway/admin/users'>Khách hàng</Link>
                                 </li>
                                 <li>
                                     <i className="fa-solid fa-list"></i>

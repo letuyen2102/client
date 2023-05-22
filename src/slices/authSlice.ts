@@ -21,6 +21,7 @@ export interface CartWithNoToken {
 export interface UserInfor {
     _id: string,
     name: string,
+    googleId: string,
     birthday: Date,
     gender: string,
     photo: string,
@@ -49,6 +50,7 @@ export const initialStateAuth: AuthState = {
         _id: "",
         name: "",
         gender: "",
+        googleId : "",
         birthday: new Date(),
         photo: "",
         phone: "",
@@ -83,6 +85,7 @@ export const authSlice = createSlice({
                 _id: "",
                 name: "",
                 gender: "",
+                googleId: "",
                 birthday: new Date(),
                 photo: "",
                 phone: "",
@@ -98,6 +101,7 @@ export const authSlice = createSlice({
                     _id: "",
                     name: "",
                     gender: "",
+                    googleId : "",
                     birthday: new Date(),
                     photo: "",
                     phone: "",
@@ -195,7 +199,9 @@ export const authSlice = createSlice({
 
         inCartNoTken: (state, action: PayloadAction<ITEM>) => {
             const checkCartItem = state.cart.items.findIndex((each, el) => {
-                return each.product._id.toLowerCase() === action.payload.product._id.toLowerCase() && each.color.toLowerCase() === action.payload.color.toLowerCase() && each.size.toLowerCase() === action.payload.size.toLowerCase()
+                return each.product._id.toLowerCase() === action.payload.product._id.toLowerCase() && 
+                each.color.toLowerCase() === action.payload.color.toLowerCase() && 
+                each.size.toLowerCase() === action.payload.size.toLowerCase()
             })
             if (checkCartItem > -1) {
                 state.cart.items[checkCartItem].quantity = state.cart.items[checkCartItem].quantity + 1
@@ -229,6 +235,16 @@ export const authSlice = createSlice({
     },
 })
 
-export const { login, logout, addCartNoToken, setEmptyCart, decCartNoToken, inCartNoTken, clearEach, changeInforUserImage, getItemsCart } = authSlice.actions
+export const { 
+    login, 
+    logout, 
+    addCartNoToken, 
+    setEmptyCart, 
+    decCartNoToken, 
+    inCartNoTken, 
+    clearEach, 
+    changeInforUserImage, 
+    getItemsCart 
+} = authSlice.actions
 
 export default authSlice.reducer

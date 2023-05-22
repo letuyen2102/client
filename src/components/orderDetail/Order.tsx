@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react'
 import styles from '../SectionProfile/MyBooking.module.css'
 import { NavigateFunction, useLocation, useNavigate } from 'react-router-dom'
 import PaginationAdminBooking from './PaginationAdminBooking'
-const Order = () => {
+const Order: React.FC<{ API: string }> = (props) => {
     const navigate: NavigateFunction = useNavigate()
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
-    const [apiString, setApiString] = useState('/myway/api/bookings/getAllBookings')
+    const [apiString, setApiString] = useState(props.API)
     // useEffect(() => {
     //     setApiString('/myway/api/bookings/getAllBookings' + location.search)
     // }, [])

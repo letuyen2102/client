@@ -42,7 +42,7 @@ export const cartSlice = createSlice({
             }
         },
         setTabColor: (state, action: PayloadAction<number>) => {
-            return { ...state, tabColor: action.payload, orderQuantity: 1, disableBtn: false }
+            return { ...state, tabColor: action.payload, tabSize : null, orderQuantity: 1, disableBtn: false }
         },
         setTabSize: (state, action: PayloadAction<number>) => {
             return { ...state, tabSize: action.payload, orderQuantity: 1, disableBtn: false }
