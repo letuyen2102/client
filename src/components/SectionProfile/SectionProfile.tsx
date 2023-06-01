@@ -5,9 +5,13 @@ import { useState } from 'react'
 import { USER_UPDATE, changeInforUserImage } from '../../slices/authSlice'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
+import Loader from '../loader/Loader'
+import { hideLoader, showLoader } from '../../slices/loaderSlice'
 
 const SectionProfile = () => {
     const handleLoginAndCart = useSelector((state: RootState) => state.auth)
+    const handleLoader = useSelector((state: RootState) => state.loader)
+
     const dispatch = useDispatch()
     const [userUpdate, setUserUpdate] = useState<USER_UPDATE>({
         name: handleLoginAndCart.user.name,
@@ -19,7 +23,9 @@ const SectionProfile = () => {
     })
     const handleUpdateMeInfor = async (objUpdate: USER_UPDATE) => {
         try {
+            dispatch(hideLoader())
             const res = await axios.patch('/myway/api/users/updateMe', objUpdate)
+            dispatch(showLoader())
             if (res.data.status === "success") {
                 console.log(res)
                 dispatch(changeInforUserImage({ userDispatch: res.data.user }))
@@ -31,6 +37,7 @@ const SectionProfile = () => {
     }
     return (
         <div className='col-lg-10 offset-lg-1'>
+            {handleLoader.loader && <Loader />}
             <div className={styles.sectionTitle}>
                 <p>Thông tin tài khoản</p>
             </div>

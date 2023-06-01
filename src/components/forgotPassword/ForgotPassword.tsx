@@ -49,7 +49,7 @@ const ForgotPassword = () => {
                         }}>
                             <div className={`${styles.formGroup}`}>
                                 <label htmlFor="Email">EMAIL <span style={{ color: '#ec1f27' }}>*</span></label>
-                                <input id="Email" type='email' placeholder="Nhập Địa Chỉ Email" value={email} onChange={event => setEmail(event.target.value)} />
+                                <input id="Email" type='email' required placeholder="Nhập Địa Chỉ Email" value={email} onChange={event => setEmail(event.target.value)} />
                             </div>
 
                             <button>Gửi liên kết</button>

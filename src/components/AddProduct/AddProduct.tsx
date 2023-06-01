@@ -3,6 +3,10 @@ import { PRODUCT } from '../Detail/Detail'
 import { useState } from 'react'
 import axios from 'axios';
 import slugify from 'slugify';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
+import Loader from '../loader/Loader';
+import { hideLoader, showLoader } from '../../slices/loaderSlice';
 export interface IMAGE_SHOW {
     quantity: {
         colorName: string;
@@ -38,6 +42,8 @@ export const sizeArray = ['S', 'S+', 'M', 'M+', 'L', 'L+', 'XL', 'XL+', '2XL', '
     }
 })
 const AddProduct = () => {
+    const dispatch = useDispatch()
+    const handleLoader = useSelector((state: RootState) => state.loader)
     const [prod, setProd] = useState<CREATE_PROD>(
         {
             name: "",
@@ -81,20 +87,24 @@ const AddProduct = () => {
     };
     const handleCreateProd = async (objCreate: any) => {
         try {
-            console.log(objCreate)
+
+            dispatch(hideLoader())
             const res = await axios({
                 method: "POST",
                 url: '/myway/api/products',
                 data: objCreate
             })
+            dispatch(showLoader())
             console.log(res)
         }
         catch (err) {
+            alert("Có lỗi , kiểm tra lại console")
             console.log(err)
         }
     }
     return (
         <div className={styles.editDetail}>
+            {handleLoader.loader && <Loader />}
             <div className="row">
                 <div className="col-lg-10 offset-lg-1">
                     <div className={styles.editDetail}>

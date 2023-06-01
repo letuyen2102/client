@@ -3,19 +3,29 @@ import { Link } from 'react-router-dom'
 import styles from './product.module.css'
 import { PRODUCT } from '../Detail/Detail'
 import { useEffect, useState } from 'react'
+import { Image } from '@chakra-ui/react'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '../../store/store'
+import { hideLoader, showLoader } from '../../slices/loaderSlice'
+import Loader from '../loader/Loader'
 const Product = () => {
+    const dispatch = useDispatch()
+    const handleLoader = useSelector((state: RootState) => state.loader)
     const [prods, setProds] = useState<PRODUCT[]>([])
     useEffect(() => {
         const getAllProducts = async () => {
+            dispatch(hideLoader())
             await fetch('/myway/api/products/filterProducts')
                 .then(res => res.json())
                 .then(all => setProds(all.products))
+            dispatch(showLoader())
         }
         getAllProducts()
     }, [])
 
     return (
         <div className={styles.pageProductAdmin}>
+            {handleLoader.loader && <Loader />}
             <div className={styles.tiltle}>
                 <p>Quản lý sản phẩm</p>
                 <Link to='/myway/admin/addProduct'>Thêm sản phẩm</Link>
@@ -47,9 +57,15 @@ const Product = () => {
                                 <tr key={index}>
                                     <td><p>{index}</p></td>
                                     <td>
-                                        <div className={styles.Image}>
+                                        {/* <div className={styles.Image}>
                                             <img src={`/products/${each.image}`} />
-                                        </div>
+                                        </div> */}
+                                        <Image
+                                            borderRadius='50%'
+                                            boxSize='60px'
+                                            src={`${each.image}`}
+                                            alt='Dan Abramov'
+                                        />
                                     </td>
                                     <td>
                                         <p>{each.name}</p>

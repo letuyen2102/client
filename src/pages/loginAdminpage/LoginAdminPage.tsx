@@ -17,7 +17,7 @@ const LoginAdminPage = () => {
         try {
             const res = await axios.post('/myway/api/users/loginAsAdmin', { email: username, password: password })
             if (res.data.status === 'success') {
-                dispatch(login({ tokenDispatch: res.data.token, userDispatch: res.data.data.user }))
+                dispatch(login({ tokenDispatch: res.data.token, userDispatch: res.data.data.user, timeExpire: res.data.data.timeExpire }))
                 navigate('/myway/admin')
             }
         }

@@ -1,0 +1,13 @@
+.chatEach {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    border: 1px solid rgb(0, 177, 86);
+    border-radius: 30px;
+    cursor: pointer;
+}
+.chatEach p {
+    font-size: 16px;
+    font-weight: 600;
+}

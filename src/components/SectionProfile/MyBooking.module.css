@@ -24,57 +24,117 @@
     color: rgb(133, 133, 133);
     font-size: 14px;
 }
-
-.detailOrder {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+@media(max-width : 768px) {
+    .btnOrderSuccess {
+        background-color: rgba(0, 177, 86, 0.15);
+        color: rgb(0, 152, 89);
+        padding: 5px 5px;
+        border-radius: 3px;
+        font-size: 10px;
+        border: none;
+    }
+    
+    .btnOrderFail {
+        background-color: #616161;
+        color: #fff;
+        padding: 5px 5px;
+        border-radius: 3px;
+        font-size: 10px;
+        border: none;
+    }
+    .detailOrder {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .detailOrder>div {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+    }
+    
+    .detailOrder>div button,
+    .detailOrder>div a {
+        padding: 5px 5px;
+        min-width: 130px;
+        font-size: 10px;
+        letter-spacing: 1.5px;
+        border: none;
+        margin-top: 10px;
+    }
+    /* .detailOrder>div a:first-child {
+        display: none;
+    } */
+    .selectOrder {
+        display: none;
+    }
+    .detailOrder>div button {
+        background-color: #757575;
+        color: #fff;
+        /* margin-right: 5px; */
+    }
+    
+    .detailOrder>div a {
+        background-color: #00b156;
+        color: #fff;
+    }
+    
 }
 
-.detailOrder>div {
-    display: flex;
-    align-items: center;
+@media(min-width : 769px) {
+    .btnOrderSuccess {
+        background-color: rgba(0, 177, 86, 0.15);
+        color: rgb(0, 152, 89);
+        padding: 4px 12px;
+        border-radius: 3px;
+        font-size: 14px;
+        border: none;
+    }
+    
+    .btnOrderFail {
+        background-color: #616161;
+        color: #fff;
+        padding: 4px 12px;
+        border-radius: 3px;
+        font-size: 14px;
+        border: none;
+    }
+    .detailOrder {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .detailOrder>div {
+        display: flex;
+        align-items: center;
+    }
+    
+    .detailOrder>div button,
+    .detailOrder>div a {
+        padding: 10px 20px;
+        min-width: 130px;
+        font-size: 16px;
+        letter-spacing: 1.5px;
+        border: none;
+    }
+    .detailOrder>div a:first-child {
+        margin-right: 20px;
+    }
+    
+    .detailOrder>div button {
+        background-color: #757575;
+        color: #fff;
+        margin-right: 20px;
+    }
+    
+    .detailOrder>div a {
+        background-color: #00b156;
+        color: #fff;
+    }
 }
 
-.detailOrder>div button,
-.detailOrder>div a {
-    padding: 10px 20px;
-    min-width: 130px;
-    font-size: 16px;
-    letter-spacing: 1.5px;
-    border: none;
-}
-.detailOrder>div a:first-child {
-    margin-right: 20px;
-}
-.btnOrderSuccess {
-    background-color: rgba(0, 177, 86, 0.15);
-    color: rgb(0, 152, 89);
-    padding: 4px 12px;
-    border-radius: 3px;
-    font-size: 14px;
-    border: none;
-}
-
-.btnOrderFail {
-    background-color: #616161;
-    color: #fff;
-    padding: 4px 12px;
-    border-radius: 3px;
-    font-size: 14px;
-    border: none;
-}
-
-.detailOrder>div button {
-    background-color: #757575;
-    color: #fff;
-    margin-right: 20px;
-}
-
-.detailOrder>div a {
-    background-color: #00b156;
-    color: #fff;
-}
 
 .btnColor {
     color: #00b156;

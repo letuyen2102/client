@@ -24,8 +24,11 @@ export const ProtectedUserRoute: React.FC<{ element: React.ReactNode }> = ({ ele
     const isLogin = handleLoginAndCart.token
 
     useEffect(() => {
-        if (!isLogin) {
+        if ((!isLogin && window.location.pathname === '/account/login')) {
             navigate("/account/login");
+        }
+        else if ((!isLogin && window.location.pathname === '/account/signup')) {
+            navigate("/account/signup");
         }
         else if ((isLogin && window.location.pathname === '/account/login') || (isLogin && window.location.pathname === '/account/signup')) {
 

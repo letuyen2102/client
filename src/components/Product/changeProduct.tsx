@@ -5,11 +5,15 @@ import { PRODUCT } from "../Detail/Detail";
 import styles from './changeProduct.module.css'
 import axios from "axios";
 import slugify from 'slugify'
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { handleNotify } from "../../slices/notifySlice";
 import { IMAGE_SHOW, IMAGE_SHOW_FORMDATA, sizeArray } from "../AddProduct/AddProduct";
+import { hideLoader, showLoader } from "../../slices/loaderSlice";
+import { RootState } from "../../store/store";
+import Loader from "../loader/Loader";
 
 const ChangeProduct = () => {
+    const handleLoader = useSelector((state: RootState) => state.loader)
     const dispatch = useDispatch()
     const { idProd } = useParams()
     const [prod, setProd] = useState<PRODUCT>({ _id: "", name: "", description: "", oldPrice: 0, sale: 0, quantity: [], image: "", category: "", categoryName: "", subQuantity: 0, newPrice: 0, slug: "" })
@@ -46,7 +50,9 @@ const ChangeProduct = () => {
     };
     const handleUpdateProduct = async (objUpdate: any) => {
         try {
+            dispatch(hideLoader())
             const res = await axios.patch(`/myway/api/products/${idProd}`, objUpdate)
+            dispatch(showLoader())
             if (res.data.status === "success") {
                 dispatch(handleNotify({ message: "Thay đổi sản phẩm thành công", show: true, status: 200 }))
                 setTimeout(() => {
@@ -54,29 +60,33 @@ const ChangeProduct = () => {
                 }, 2000)
             }
         }
-        catch (err) {
-            dispatch(handleNotify({ message: "Thay đổi sản phẩm thất bại , vui lòng kiểm tra lại", show: true, status: 400 }))
-            setTimeout(() => {
-                dispatch(handleNotify({ message: "", show: false, status: 0 }))
-            }, 2000)
+        catch (err: any) {
+            // dispatch(handleNotify({ message: "Thay đổi sản phẩm thất bại , vui lòng kiểm tra lại", show: true, status: 400 }))
+            // setTimeout(() => {
+            //     dispatch(handleNotify({ message: "", show: false, status: 0 }))
+            // }, 2000)
+            alert("Có lỗi xảy ra , kiểm tra console")
+            console.log(err)
         }
     }
     useEffect(() => {
         const getEachProduct = async () => {
+            dispatch(hideLoader())
             await fetch(`/myway/api/products/getProductById/${idProd}`)
                 .then(res => res.json())
                 .then(all => {
-                    console.log(all.product.quantity.length)
                     setProd(all.product),
                         setSelectSize(Array(all.product.quantity.length).fill('')),
                         setImageSlideShows({ quantity: Array(all.product.quantity.length).fill({ color: "", imageSlideShows: [] }) }),
                         setImageSlideShowsFormData({ quantity: Array(all.product.quantity.length).fill({ color: "", imageSlideShows: [] }) })
                 })
+            dispatch(showLoader())
         }
         getEachProduct()
     }, [])
     return (
         <div className="row">
+            {handleLoader.loader && <Loader />}
             <div className="col-lg-10 offset-lg-1">
                 <div className={styles.editDetail}>
                     <div className={styles.editDetailTitle}>
@@ -137,7 +147,7 @@ const ChangeProduct = () => {
                                         <p>Ảnh chính</p>
                                         <div>
                                             <input type="file" onChange={handleImageChange} />
-                                            {image ? <img src={image} alt="Ảnh của bạn" style={{ width: '20%' }} /> : <img src={`/products/${prod.image}`} style={{ width: '20%' }} />}
+                                            {image ? <img src={image} alt="Ảnh của bạn" style={{ width: '20%' }} /> : <img src={`${prod.image}`} style={{ width: '20%' }} />}
                                         </div>
                                     </div>
                                     <p style={{ fontSize: '20px', letterSpacing: '2px', color: '#333' }}>* Màu sắc : {prod.quantity.length} loại</p>
@@ -254,7 +264,7 @@ const ChangeProduct = () => {
 
                                                                                 <div>
 
-                                                                                    <img src={`/products/${ei}`} style={{ width: '100%' }} />
+                                                                                    <img src={`${ei}`} style={{ width: '100%' }} />
 
                                                                                 </div>
                                                                                 <div>

@@ -43,6 +43,7 @@ export interface AuthState {
     token: string;
     user: UserInfor;
     cart: CartWithNoToken;
+    timeExpire: number
 }
 export const initialStateAuth: AuthState = {
     token: localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token") || "") : "",
@@ -62,20 +63,23 @@ export const initialStateAuth: AuthState = {
     cart: sessionStorage.getItem("carts")
         ? JSON.parse(sessionStorage.getItem("carts") || "")
         : { items: [], subTotal: 0 },
+    timeExpire: localStorage.getItem("timeExpire") ? JSON.parse(localStorage.getItem("timeExpire") || "") : 0,
 };
 
 export const authSlice = createSlice({
     name: 'auth',
     initialState: initialStateAuth,
     reducers: {
-        login: (state, action: PayloadAction<{ tokenDispatch: string, userDispatch: UserInfor }>) => {
+        login: (state, action: PayloadAction<{ tokenDispatch: string, userDispatch: UserInfor , timeExpire: number }>) => {
             const newState: AuthState = {
                 ...state,
                 token: action.payload.tokenDispatch,
-                user: action.payload.userDispatch
+                user: action.payload.userDispatch,
+                timeExpire: action.payload.timeExpire
             }
             localStorage.setItem("token", JSON.stringify(action.payload.tokenDispatch))
             localStorage.setItem("user", JSON.stringify(action.payload.userDispatch))
+            localStorage.setItem("timeExpire", JSON.stringify(action.payload.timeExpire))
 
             return newState
         },
@@ -94,6 +98,7 @@ export const authSlice = createSlice({
                 email: "",
                 id: ""
             }))
+            localStorage.removeItem("timeExpire")
             return {
                 ...state,
                 token: '',

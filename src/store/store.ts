@@ -3,6 +3,7 @@ import adminProduct from '../slices/adminProduct'
 import authSlice from '../slices/authSlice'
 import cartSlice from '../slices/cartSlice'
 import notifySlice from '../slices/notifySlice'
+import loaderSlice from '../slices/loaderSlice'
 
 
 export const store = configureStore({
@@ -10,7 +11,8 @@ export const store = configureStore({
         cart: cartSlice,
         auth: authSlice,
         adminProduct: adminProduct,
-        notify: notifySlice
+        notify: notifySlice,
+        loader: loaderSlice
     }
 })
 

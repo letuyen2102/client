@@ -6,9 +6,12 @@ import styles from './Collection.module.css'
 import PaginatedItems from './Pagination';
 import Title from '../Tiltle/Title';
 import slugify from 'slugify';
+import { useDispatch } from 'react-redux';
+import { hideLoader, showLoader } from '../../slices/loaderSlice';
 const Collection: React.FC<{ queryAPI: string, queryString: string }> = (props) => {
 
     const navigate: NavigateFunction = useNavigate()
+    const dispatch = useDispatch()
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const [categories, setCategories] = useState<string[]>([])
@@ -27,7 +30,9 @@ const Collection: React.FC<{ queryAPI: string, queryString: string }> = (props) 
         getCategories()
         getColors()
     }, [props.queryAPI])
-
+    useEffect(() => {
+        dispatch(hideLoader())
+    }, [searchParams.toString()])
     return (
         <div>
             <Title>

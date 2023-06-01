@@ -13,7 +13,7 @@ const ProfileUser = () => {
         <div>
             <Header />
             <div style={{ backgroundColor: '#F9FAFA' }}>
-                <div className={`container-lg`}>
+                <div className={`container-lg`} style={{ paddingBottom: '50px' }}>
                     <Title>
                         <ul>
                             <li>
@@ -24,7 +24,7 @@ const ProfileUser = () => {
                             </li>
                         </ul>
                     </Title>
-                    <div className="row" style={{ marginTop: '50px' }}>
+                    <div className="row" style={{ marginTop: '20px' }}>
                         <div className={`col-lg-3 ${styles.hide}`}>
                             <div>
                                 <div>

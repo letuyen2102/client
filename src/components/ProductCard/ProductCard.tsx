@@ -8,7 +8,7 @@ const ProductCard: React.FC<{ image: string, oldPrice: number, sale: number, nam
         <div className={`${styles.ProductCard}`}>
             <div className={`${styles.ProductCardImage}`}>
                 <Link to={`/detail/${props.slug}`}>
-                    <img src={`/products/${props.image}`} />
+                    <img src={`${props.image}`} />
                 </Link>
             </div>
             <h2 style={{ textTransform: 'uppercase' }}>{props.category} - LIMITED</h2>

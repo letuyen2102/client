@@ -1,4 +1,5 @@
 import { Routes, Route, Outlet, Navigate, useNavigate } from 'react-router-dom';
+import { useState } from 'react'
 import jwtDecode from 'jwt-decode';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
@@ -27,49 +28,45 @@ import { ProtectedAdminRoute, ProtectedUserRoute } from './components/RouteProte
 import User from './pages/user/User';
 import DetailUser from './pages/detailUser/DetailUser';
 import GetBookingBaseOnUser from './pages/getBookingBaseOnUser/GetBookingBaseOnUser';
+import Dashboard from './pages/dashboard/Dashboard';
+import Test123 from './components/test/Test';
+import Chat from './components/Chat/Chat';
+import 'react-chat-widget/lib/styles.css';
+import axios from "axios";
+import io from 'socket.io-client'
+import AdminChat from './pages/adminChat/AdminChat';
+const socket = io('http://localhost:5000')
 function App() {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
   const queryShopAll = '/myway/api/products/filterProducts?'
   const API = '/myway/api/bookings/getAllBookings'
   const notify = useSelector((state: RootState) => state.notify)
   const handleLoginAndCart = useSelector((state: RootState) => state.auth)
-  const dispatch = useDispatch()
-  const navigate = useNavigate();
-  const getCookieValue = (cookieName: string) => {
-    const cookies = document.cookie.split('; ');
-    for (let i = 0; i < cookies.length; i++) {
-      const cookie = cookies[i].split('=');
-      const name = cookie[0];
-      const value = cookie[1];
-
-      if (name === cookieName) {
-        return decodeURIComponent(value);
-      }
-    }
-
-    return null;
-  };
+  const [showChat, setShowChat] = useState(false)
+  const [username, setUsername] = useState("")
+  const [room, setRoom] = useState("")
+  console.log(room)
+  const joinRoom = () => {
+    socket.emit("join_room", handleLoginAndCart.user._id.toString())
+    console.log("hello")
+    setShowChat(true)
+  }
   useEffect(() => {
     const checkTokenExpiration = () => {
-      const token = getCookieValue('jwt');
-      if (token) {
-        try {
-          const decodedToken = jwtDecode<{ exp: number }>(token);
-          const expirationTime = decodedToken.exp * 1000;
-          const currentTime = Date.now();
-          if (currentTime > expirationTime) {
-            if (window.confirm('Phiên đăng nhập đã hết hạn , vui lòng đăng nhập lại')) {
-              dispatch(logout())
-              navigate('/account/login')
-            }
-          }
-        } catch (error) {
-          console.log('Lỗi giải mã JWT:', error);
+      const cookieExpire = handleLoginAndCart.timeExpire;
+      const now = new Date().getTime();
+      if (handleLoginAndCart.timeExpire && cookieExpire - now <= 0) {
+        if (window.confirm("Phiên đăng nhập hết hạn , vui lòng đăng nhập lại")) {
+          dispatch(logout());
+          window.location.reload()
         }
       }
     };
     const interval = setInterval(checkTokenExpiration, 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [handleLoginAndCart]);
+
   return (
     <div className="App">
       {notify.show && notify.status === 200 && <div className='notify_message_success'>
@@ -78,11 +75,21 @@ function App() {
       {notify.show && notify.status === 400 && <div className='notify_message_error'>
         <p>{notify.message} </p>
       </div>}
+      {
+        showChat ? <div style={{ width: '300px', height: '400px', position: 'fixed', bottom: '50px', right: '50px', zIndex: '100' }}>
+          <Chat setShowChat={setShowChat} socket={socket} room={handleLoginAndCart.user._id.toString()} username={handleLoginAndCart.user} />
+        </div> : (handleLoginAndCart.user.role === 'user' && <button
+          style={{ position: 'fixed', bottom: '50px', right: '50px', zIndex: '100', padding: '10px', borderRadius: '10px', backgroundColor: '#00b156', color: '#fff' }}
+
+          onClick={() => { joinRoom() }}
+        >CHAT</button>)
+      }
+
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/account/login' element={<ProtectedUserRoute element={<div><Header /> <Login /> <Footer /> </div>} />} />
-        <Route path='/account/forgotpassword/*' element={<ForgotPasswordPage />} />
         <Route path='/account/signup' element={<ProtectedUserRoute element={<div><Header /> <Signup /> <Footer /> </div>} />} />
+        <Route path='/account/forgotpassword/*' element={<ForgotPasswordPage />} />
         <Route path='/detail/:slug' element={<div><Header /> <Detail /> <Footer /> </div>} />
         <Route path='/profile/account/user/*' element={<ProtectedUserRoute element={<ProfileUser />} />} />
         <Route path='/collection/all' element={<PageShop queryApi={queryShopAll} queryString='category' />} />
@@ -91,7 +98,7 @@ function App() {
         <Route path='/success' element={<ProtectedUserRoute element={<PaymentSuccess />} />} />
         <Route path="/admin/login" element={<ProtectedAdminRoute element={<LoginAdminPage />} />} />
         <Route path="/myway/admin" element={<ProtectedAdminRoute element={<div><Admin><Outlet /></Admin></div>} />}>
-          <Route index element={<div>THIS IS DASHBOARD</div>} />
+          <Route index element={<Dashboard />} />
           <Route path="product" element={<Product />} />
           <Route path="product/:idProd" element={<ChangeProduct />} />
           <Route path="addProduct" element={<AddProduct />} />
@@ -100,10 +107,13 @@ function App() {
           <Route path="orders" element={<Order API={API} />} />
           <Route path="user/:idUser/orders" element={<GetBookingBaseOnUser />} />
           <Route path="orders/:orderId" element={<DetailOrder />} />
-        </Route>
+          <Route path="chats" element={<AdminChat socket={socket} />} />
 
+
+        </Route>
+        {/* <Route path='/test' element={<Test123 />} /> */}
       </Routes>
-    </div>
+    </div >
   );
 }
 

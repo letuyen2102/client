@@ -5,8 +5,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import axios from 'axios';
 import { changeInforUserImage, logout } from '../../slices/authSlice';
+import Loader from '../loader/Loader';
+import { hideLoader, showLoader } from '../../slices/loaderSlice';
 const SideBarProfile = () => {
     const handleLoginAndCart = useSelector((state: RootState) => state.auth)
+    const handleLoader = useSelector((state: RootState) => state.loader)
+
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const [confirm, setConfirm] = useState(false)
@@ -28,7 +32,9 @@ const SideBarProfile = () => {
     };
     const handleChangeImageUser = async (objUpdateImage: FormData) => {
         try {
+            dispatch(hideLoader())
             const res = await axios.patch('/myway/api/users/updateMe', objUpdateImage)
+            dispatch(showLoader())
             if (res.data.status === "success") {
                 setConfirm(false)
                 dispatch(changeInforUserImage({ userDispatch: res.data.user }))
@@ -42,6 +48,7 @@ const SideBarProfile = () => {
     const handleLogout = async () => {
         try {
             const res = await axios.get('/myway/api/users/logout')
+            console.log(res)
             if (res.data.status === "success") {
                 dispatch(logout())
                 navigate('/account/login')
@@ -53,11 +60,12 @@ const SideBarProfile = () => {
     }
     return (
         <div>
+            {handleLoader.loader && <Loader />}
             <div className={styles.sideBarImageName}>
                 <div className={styles.sideBarImageUpload}>
                     <div>
                         <div>
-                            {imagePreviewUrl ? <img src={imagePreviewUrl} alt='' /> : <img src={`/users/${handleLoginAndCart.user.photo}`} alt='' />}
+                            {imagePreviewUrl ? <img src={imagePreviewUrl} alt='' /> : <img src={`${handleLoginAndCart.user.photo}`} alt='' />}
                         </div>
                     </div>
 

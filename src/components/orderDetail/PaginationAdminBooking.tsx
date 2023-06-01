@@ -5,8 +5,12 @@ import { Link, NavigateFunction, useLocation, useNavigate } from 'react-router-d
 import moment from 'moment';
 import { ORDER } from '../SectionProfile/PaginitionBooking';
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { handleNotify } from '../../slices/notifySlice';
+import { Image } from '@chakra-ui/react';
+import { RootState } from '../../store/store';
+import { showLoader } from '../../slices/loaderSlice';
+import Loader from '../loader/Loader';
 function Items({ currentItems }: { currentItems: ORDER[] }) {
     console.log(currentItems)
     const dispatch = useDispatch()
@@ -29,8 +33,8 @@ function Items({ currentItems }: { currentItems: ORDER[] }) {
                 })
             }
         }
-        catch (err) {
-            dispatch(handleNotify({ message: "Chấp nhận đơn hàng thất bại , vui lòng kiểm tra lại số lượng tồn kho !", show: true, status: 400 }))
+        catch (err: any) {
+            dispatch(handleNotify({ message: err.response.data.message, show: true, status: 400 }))
             setTimeout(() => {
                 dispatch(handleNotify({ message: "", show: false, status: 0 }))
             }, 1500)
@@ -81,9 +85,15 @@ function Items({ currentItems }: { currentItems: ORDER[] }) {
                                                 <div className='col-lg-6' key={index}>
                                                     <div className={styles.eachItemOrder}>
                                                         <div style={{ padding: '5px' }}>
-                                                            <div style={{ width: '60px' }}>
+                                                            {/* <div style={{ width: '60px' }}>
                                                                 <img src={`/products/${each.image}`} alt='' style={{ width: '100%' }} />
-                                                            </div>
+                                                            </div> */}
+                                                            <Image
+                                                                // borderRadius='full'
+                                                                boxSize='70px'
+                                                                src={`${each.image}`}
+                                                                alt='Dan Abramov'
+                                                            />
                                                         </div>
                                                         <div>
                                                             <span>{each.product.name}</span>
@@ -124,6 +134,8 @@ function Items({ currentItems }: { currentItems: ORDER[] }) {
 
 function PaginationAdminBooking({ itemsPerPage, apiString }: { itemsPerPage: number, apiString: string }) {
     const navigate: NavigateFunction = useNavigate()
+    const handleLoader = useSelector((state: RootState) => state.loader)
+    const dispatch = useDispatch()
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const [bookings, setBookings] = useState<ORDER[]>([])
@@ -149,6 +161,7 @@ function PaginationAdminBooking({ itemsPerPage, apiString }: { itemsPerPage: num
             await fetch(apiString)
                 .then(res => res.json())
                 .then(all => { setBookings(all.bookings) })
+            dispatch(showLoader())
         }
 
         getBookingsMe()
@@ -160,6 +173,7 @@ function PaginationAdminBooking({ itemsPerPage, apiString }: { itemsPerPage: num
     }, [searchParams])
     return (
         <>
+            {handleLoader.loader && <Loader />}
             <Items currentItems={currentItems} />
             <ReactPaginate
                 breakLabel="..."

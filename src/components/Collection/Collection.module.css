@@ -64,11 +64,19 @@
     margin-right: 15px;
 }
 
-.productShopFilter {
-    display: flex;
-    align-items: center;
-    padding: 15px 0px;
+@media (max-width : 991px) {
+    .productShopFilter {
+        display: none;
+    }
 }
+@media (min-width : 992px) {
+    .productShopFilter {
+        display: flex;
+        align-items: center;
+        padding: 15px 0px;
+    }
+}
+
 
 .productShopFilter label {
     margin-right: 15px;

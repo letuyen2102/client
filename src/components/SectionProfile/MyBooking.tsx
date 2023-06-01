@@ -16,8 +16,8 @@ const MyBooking: React.FC<{ API: string }> = (props) => {
             <div className={styles.sectionTitle}>
                 <p>Đơn hàng của tôi</p>
             </div>
-            <div className='row' style={{ marginTop: '24px' }}>
-                <div className='col-lg-3'>
+            <div className={`row ${styles.selectOrder}`} style={{ marginTop: '24px' }}>
+                <div className='col-lg-3 col-md-6 col-sm-6'>
                     <div>
                         <button className={`${styles.btnBooking} ${!searchParams.get("status") && styles.btnColor}`} onClick={() => {
                             searchParams.delete("startItem")
@@ -26,7 +26,7 @@ const MyBooking: React.FC<{ API: string }> = (props) => {
                         }}>TẤT CẢ</button>
                     </div>
                 </div>
-                <div className='col-lg-3'>
+                <div className='col-lg-3 col-md-6 col-sm-6'>
                     <div>
                         <button className={`${styles.btnBooking} ${searchParams.get("status") === "processing" && styles.btnColor}`} onClick={() => {
                             searchParams.delete("startItem")
@@ -38,7 +38,7 @@ const MyBooking: React.FC<{ API: string }> = (props) => {
                         }}>CHƯA XÁC NHẬN</button>
                     </div>
                 </div>
-                <div className='col-lg-3'>
+                <div className='col-lg-3 col-md-6 col-sm-6'>
                     <div>
                         <button className={`${styles.btnBooking} ${searchParams.get("status") === "success" && styles.btnColor}`} onClick={() => {
                             searchParams.delete("startItem")
@@ -50,7 +50,7 @@ const MyBooking: React.FC<{ API: string }> = (props) => {
                         }}>ĐÃ XÁC NHẬN</button>
                     </div>
                 </div>
-                <div className='col-lg-3'>
+                <div className='col-lg-3 col-md-6 col-sm-6'>
                     <div>
                         <button className={`${styles.btnBooking} ${searchParams.get("status") === "cancel" && styles.btnColor}`} onClick={() => {
                             searchParams.delete("startItem")

@@ -6,12 +6,18 @@ import { Link, NavigateFunction, useNavigate, useLocation } from 'react-router-d
 import { RootState } from "../../store/store"
 import styles from './Header.module.css'
 import { logout } from "../../slices/authSlice"
+import { Button, FormControl, FormLabel, Icon, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spinner, chakra, useDisclosure } from "@chakra-ui/react"
+import SearchCard from "../searchCard/SearchCard"
+import { PRODUCT } from "../Detail/Detail"
+
 const Header: React.FC = (props) => {
+    const { isOpen, onOpen, onClose } = useDisclosure()
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const handleLoginAndCart = useSelector((state: RootState) => state.auth)
-    const location = useLocation();
     const [showMenuMobile, setShowMenuMobile] = useState<boolean>(false)
+    const [prodSearch, setProdSearch] = useState<PRODUCT[]>()
+    const [spinerLoad, setSpiner] = useState(false)
     const handleLogout = async () => {
         try {
             const res = await axios.get('/myway/api/users/logout')
@@ -24,6 +30,22 @@ const Header: React.FC = (props) => {
             alert(err.response.data)
         }
     }
+    const handleSearch = async (text: string) => {
+        try {
+            // setSpiner(true)
+            const res = await axios.post(`/myway/api/products/search`, { query: text })
+            if (res.data.status === 'success') {
+                setProdSearch(res.data.products)
+            }
+            // setSpiner(false)
+
+
+        }
+        catch (err) {
+            alert("có lỗi xảy ra ")
+            console.log(err)
+        }
+    }
     return (
         <div>
             <div className={`${styles.HeaderTop} container-lg`}>
@@ -32,27 +54,22 @@ const Header: React.FC = (props) => {
                         <div className={`${styles.HeaderModalMenu}`} onClick={e => e.stopPropagation()}>
                             <ul className={`${styles.ul1}`}>
                                 <li>
-                                    <Link to='/'>Trang Chủ</Link>
+                                    <a href='/'>Trang Chủ</a>
                                 </li>
                                 <li>
-                                    <Link to=''>Thời Trang</Link>
-                                    <i className={`fa-solid fa-angle-down ${styles.iconAngleDown}`}></i>
+                                    <a href='/collection/all'>Thời Trang</a>
                                 </li>
                                 <li>
-                                    <Link to=''>Mua Sắm Theo Dịp</Link>
-                                    <i className={`fa-solid fa-angle-down ${styles.iconAngleDown}`}></i>
+                                    <a href='/collection/all'>Mua Sắm Theo Dịp</a>
                                 </li>
                                 <li>
-                                    <Link to=''>Bộ Sưu Tập</Link>
-                                    <i className={`fa-solid fa-angle-down ${styles.iconAngleDown}`}></i>
+                                    <a href='/collection/all'>Bộ Sưu Tập</a>
                                 </li>
                                 <li>
                                     <Link to=''>Tin Tức</Link>
-                                    <i className={`fa-solid fa-angle-down ${styles.iconAngleDown}`}></i>
                                 </li>
                                 <li>
                                     <Link to=''>Liên Hệ</Link>
-                                    <i className={`fa-solid fa-angle-down ${styles.iconAngleDown}`}></i>
                                 </li>
                                 {!handleLoginAndCart.token ?
                                     <>
@@ -120,10 +137,64 @@ const Header: React.FC = (props) => {
 
                             </div>
                             <div className={`${styles.HeaderTopAccount_Search}`}>
-                                <Link to=''>
+                                {/* <Link to=''>
                                     <i className="fa-regular fa-magnifying-glass"></i>
-                                </Link>
+                                </Link> */}
+                                <>
+                                    <Link to='' onClick={onOpen}>
+                                        <i className="fa-regular fa-magnifying-glass"></i>
+                                    </Link>
+                                    <Modal isOpen={isOpen} onClose={onClose}>
+                                        <ModalOverlay />
+                                        <ModalContent marginTop={"0px"} borderRadius={'0px'}>
+                                            <ModalHeader>Tìm kiếm sản phẩm</ModalHeader>
+                                            <ModalCloseButton />
+                                            <ModalBody>
+                                                {/* <Input placeholder='Search ...' /> */}
+                                                <FormControl style={{ display: 'flex', alignItems: 'center' }}>
+                                                    <Input type='email' placeholder="Tìm kiếm sản phẩm ..." onChange={event => {
 
+                                                        setTimeout(() => {
+                                                            handleSearch(event.target.value)
+                                                        }, 1000)
+
+                                                    }} />
+                                                    <Button
+                                                        marginLeft='10px'
+                                                        colorScheme='teal'
+                                                        type='submit'
+                                                    // float='right'
+                                                    >
+                                                        Tìm
+                                                    </Button>
+                                                </FormControl>
+                                            </ModalBody>
+                                            <ModalBody maxHeight='300px' overflowY='scroll'>
+                                                {/* <div style={{ padding: '5px 0px', marginBottom: '5px' }}>
+                                                    <SearchCard></SearchCard>
+                                                </div> */}
+                                                <div>
+                                                    {
+                                                        prodSearch && prodSearch.length > 0
+                                                        && prodSearch.map((el, idx) => {
+                                                            return <div style={{ padding: '5px 0px', marginBottom: '5px' }} key={idx}>
+                                                                <SearchCard image={el.image} name={el.name} slug={el.slug}></SearchCard>
+                                                            </div>
+                                                        })
+                                                    }
+                                                </div>
+                                                {spinerLoad && <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                    <Spinner />
+                                                </div>}
+
+                                            </ModalBody>
+                                        </ModalContent>
+
+                                        {/* <div style={{ width: '400px', height: '400px', backgroundColor: 'red' }}>
+
+                                        </div> */}
+                                    </Modal>
+                                </>
                             </div>
                         </div>
                     </div>

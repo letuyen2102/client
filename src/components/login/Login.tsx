@@ -42,7 +42,7 @@ const BtnGoogle: React.FC = (props) => {
 
             if (resPost.data.status === 'success') {
                 const userGg: UserInfor = { ...resPost.data.data.user }
-                dispatch(login({ tokenDispatch: resPost.data.token, userDispatch: userGg }))
+                dispatch(login({ tokenDispatch: resPost.data.token, userDispatch: userGg, timeExpire: resPost.data.timeExpire }))
 
                 navigate('/')
             }
@@ -76,8 +76,8 @@ const Login: React.FC = () => {
             })
 
             if (res.data.status === 'success') {
-
-                dispatch(login({ tokenDispatch: res.data.token, userDispatch: res.data.data.user }))
+                console.log(res.data.data.timeExpire)
+                dispatch(login({ tokenDispatch: res.data.token, userDispatch: res.data.data.user, timeExpire: res.data.timeExpire }))
                 // dispatch(handleNotify({ message: "Đăng nhập thành công , chờ trong giây lát!", show: true, status: 200 }))
                 // setTimeout(() => {
                 //     dispatch(handleNotify({ message: "", show: false, status: 0 }))

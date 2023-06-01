@@ -29,7 +29,7 @@ const SendSMS = () => {
                         }}>
                             <div className={`${styles.formGroup}`}>
                                 <label htmlFor="Phone">SDT <span style={{ color: '#ec1f27' }}>*</span></label>
-                                <input id="Phone" type='text' placeholder="Nhập Số Điện Thoại" />
+                                <input id="Phone" type='text' required placeholder="Nhập Số Điện Thoại" />
                             </div>
 
                             <button>Gửi Mật Khẩu</button>

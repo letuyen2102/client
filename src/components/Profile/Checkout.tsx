@@ -204,7 +204,7 @@ const Checkout = () => {
                                             return <li key={ind}>
                                                 <div className={styles.paymentProductImg}>
                                                     <div>
-                                                        <img src={`/products/${each.image}`} />
+                                                        <img src={`${each.image}`} />
                                                     </div>
                                                 </div>
 

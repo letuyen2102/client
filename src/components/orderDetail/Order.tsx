@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import styles from '../SectionProfile/MyBooking.module.css'
 import { NavigateFunction, useLocation, useNavigate } from 'react-router-dom'
 import PaginationAdminBooking from './PaginationAdminBooking'
+import { useDispatch } from 'react-redux'
+import { hideLoader } from '../../slices/loaderSlice'
 const Order: React.FC<{ API: string }> = (props) => {
     const navigate: NavigateFunction = useNavigate()
     const location = useLocation();
@@ -10,6 +12,10 @@ const Order: React.FC<{ API: string }> = (props) => {
     // useEffect(() => {
     //     setApiString('/myway/api/bookings/getAllBookings' + location.search)
     // }, [])
+    const dispatch = useDispatch()
+    useEffect(() => {
+        dispatch(hideLoader())
+    }, [searchParams.toString()])
     return (
         <div>
             <div className={styles.orderTitle}>

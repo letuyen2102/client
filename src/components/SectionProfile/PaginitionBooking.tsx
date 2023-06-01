@@ -7,8 +7,12 @@ import styles from './MyBooking.module.css'
 import { Link, NavigateFunction, useLocation, useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { handleNotify } from '../../slices/notifySlice';
+import { Image } from '@chakra-ui/react';
+import { RootState } from '../../store/store';
+import Loader from '../loader/Loader';
+import { hideLoader, showLoader } from '../../slices/loaderSlice';
 export interface PRODORDER {
     product: PRODUCT
     quantity: number,
@@ -36,11 +40,24 @@ export interface ORDER {
 }
 function Items({ currentItems }: { currentItems: ORDER[] }) {
     const dispatch = useDispatch()
+    const handleLoader = useSelector((state: RootState) => state.loader)
+    const [items, setItems] = useState<ORDER[]>(currentItems)
     const cancelOrder = async (idBooking: string) => {
         try {
             const res = await axios.patch(`/myway/api/bookings/userCancelBooking/${idBooking}`)
             if (res.data.status === "success") {
-                dispatch(handleNotify({ message: "Hủy đơn hàng thành công!", show: true, status: 200 }))
+                setItems(prev => {
+                    const newState = [...prev]
+
+                    newState.forEach((each, idx) => {
+                        if (each._id === idBooking) {
+                            each.status = 'required'
+                        }
+                    })
+
+                    return newState
+                })
+                dispatch(handleNotify({ message: "Đơn hàng đang chờ hủy", show: true, status: 200 }))
                 setTimeout(() => {
                     dispatch(handleNotify({ message: "", show: false, status: 0 }))
                 }, 1500)
@@ -53,11 +70,14 @@ function Items({ currentItems }: { currentItems: ORDER[] }) {
             }, 1500)
         }
     }
+    useEffect(() => {
+        setItems(currentItems)
+    }, [currentItems])
     return (
         <div>
-            {currentItems && currentItems.length > 0 &&
+            {items && items.length > 0 &&
                 currentItems.map((item, idx) => (
-                    <div style={{ padding: '20px 30px', border: '1px solid rgb(222, 231, 231)', backgroundColor: '#fff', marginTop: '30px' }} key={idx}>
+                    <div style={{ padding: '10px 10px', border: '1px solid rgb(222, 231, 231)', backgroundColor: '#fff', marginTop: '30px' }} key={idx}>
                         <div className={styles.eachOrder}>
                             <div className={styles.eachOrder_overview}>
                                 <p>Mã đơn hàng: #{item._id} | Đặt ngày: {moment(item.createAt).format('DD/MM/YYYY')} | {item.paymentCardName ? `Thanh toán online qua ${item.paymentCardName}` : "Thanh toán khi nhận hàng (COD)"} | Tổng tiền: {item.subTotal}đ</p>
@@ -67,12 +87,18 @@ function Items({ currentItems }: { currentItems: ORDER[] }) {
                                     {
                                         item.products.length > 0 && item.products.map((each, index) => {
                                             return (
-                                                <div className='col-lg-6' key={index}>
+                                                <div className='col-lg-6 col-md-12' key={index}>
                                                     <div className={styles.eachItemOrder}>
                                                         <div style={{ padding: '5px' }}>
-                                                            <div style={{ width: '60px' }}>
+                                                            {/* <div style={{ width: '60px' }}>
                                                                 <img src={`/products/${each.image}`} alt='' style={{ width: '100%' }} />
-                                                            </div>
+                                                            </div> */}
+                                                            <Image
+                                                                // borderRadius='full'
+                                                                boxSize='70px'
+                                                                src={`${each.image}`}
+                                                                alt='Dan Abramov'
+                                                            />
                                                         </div>
                                                         <div>
                                                             <span>{each.product.name}</span>
@@ -110,6 +136,8 @@ function Items({ currentItems }: { currentItems: ORDER[] }) {
 
 function PaginatedItems({ itemsPerPage, apiString }: { itemsPerPage: number, apiString: string }) {
     const navigate: NavigateFunction = useNavigate()
+    const dispatch = useDispatch()
+    const handleLoader = useSelector((state: RootState) => state.loader)
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const [bookings, setBookings] = useState<ORDER[]>([])
@@ -131,9 +159,13 @@ function PaginatedItems({ itemsPerPage, apiString }: { itemsPerPage: number, api
     };
     useEffect(() => {
         const getBookingsMe = async () => {
+            dispatch(hideLoader())
+
             await fetch(apiString)
                 .then(res => res.json())
                 .then(all => { setBookings(all.bookings) })
+            dispatch(showLoader())
+
         }
 
         getBookingsMe()
@@ -145,6 +177,7 @@ function PaginatedItems({ itemsPerPage, apiString }: { itemsPerPage: number, api
     }, [searchParams])
     return (
         <>
+            {handleLoader.loader && <Loader />}
             <Items currentItems={currentItems} />
             <ReactPaginate
                 breakLabel="..."

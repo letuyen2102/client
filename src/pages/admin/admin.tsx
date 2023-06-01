@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import styles from './admin.module.css'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../store/store'
+import { Image } from '@chakra-ui/react'
 const Admin: React.FC<{ children: React.ReactNode }> = (props) => {
     const handleLoginAndCart = useSelector((state: RootState) => state.auth)
     return (
@@ -13,7 +14,12 @@ const Admin: React.FC<{ children: React.ReactNode }> = (props) => {
                     <div className={`col-lg-2 ${styles.sidebarAdmin}`}>
                         <div className={styles.imageAdmin}>
                             <div>
-                                <img src={`/users/${handleLoginAndCart.user.photo}`} />
+                                {/* <img src={`${handleLoginAndCart.user.photo}`} /> */}
+                                <Image
+                                    src={`${handleLoginAndCart.user.photo}`}
+                                    alt='Dan Abramov'
+                                    style={{ width: '100%', height: '200px' }}
+                                />
                             </div>
                             <p>Chào Admin</p>
                         </div>
@@ -34,7 +40,12 @@ const Admin: React.FC<{ children: React.ReactNode }> = (props) => {
                                 </li>
                                 <li>
                                     <i className="fa-duotone fa-list"></i>
-                                    <Link to='/myway/admin/orders'>order</Link>
+                                    <Link to='/myway/admin/orders'>Order</Link>
+                                </li>
+
+                                <li>
+                                    <i className="fa-duotone fa-list"></i>
+                                    <Link to='/myway/admin/chats'>Chat</Link>
                                 </li>
 
                             </ul>

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom"
 import styles from './Footer.module.css'
 const Footer: React.FC = (props) => {
     return (
-        <div style={{ backgroundColor: '#f9f9f9' }}>
+        <div style={{ borderTop: '1px solid #f5f5f5' }}>
             <div className={`container-md ${styles.footer}`}>
                 <div className={`row`} style={{ paddingTop: '50px', paddingBottom: '25px' }}>
                     <div className={`col-lg-3 col-md-6 col-sm-12`}>
