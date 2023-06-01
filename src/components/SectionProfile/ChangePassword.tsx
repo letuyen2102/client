@@ -41,15 +41,15 @@ const ChangePassword = () => {
             }}>
                 <div className={styles.formGroup}>
                     <label>Mật khẩu hiện tại</label>
-                    <input type='password' placeholder='Nhập mật khẩu cũ' required value={objUpdatePassword.passwordCurrent} onChange={event => setUpdatePassword({ ...objUpdatePassword, passwordCurrent: event.target.value })} />
+                    <input type='password' minLength={8} placeholder='Nhập mật khẩu cũ' required value={objUpdatePassword.passwordCurrent} onChange={event => setUpdatePassword({ ...objUpdatePassword, passwordCurrent: event.target.value })} />
                 </div>
                 <div className={styles.formGroup}>
                     <label>Mật khẩu mới</label>
-                    <input type='password' placeholder='Nhập mật mới' required value={objUpdatePassword.password} onChange={event => setUpdatePassword({ ...objUpdatePassword, password: event.target.value })} />
+                    <input type='password' minLength={8} placeholder='Nhập mật mới' required value={objUpdatePassword.password} onChange={event => setUpdatePassword({ ...objUpdatePassword, password: event.target.value })} />
                 </div>
                 <div className={styles.formGroup}>
                     <label>Nhập lại mật khẩu</label>
-                    <input type='password' placeholder='Nhập lại mật khẩu mới' required value={objUpdatePassword.passwordConfirm} onChange={event => setUpdatePassword({ ...objUpdatePassword, passwordConfirm: event.target.value })} />
+                    <input type='password' minLength={8} placeholder='Nhập lại mật khẩu mới' required value={objUpdatePassword.passwordConfirm} onChange={event => setUpdatePassword({ ...objUpdatePassword, passwordConfirm: event.target.value })} />
                 </div>
                 <div className={styles.formGroup}>
                     <button>XÁC NHẬN</button>

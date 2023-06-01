@@ -27,11 +27,10 @@ const AdminChat = ({ socket }: { socket: Socket }) => {
     const handleLoginAndCart = useSelector((state: RootState) => state.auth)
     const [currentMessage, setCurrentMessage] = useState("");
     const [messageListUser, setMessageListUser] = useState<MESSAGE[]>([]);
-    console.log(messageListUser)
     const currentLoad = useRef(false)
-    const [username, setUsername] = useState("")
     const [room, setRoom] = useState("")
-    console.log(room)
+    const [name, setName] = useState("")
+    const [showChat, setShowChat] = useState(false)
     const joinRoom = (rm: string) => {
         socket.emit("join_room", rm)
     }
@@ -68,7 +67,9 @@ const AdminChat = ({ socket }: { socket: Socket }) => {
                 setMessageListUser(res.data.chats)
             }
         }
-        getChats()
+        if (room) {
+            getChats()
+        }
         getAllUsers()
     }, [room])
     useEffect(() => {
@@ -88,34 +89,41 @@ const AdminChat = ({ socket }: { socket: Socket }) => {
             {handleLoader.loader && <Loader />}
             <div className='row'>
                 <div className='col-lg-3'>
-                    <ul>
-                        {
-                            users && users.length > 0 && users.map((each, idx) => {
-                                return (
-                                    <li key={idx} className={styles.chatEach} onClick={event => {
-                                        setRoom(each._id)
-                                        joinRoom(each._id)
-                                    }}>
-                                        <Image
-                                            borderRadius='50%'
-                                            boxSize='50px'
-                                            src={`${each.photo}`}
-                                            alt='Dan Abramov'
-                                        />
-                                        <p>{each.name}</p>
-                                    </li>
-                                )
-                            })
-                        }
-                    </ul>
+                    <ScrollToBottom className="message-container">
+
+                        <ul>
+                            {
+                                users && users.length > 0 && users.map((each, idx) => {
+                                    return (
+                                        <li key={idx} className={styles.chatEach} onClick={event => {
+                                            setRoom(each._id)
+                                            joinRoom(each._id)
+                                            setShowChat(true)
+                                            setName(each.name)
+                                        }}>
+                                            <Image
+                                                borderRadius='50%'
+                                                boxSize='50px'
+                                                src={`${each.photo}`}
+                                                alt='Dan Abramov'
+                                            />
+                                            <p>{each.name}</p>
+                                        </li>
+                                    )
+                                })
+                            }
+                        </ul>
+                    </ScrollToBottom>
                 </div>
 
                 <div className='col-lg-9'>
                     {/* <Chat setShowChat={setShowChat} socket={socket} room={room} username={handleLoginAndCart.user} /> */}
 
-                    <div className="chat-window">
+                    {showChat && <div className="chat-window">
                         <div className="chat-header">
                             <p>Live Chat</p>
+                            <p>{name}</p>
+
                         </div>
                         <div className="chat-body">
                             <ScrollToBottom className="message-container">
@@ -154,7 +162,7 @@ const AdminChat = ({ socket }: { socket: Socket }) => {
                             />
                             <button onClick={sendMessage}>&#9658;</button>
                         </div>
-                    </div>
+                    </div>}
                 </div>
             </div>
 

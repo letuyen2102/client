@@ -23,7 +23,7 @@ const DetailUser = () => {
                 <div className='row'>
                     <div className="col-lg-4">
                         <div className={styles.imageUser}>
-                            <img src={`/users/${userDetail?.photo}`} alt="" />
+                            <img src={`${userDetail?.photo}`} alt="" />
                         </div>
                     </div>
 

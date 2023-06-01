@@ -25,7 +25,7 @@ const statData: StatData[] = [
     }
 ];
 
-const Dashboard = () => {
+const Stat = () => {
     return (
         <Container maxW="7xl" p={{ base: 5, md: 10 }}>
             <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} spacing={5} mt={12} mb={4}>
@@ -42,4 +42,4 @@ const Dashboard = () => {
     );
 };
 
-export default Dashboard;
+export default Stat;

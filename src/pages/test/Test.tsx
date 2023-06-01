@@ -19,12 +19,16 @@ import {
 // Here we have used react-icons package for the icons
 import { FaBell } from 'react-icons/fa';
 import { AiOutlineTeam, AiOutlineHome } from 'react-icons/ai';
-import { BsFolder2, BsCalendarCheck } from 'react-icons/bs';
+import { BsFolder2, BsCalendarCheck, BsFillChatRightDotsFill } from 'react-icons/bs';
 import { FiMenu } from 'react-icons/fi';
 import { RiFlashlightFill } from 'react-icons/ri';
+import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
 
-export default function Test() {
+const Test: React.FC<{ children: React.ReactNode }> = (props) => {
     const { isOpen, onClose, onOpen } = useDisclosure();
+    const handleLoginAndCart = useSelector((state: RootState) => state.auth)
 
     return (
         <Box as="section" bg={useColorModeValue('gray.50', 'gray.700')} minH="100vh">
@@ -62,13 +66,13 @@ export default function Test() {
                             ml="4"
                             size="sm"
                             name="Ahmad"
-                            src="https://avatars2.githubusercontent.com/u/37842853?v=4"
+                            src={handleLoginAndCart.user.photo}
                             cursor="pointer"
                         />
                     </Flex>
                 </Flex>
 
-                <Box as="main" p={14} minH="25rem" bg={useColorModeValue('auto', 'gray.800')}>
+                {/* <Box as="main" p={14} minH="25rem" bg={useColorModeValue('auto', 'gray.800')}>
                     <Stack
                         direction={{ base: 'column', sm: 'row' }}
                         alignItems="center"
@@ -103,10 +107,10 @@ export default function Test() {
                             alt="Homepage Image"
                             objectFit="cover"
                             width="60vh"
-                            src="http://pos-new-system.herokuapp.com/static/media/EmptyNotesList.2ec57340.svg"
+                            src={handleLoginAndCart.user.photo}
                         />
                     </Stack>
-                </Box>
+                </Box> */}
             </Box>
         </Box>
     );
@@ -141,10 +145,21 @@ const SidebarContent = ({ ...props }: BoxProps) => (
             </Text>
         </Flex>
         <Flex direction="column" as="nav" fontSize="md" color="gray.600" aria-label="Main Navigation">
-            <NavItem icon={AiOutlineHome}>Dashboard</NavItem>
-            <NavItem icon={AiOutlineTeam}>Team</NavItem>
-            <NavItem icon={BsFolder2}>Projects</NavItem>
-            <NavItem icon={BsCalendarCheck}>Calendar</NavItem>
+            <NavItem icon={AiOutlineHome}>
+                <Link to='/myway/admin'>Dashboard</Link>
+            </NavItem>
+            <NavItem icon={AiOutlineTeam}>
+                <Link to='/myway/admin/users'>Khách hàng</Link>
+            </NavItem>
+            <NavItem icon={BsFolder2}>
+                <Link to='/myway/admin/products'>Sản phẩm</Link>
+            </NavItem>
+            <NavItem icon={BsCalendarCheck}>
+                <Link to='/myway/admin/orders'>Đơn hàng</Link>
+            </NavItem>
+            <NavItem icon={BsFillChatRightDotsFill}>
+                <Link to='/myway/admin/chats'>Chat</Link>
+            </NavItem>
         </Flex>
     </Box>
 );
@@ -182,3 +197,5 @@ const NavItem = (props: any) => {
         </Flex>
     );
 };
+
+export default Test

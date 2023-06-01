@@ -29,12 +29,15 @@ import User from './pages/user/User';
 import DetailUser from './pages/detailUser/DetailUser';
 import GetBookingBaseOnUser from './pages/getBookingBaseOnUser/GetBookingBaseOnUser';
 import Dashboard from './pages/dashboard/Dashboard';
-import Test123 from './components/test/Test';
 import Chat from './components/Chat/Chat';
 import 'react-chat-widget/lib/styles.css';
 import axios from "axios";
 import io from 'socket.io-client'
 import AdminChat from './pages/adminChat/AdminChat';
+import Stat from './components/Stats/Stat';
+import Test from './pages/test/Test';
+import SignupAdminPage from './pages/SignupAdminPage/SignupAdminPage';
+import Reset from './pages/resetPassword/Reset';
 const socket = io('http://localhost:5000')
 function App() {
   const dispatch = useDispatch()
@@ -97,6 +100,7 @@ function App() {
         <Route path='/checkout' element={<ProtectedUserRoute element={<div><Header /> <Checkout /> <Footer /> </div>} />} />
         <Route path='/success' element={<ProtectedUserRoute element={<PaymentSuccess />} />} />
         <Route path="/admin/login" element={<ProtectedAdminRoute element={<LoginAdminPage />} />} />
+        <Route path="/admin/signup" element={<SignupAdminPage />} />
         <Route path="/myway/admin" element={<ProtectedAdminRoute element={<div><Admin><Outlet /></Admin></div>} />}>
           <Route index element={<Dashboard />} />
           <Route path="product" element={<Product />} />
@@ -111,7 +115,7 @@ function App() {
 
 
         </Route>
-        {/* <Route path='/test' element={<Test123 />} /> */}
+        <Route path='/account/user/resetPassword/:resetToken' element={<Reset />} />
       </Routes>
     </div >
   );

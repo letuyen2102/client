@@ -61,7 +61,8 @@ interface COMMENT {
     response: {
         user: UserInfor,
         text: string,
-        createAt: string
+        createAt: string,
+        _id: string
     }[],
     createAt: string
 }
@@ -82,7 +83,6 @@ const Detail: React.FC = (props) => {
     const [changeImg, setChangeImg] = useState<string | null>()
     const [prod, setProd] = useState<PRODUCT>({ _id: "", name: "", description: "", oldPrice: 0, sale: 0, quantity: [], image: "", category: "", categoryName: "", subQuantity: 0, newPrice: 0, slug: "" })
     const [comments, setComments] = useState<COMMENT[]>([])
-    console.log(comments)
     const [userComment, setUserComment] = useState<{ productId: string, content: string }>({
         productId: '',
         content: ''
@@ -150,6 +150,19 @@ const Detail: React.FC = (props) => {
             console.log(err)
         }
     }
+    const deleteComment = async (idCmt: string) => {
+        try {
+            const res = await axios.delete(`/myway/api/reviews/${idCmt}`)
+            setComments(prev => {
+                const newState = [...prev].filter(el => el._id !== idCmt)
+                return newState
+            })
+        }
+        catch (err) {
+            alert("có lỗi")
+            console.log(err)
+        }
+    }
     const replyComment = async (idCmt: string, text: string) => {
         try {
             const res = await axios.post(`/myway/api/reviews/comments/${idCmt}`, { text })
@@ -171,6 +184,27 @@ const Detail: React.FC = (props) => {
 
                 })
             }
+        }
+        catch (err) {
+            alert("có lỗi")
+            console.log(err)
+        }
+    }
+    const deleteResponse = async (idCmt: string, idRes: string) => {
+        try {
+            const res = await axios.delete(`/myway/api/reviews/${idCmt}/${idRes}`)
+            console.log(res)
+            setComments(prev => {
+                const newState = [...prev]
+                newState.forEach(el => {
+                    if (el._id === idCmt) {
+                        el.response = el.response.filter(el2 => {
+                            return el2._id !== idRes
+                        })
+                    }
+                })
+                return newState
+            })
         }
         catch (err) {
             alert("có lỗi")
@@ -413,14 +447,14 @@ const Detail: React.FC = (props) => {
                                 <div className={`${styles.content3}`}>
                                     <div className={`${styles.ownerComment}`}>
                                         <div className={`${styles.quantityComment}`}>
-                                            <p style={{ display: 'inline-block', marginRight: '50px' }}>40 bình luận</p>
+                                            <p style={{ display: 'inline-block', marginRight: '50px' }}>{comments.length} bình luận</p>
                                             <p style={{ display: 'inline-block', cursor: 'pointer' }}>
                                                 <i className="fa-light fa-bars-sort" style={{ fontWeight: '600', marginRight: '10px' }}></i>
                                                 Sắp xếp theo
                                             </p>
                                         </div>
                                         <div className="row">
-                                            <div className="col-lg-6 col-md-12 col-sm-12 col-12">
+                                            {handleLoginAndCart.token ? <div className="col-lg-6 col-md-12 col-sm-12 col-12">
                                                 <div className={`${styles.inputComment}`}>
                                                     <Image
                                                         borderRadius='full'
@@ -437,7 +471,9 @@ const Detail: React.FC = (props) => {
                                                         createComment(prod._id, userComment.content)
                                                     }}
                                                 >Bình luận</button>
-                                            </div>
+                                            </div> : <div style={{ textAlign: 'center', height: '60px', lineHeight: '60px' }}>
+                                                Hãy <Link to='/account/login' style={{ color: '#ec1f27' }}>đăng nhập </Link>để bình luận
+                                            </div>}
                                         </div>
                                     </div>
                                     <div className="row">
@@ -459,11 +495,12 @@ const Detail: React.FC = (props) => {
                                                                     <strong>{comment.user.name}</strong>
                                                                     <p>{moment(comment.createAt).format('DD/MM/YYYY')}</p>
                                                                 </div>
-                                                                <div className={styles.editComment}>
-                                                                    <button>Xóa</button>
-                                                                    <button>Chỉnh sửa</button>
-
-                                                                </div>
+                                                                {
+                                                                    comment.user._id === handleLoginAndCart.user._id && <div className={styles.editComment}>
+                                                                        <button onClick={() => deleteComment(comment._id)}>Xóa</button>
+                                                                        {/* <button>Chỉnh sửa</button> */}
+                                                                    </div>
+                                                                }
                                                             </div>
                                                             <div>
                                                                 <p style={{ marginLeft: '60px' }}>{comment.text}</p>
@@ -506,8 +543,6 @@ const Detail: React.FC = (props) => {
                                                                     >Bình luận</button>
                                                                 </div>}
                                                             </div>
-
-                                                            {/* response  */}
                                                             {
                                                                 comment.response && comment.response.length > 0
                                                                 && comment.response.map((res, index) => {
@@ -524,6 +559,14 @@ const Detail: React.FC = (props) => {
                                                                                 <strong>{res.user.name}</strong>
                                                                                 <p>{moment(res.createAt).format('DD/MM/YYYY')}</p>
                                                                             </div>
+                                                                            {
+                                                                                res.user._id === handleLoginAndCart.user._id && <div className={styles.editComment}>
+                                                                                    <button onClick={event => {
+                                                                                        deleteResponse(comment._id, res._id)
+                                                                                    }}>Xóa</button>
+                                                                                    {/* <button>Chỉnh sửa</button> */}
+                                                                                </div>
+                                                                            }
                                                                         </div>
                                                                         <div>
                                                                             <p style={{ marginLeft: '60px' }}>{res.text}</p>

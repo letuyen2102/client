@@ -13,8 +13,6 @@ export interface MESSAGE {
 function Chat({ socket, username, room, setShowChat }: { socket: Socket, username: UserInfor, room: string, setShowChat: React.Dispatch<React.SetStateAction<boolean>> }) {
     const [currentMessage, setCurrentMessage] = useState("");
     const [messageList, setMessageList] = useState<MESSAGE[]>([]);
-
-    console.log(messageList)
     const currentLoad = useRef(false)
     const sendMessage = async () => {
         if (currentMessage !== "") {
@@ -61,6 +59,7 @@ function Chat({ socket, username, room, setShowChat }: { socket: Socket, usernam
         <div className="chat-window">
             <div className="chat-header">
                 <p>Live Chat</p>
+                <button onClick={() => { setShowChat(false) }}>X</button>
             </div>
             <div className="chat-body">
                 <ScrollToBottom className="message-container">
@@ -97,7 +96,7 @@ function Chat({ socket, username, room, setShowChat }: { socket: Socket, usernam
                         event.key === "Enter" && sendMessage();
                     }}
                 />
-                <button onClick={sendMessage}>&#9658;</button>
+                <button onClick={sendMessage} style={{ backgroundColor: '#fff' }}>&#9658;</button>
             </div>
         </div>
     );

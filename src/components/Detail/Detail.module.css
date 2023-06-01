@@ -387,7 +387,7 @@
     flex-direction: column;
 }
 .editComment button {
-    font-size: 12px;
+    font-size: 14px;
 }
 .editComment button:first-child {
     color: red;
