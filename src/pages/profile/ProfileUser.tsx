@@ -8,6 +8,7 @@ import ChangePassword from "../../components/SectionProfile/ChangePassword"
 import MyBooking from "../../components/SectionProfile/MyBooking"
 import DetailOrder from "../../components/SectionProfile/DetailOrder"
 import styles from './Profile.module.css'
+import ChangePhone from "../../components/ChangePhone/ChangePhone"
 const ProfileUser = () => {
     return (
         <div>
@@ -37,6 +38,7 @@ const ProfileUser = () => {
                                 <div>
                                     <Routes>
                                         <Route path="/" element={<SectionProfile />} />
+                                        <Route path="/change-phone" element={<ChangePhone />} />
                                         <Route path="/change-password" element={<ChangePassword />} />
                                         <Route path="/myOrder" element={<MyBooking API="/myway/api/bookings/getBookingsMe" />} />
                                         <Route path="/myOrder/:orderId" element={<DetailOrder />} />

@@ -117,8 +117,6 @@ const AdminChat = ({ socket }: { socket: Socket }) => {
                 </div>
 
                 <div className='col-lg-9'>
-                    {/* <Chat setShowChat={setShowChat} socket={socket} room={room} username={handleLoginAndCart.user} /> */}
-
                     {showChat && <div className="chat-window">
                         <div className="chat-header">
                             <p>Live Chat</p>
@@ -131,7 +129,7 @@ const AdminChat = ({ socket }: { socket: Socket }) => {
                                     return (
                                         <div
                                             className="message"
-                                            id={handleLoginAndCart.user._id === messageContent.author._id ? "other" : "you"}
+                                            id={room !== messageContent.author._id ? "other" : "you"}
                                             key={idx}
                                         >
                                             <div>

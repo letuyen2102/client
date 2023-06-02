@@ -4,9 +4,10 @@ import { RootState } from '../../store/store'
 import { useState } from 'react'
 import { USER_UPDATE, changeInforUserImage } from '../../slices/authSlice'
 import axios from 'axios'
-import { Link } from 'react-router-dom'
+import { Link, Route, Routes } from 'react-router-dom'
 import Loader from '../loader/Loader'
 import { hideLoader, showLoader } from '../../slices/loaderSlice'
+import ChangePhone from '../ChangePhone/ChangePhone'
 
 const SectionProfile = () => {
     const handleLoginAndCart = useSelector((state: RootState) => state.auth)
@@ -27,11 +28,11 @@ const SectionProfile = () => {
             const res = await axios.patch('/myway/api/users/updateMe', objUpdate)
             dispatch(showLoader())
             if (res.data.status === "success") {
-                console.log(res)
                 dispatch(changeInforUserImage({ userDispatch: res.data.user }))
             }
         }
-        catch (err) {
+        catch (err: any) {
+            alert(err.response.data.message)
             console.log(err)
         }
     }
@@ -66,7 +67,7 @@ const SectionProfile = () => {
                 <div className="col-lg-6">
                     <div className={styles.formGroup}>
                         <label>
-                            Số điện thoại <Link to="" style={{ color: '#00b156' }}>Thay đổi</Link>
+                            Số điện thoại <Link to="/profile/account/user/change-phone" style={{ color: '#00b156' }}>Thay đổi</Link>
                         </label>
 
                         <input defaultValue={userUpdate.phone} disabled />

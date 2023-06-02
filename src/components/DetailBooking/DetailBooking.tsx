@@ -3,7 +3,6 @@ import React, { useContext, useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 import { PRODUCT } from "../Detail/Detail"
 import styles from './DetailBooking.module.css'
-import { convertToVietnamTime } from "../Profile/History"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../../store/store"
 export interface PRODORDER {
@@ -23,6 +22,17 @@ export interface ORDER {
     createAt: string,
     subTotal: number,
     paymentCardName: string
+}
+const convertToVietnamTime = (utcTime: string): string => {
+    const inputTime = new Date(utcTime);
+    const vietnamTime = new Date(inputTime.getTime() + 7 * 60 * 60 * 1000);
+    const formattedTime = vietnamTime.toLocaleDateString('vi-VN', {
+        timeZone: 'Asia/Ho_Chi_Minh',
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+    });
+    return formattedTime;
 }
 const DetailBooking = () => {
     const handleLoginAndCart = useSelector((state: RootState) => state.auth)

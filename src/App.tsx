@@ -8,7 +8,7 @@ import Login from './components/login/Login';
 import Signup from './components/Signup/Signup';
 import Detail from './components/Detail/Detail';
 import Cart from './components/Cart/Cart';
-import Checkout from './components/Profile/Checkout';
+import Checkout from './components/Checkout/Checkout';
 import PaymentSuccess from './components/PaymentSuccess/PaymentSuccess';
 import { useDispatch, useSelector } from 'react-redux/es/exports';
 import { RootState } from './store/store';

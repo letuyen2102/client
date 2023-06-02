@@ -1,10 +1,44 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Title from '../Tiltle/Title'
 import styles from '../login/Login.module.css'
+import { useState } from 'react'
+import axios from 'axios'
+import { useSelector } from 'react-redux'
+import { RootState } from '../../store/store'
+import { useDispatch } from 'react-redux'
+import { Loader } from '@chatscope/chat-ui-kit-react'
+import { hideLoader, showLoader } from '../../slices/loaderSlice'
+import { handleNotify } from '../../slices/notifySlice'
 
 const SendSMS = () => {
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+    const handleLoader = useSelector((state: RootState) => state.loader)
+
+    const [phone, setPhone] = useState("")
+    const handleSendPassword = async (phn: string) => {
+        try {
+            dispatch(hideLoader())
+            const res = await axios.patch("/myway/api/users/resetPasswordPhone", { phone })
+            dispatch(showLoader())
+            if (res.data.status === "success") {
+                dispatch(handleNotify({ message: "Đã gửi mật khẩu mới , vui lòng kiểm tra sms", show: true, status: 200 }))
+                setTimeout(() => {
+                    dispatch(handleNotify({ message: "", show: false, status: 0 }))
+                    navigate('/account/login')
+                }, 2000)
+            }
+        }
+        catch (err) {
+            dispatch(handleNotify({ message: "Đã có lỗi khi gửi mật khẩu , vui lòng thử lại", show: true, status: 400 }))
+            setTimeout(() => {
+                dispatch(handleNotify({ message: "", show: false, status: 0 }))
+            }, 2000)
+        }
+    }
     return (
         <div>
+            {handleLoader.loader && <Loader />}
             <Title>
                 <ul>
                     <li>
@@ -25,11 +59,13 @@ const SendSMS = () => {
 
                         <form className={`${styles.formLogin}`} onSubmit={event => {
                             event.preventDefault()
-
+                            handleSendPassword(phone)
                         }}>
                             <div className={`${styles.formGroup}`}>
                                 <label htmlFor="Phone">SDT <span style={{ color: '#ec1f27' }}>*</span></label>
-                                <input id="Phone" type='text' required placeholder="Nhập Số Điện Thoại" />
+                                <input id="Phone" type='text' required placeholder="Nhập Số Điện Thoại" value={phone} onChange={event => {
+                                    setPhone(event.target.value)
+                                }} />
                             </div>
 
                             <button>Gửi Mật Khẩu</button>

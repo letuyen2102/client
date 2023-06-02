@@ -96,3 +96,8 @@
     letter-spacing: 2px;
     border-radius: 5px;
 }
+
+.btnSend button {
+    text-align: center;
+    margin-top: 15px;
+}
