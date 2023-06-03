@@ -38,7 +38,7 @@ import Stat from './components/Stats/Stat';
 import Test from './pages/test/Test';
 import SignupAdminPage from './pages/SignupAdminPage/SignupAdminPage';
 import Reset from './pages/resetPassword/Reset';
-const socket = io('http://localhost:5000')
+const socket = io('https://myway-shop-app-api.onrender.com')
 function App() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
