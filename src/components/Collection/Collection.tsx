@@ -8,6 +8,7 @@ import Title from '../Tiltle/Title';
 import slugify from 'slugify';
 import { useDispatch } from 'react-redux';
 import { hideLoader, showLoader } from '../../slices/loaderSlice';
+import axios from 'axios';
 const Collection: React.FC<{ queryAPI: string, queryString: string }> = (props) => {
 
     const navigate: NavigateFunction = useNavigate()
@@ -18,18 +19,26 @@ const Collection: React.FC<{ queryAPI: string, queryString: string }> = (props) 
     const [colors, setColors] = useState<string[]>([])
     useEffect(() => {
         const getCategories = async () => {
-            await fetch(`/myway/api/products/getCategories`)
-                .then(res => res.json())
-                .then(all => setCategories(all.categories))
-        }
+            try {
+                const response = await axios.get('/myway/api/products/getCategories');
+                setCategories(response.data.categories);
+            } catch (error) {
+                console.error('Error fetching categories:', error);
+            }
+        };
+
         const getColors = async () => {
-            await fetch('/myway/api/products/getColors')
-                .then(res => res.json())
-                .then(all => setColors(all.colors))
-        }
-        getCategories()
-        getColors()
-    }, [props.queryAPI])
+            try {
+                const response = await axios.get('/myway/api/products/getColors');
+                setColors(response.data.colors);
+            } catch (error) {
+                console.error('Error fetching colors:', error);
+            }
+        };
+
+        getCategories();
+        getColors();
+    }, [props.queryAPI]);
     useEffect(() => {
         dispatch(hideLoader())
     }, [searchParams.toString()])
