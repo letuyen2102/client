@@ -20,7 +20,7 @@ const Collection: React.FC<{ queryAPI: string, queryString: string }> = (props) 
     useEffect(() => {
         const getCategories = async () => {
             try {
-                const response = await axios.get('/myway/api/products/getCategories');
+                const response = await axios.get('https://myway-shop-app-api.onrender.com/myway/api/products/getCategories');
                 setCategories(response.data.categories);
             } catch (error) {
                 console.error('Error fetching categories:', error);
@@ -29,7 +29,7 @@ const Collection: React.FC<{ queryAPI: string, queryString: string }> = (props) 
 
         const getColors = async () => {
             try {
-                const response = await axios.get('/myway/api/products/getColors');
+                const response = await axios.get('https://myway-shop-app-api.onrender.com/myway/api/products/getColors');
                 setColors(response.data.colors);
             } catch (error) {
                 console.error('Error fetching colors:', error);
@@ -268,7 +268,7 @@ const Collection: React.FC<{ queryAPI: string, queryString: string }> = (props) 
                                 </div>
                             </div>
                             <div className='row'>
-                                <PaginatedItems itemsPerPage={8} apiString={props.queryAPI + searchParams.toString()} />
+                                <PaginatedItems itemsPerPage={8} apiString={'https://myway-shop-app-api.onrender.com' + props.queryAPI + searchParams.toString()} />
                                 {/* {props.queryAPI.endsWith('&') && <PaginatedItems itemsPerPage={8} apiString={props.queryAPI + searchParams.toString()} />} */}
 
                             </div>
