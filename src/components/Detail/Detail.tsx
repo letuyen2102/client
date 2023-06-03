@@ -213,28 +213,22 @@ const Detail: React.FC = (props) => {
     }
     useEffect(() => {
         const getProductDetail = async () => {
-            try {
-                const response = await axios.get(`/myway/api/products/${slug}`);
-                setProd(response.data.product);
-                dispatch(showLoader());
-            } catch (error) {
-                console.error('Error fetching product detail:', error);
-            }
-        };
-
+            await fetch(`/myway/api/products/${slug}`)
+                .then(res => res.json())
+                .then(data => setProd(data.product))
+            dispatch(showLoader())
+        }
         const getAllComments = async () => {
-            try {
-                const response = await axios.get('/myway/api/reviews');
-                setComments(response.data.reviews);
-                setCount(Array(response.data.reviews.length).fill(false));
-            } catch (error) {
-                console.error('Error fetching comments:', error);
-            }
-        };
-
-        getProductDetail();
-        getAllComments();
-    }, []);
+            await fetch(`/myway/api/reviews`)
+                .then(res => res.json())
+                .then(data => {
+                    setComments(data.reviews)
+                    setCount(Array(data.reviews.length).fill(false))
+                })
+        }
+        getProductDetail()
+        getAllComments()
+    }, [])
     useEffect(() => {
         dispatch(defaultTab())
     }, [slug])

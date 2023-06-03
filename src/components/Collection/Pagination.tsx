@@ -7,7 +7,6 @@ import Loader from '../loader/Loader';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { hideLoader, showLoader } from '../../slices/loaderSlice';
-import axios from 'axios';
 
 function Items({ currentItems }: { currentItems: PRODUCT[] }) {
     return (
@@ -36,7 +35,7 @@ export default function PaginatedItems({ itemsPerPage, apiString }: { itemsPerPa
     const [itemOffset, setItemOffset] = useState(parseInt(searchParams.get("startItem") ?? "0", 10));
 
     const endOffset = itemOffset + itemsPerPage;
-    const currentItems = prods?.slice(itemOffset, endOffset);
+    const currentItems = prods.slice(itemOffset, endOffset);
     const pageCount = Math.ceil(prods.length / itemsPerPage);
 
     const handlePageClick = (event: { selected: number }) => {
@@ -54,20 +53,14 @@ export default function PaginatedItems({ itemsPerPage, apiString }: { itemsPerPa
     };
     useEffect(() => {
         const getProds = async () => {
-            try {
-                dispatch(hideLoader());
-
-                const response = await axios.get(apiString);
-                setProds(response.data.products);
-
-                dispatch(showLoader());
-            } catch (error) {
-                console.error('Error fetching products:', error);
-            }
-        };
-
-        getProds();
-    }, [apiString]);
+            dispatch(hideLoader())
+            await fetch(apiString)
+                .then(res => res.json())
+                .then(all => setProds(all.products))
+            dispatch(showLoader())
+        }
+        getProds()
+    }, [apiString])
     useEffect(() => {
         if (!searchParams.get("startItem")) {
             setItemOffset(0)

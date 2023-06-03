@@ -8,7 +8,6 @@ import Title from '../Tiltle/Title';
 import slugify from 'slugify';
 import { useDispatch } from 'react-redux';
 import { hideLoader, showLoader } from '../../slices/loaderSlice';
-import axios from 'axios';
 const Collection: React.FC<{ queryAPI: string, queryString: string }> = (props) => {
 
     const navigate: NavigateFunction = useNavigate()
@@ -19,26 +18,18 @@ const Collection: React.FC<{ queryAPI: string, queryString: string }> = (props) 
     const [colors, setColors] = useState<string[]>([])
     useEffect(() => {
         const getCategories = async () => {
-            try {
-                const response = await axios.get('https://myway-shop-app-api.onrender.com/myway/api/products/getCategories');
-                setCategories(response.data.categories);
-            } catch (error) {
-                console.error('Error fetching categories:', error);
-            }
-        };
-
+            await fetch(`/myway/api/products/getCategories`)
+                .then(res => res.json())
+                .then(all => setCategories(all.categories))
+        }
         const getColors = async () => {
-            try {
-                const response = await axios.get('https://myway-shop-app-api.onrender.com/myway/api/products/getColors');
-                setColors(response.data.colors);
-            } catch (error) {
-                console.error('Error fetching colors:', error);
-            }
-        };
-
-        getCategories();
-        getColors();
-    }, [props.queryAPI]);
+            await fetch('/myway/api/products/getColors')
+                .then(res => res.json())
+                .then(all => setColors(all.colors))
+        }
+        getCategories()
+        getColors()
+    }, [props.queryAPI])
     useEffect(() => {
         dispatch(hideLoader())
     }, [searchParams.toString()])
@@ -268,7 +259,7 @@ const Collection: React.FC<{ queryAPI: string, queryString: string }> = (props) 
                                 </div>
                             </div>
                             <div className='row'>
-                                <PaginatedItems itemsPerPage={8} apiString={'https://myway-shop-app-api.onrender.com' + props.queryAPI + searchParams.toString()} />
+                                <PaginatedItems itemsPerPage={8} apiString={props.queryAPI + searchParams.toString()} />
                                 {/* {props.queryAPI.endsWith('&') && <PaginatedItems itemsPerPage={8} apiString={props.queryAPI + searchParams.toString()} />} */}
 
                             </div>
